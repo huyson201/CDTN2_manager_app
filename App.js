@@ -1,12 +1,16 @@
-import React from 'react';
-import { Text, View } from 'react-native';
-import TabHome from './screens/TabHome';
-import { NavigationContainer } from '@react-navigation/native';
+import React from "react";
+import { Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import TaskHome from "./components/TaskScreen/TaskHome";
+import { MenuProvider } from "react-native-popup-menu";
+
 const App = () => {
   return (
     <View style={{ flex: 1 }}>
-       <NavigationContainer>
-        <TabHome />
+      <NavigationContainer>
+        <MenuProvider>
+          <TaskHome />
+        </MenuProvider>
       </NavigationContainer>
     </View>
   );
