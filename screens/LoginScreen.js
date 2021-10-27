@@ -71,7 +71,7 @@ const LoginScreen = ({navigation}) => {
           <View style={loginStyles.header}>
             <ImageBackground
               style={loginStyles.img}
-              source={require('../src/assets/logo.png')}></ImageBackground>
+              source={require('../src/images/logo.png')}></ImageBackground>
             <Text style={loginStyles.textLogo}>THE BOOKING</Text>
           </View>
           <View style={loginStyles.inner}>
