@@ -97,4 +97,5 @@ export const STAFF_NAME = "Nguyễn Văn Táp";
 export const STAFF_POSITION = "Nhân viên";
 export const STAFF_PHONE = "0987654321";
 export const STAFF_EMAIL = "staff@gmail.com";
-
+export const STAFF_EDIT = "Chỉnh sửa";
+export const STAFF_DELETE = "Xóa";

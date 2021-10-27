@@ -17,7 +17,9 @@ const App = () => {
     // </View>
 
     <SafeAreaView style={{ flex: 1 }}>
-      <StaffList />
+      <MenuProvider>
+        <StaffList />
+      </MenuProvider>
     </SafeAreaView>
 
     // <SafeAreaView style={{ flex: 1 }}>
