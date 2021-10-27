@@ -16,24 +16,37 @@ import {
 import {
     STAFF_NAME,
     STAFF_POSITION,
+    STAFF_PHONE,
+    STAFF_EMAIL,
 } from "../../src/values/constants";
 
 const StaffItem = (props) => {
     return (
         <View style={[styles.view, styles.flex_row]}>
             {/* Image */}
-            <Image
+            <View style={{justifyContent: "center", alignItems: "center"}}>
+                <Image
                 style={styles.imgStaff}
                 source={require('../../src/images/staff.jpg')} />
+            </View>
+            
             {/* Name, position */}
-            <View style={{ paddingLeft: 10, paddingTop: 10 }}>
+            <View style={{ paddingLeft: 20,}}>
                 <View style={styles.flex_row}>
-                    <Text style={styles.title}>Name: </Text>
-                    <Text style={styles.content}>{STAFF_NAME}</Text>
+                    <Text style={styles.title1}>Name: </Text>
+                    <Text style={styles.content1}>{STAFF_NAME}</Text>
                 </View>
                 <View style={styles.flex_row}>
-                    <Text style={styles.title}>Position: </Text>
-                    <Text style={styles.content}>{STAFF_POSITION}</Text>
+                    <Text style={styles.title2}>Position: </Text>
+                    <Text style={styles.content2}>{STAFF_POSITION}</Text>
+                </View>
+                <View style={styles.flex_row}>
+                    <Text style={styles.title2}>Phone: </Text>
+                    <Text style={styles.content2}>{STAFF_PHONE}</Text>
+                </View>
+                <View style={styles.flex_row}>
+                    <Text style={styles.title2}>Email: </Text>
+                    <Text style={styles.content2}>{STAFF_EMAIL}</Text>
                 </View>
             </View>
         </View>
@@ -57,14 +70,25 @@ const styles = StyleSheet.create({
         height: 90,
         borderRadius: 100,
     },
-    title: {
-        lineHeight: 30,
+    title1: {
+        lineHeight: 25,
         fontSize: 16,
         fontWeight: "bold",
     },
-    content: {
-        lineHeight: 30,
+    content1: {
+        lineHeight: 25,
         fontSize: 16,
+        maxWidth: "75%",
+    },
+    title2: {
+        lineHeight: 25,
+        fontSize: 13,
+        fontWeight: "bold",
+    },
+    content2: {
+        lineHeight: 25,
+        fontSize: 14,
+        maxWidth: "75%",
     }
 });
 
