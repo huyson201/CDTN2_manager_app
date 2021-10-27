@@ -91,3 +91,7 @@ export const DONE = "Đã hoàn thành";
 export const CHECK_IN = "Check in";
 export const CHECK_OUT = "Check out";
 export const TOTAL = "Thành tiền";
+
+// Staff
+export const STAFF_NAME = "Nguyễn Văn Táp"
+export const STAFF_POSITION = "Nhân viên"

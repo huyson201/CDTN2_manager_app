@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import TaskHome from "./components/TaskScreen/TaskHome";
 import { MenuProvider } from "react-native-popup-menu";
 import StaffList from "./screens/StaffList";
+import StaffItem from "./components/staff/StaffItem";
 
 const App = () => {
   return (
@@ -18,6 +19,10 @@ const App = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <StaffList />
     </SafeAreaView>
+
+    // <SafeAreaView style={{ flex: 1 }}>
+    //   <StaffItem />
+    // </SafeAreaView>
   );
 };
 
