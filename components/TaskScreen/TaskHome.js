@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 const TaskHome = () => {
   return (
     <Stack.Navigator>
-      {/* <Stack.Screen
+      <Stack.Screen
         name="TabStatus"
         component={TabStatus}
         options={{ headerShown: false }}
@@ -21,8 +21,8 @@ const TaskHome = () => {
         name="Invoice"
         component={Invoice}
         options={{ headerShown: false }}
-      /> */}
-        {/* <Stack.Screen
+      />
+        <Stack.Screen
         name="All Rooms"
         component={ListRoomsScreen}
         options={{ headerShown: true }}
@@ -31,7 +31,7 @@ const TaskHome = () => {
         name="Type Rooms"
         component={ListRoomsByTypeScreen}
         options={{ headerShown: true }}
-      /> */}
+      />
   <Stack.Screen
         name="Add A new Room"
         component={AddNewRoomScreen}
