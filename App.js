@@ -5,6 +5,7 @@ import TaskHome from "./components/TaskScreen/TaskHome";
 import { MenuProvider } from "react-native-popup-menu";
 import StaffList from "./screens/StaffList";
 import StaffItem from "./components/staff/StaffItem";
+import EditProfileStaff from "./screens/EditProfileStaff";
 
 const App = () => {
   return (
@@ -16,15 +17,16 @@ const App = () => {
     //   </NavigationContainer>
     // </View>
 
-    <SafeAreaView style={{ flex: 1 }}>
-      <MenuProvider>
-        <StaffList />
-      </MenuProvider>
-    </SafeAreaView>
-
     // <SafeAreaView style={{ flex: 1 }}>
-    //   <StaffItem />
+    //   <MenuProvider>
+    //     <StaffList />
+    //   </MenuProvider>
     // </SafeAreaView>
+
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* <StaffItem /> */}
+      <EditProfileStaff/>
+    </SafeAreaView>
   );
 };
 

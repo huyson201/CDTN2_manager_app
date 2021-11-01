@@ -2,11 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {
-    BLUE2,
     WHITE,
-    LIGHT_GRAY,
-    ORANGE,
-    MAP_MARKER,
 } from "../../src/values/color";
 import {
     Menu,
@@ -59,7 +55,7 @@ const StaffItem = (props) => {
                 </MenuTrigger>
                 <MenuOptions>
                     <MenuOption text={STAFF_EDIT} />
-                    <MenuOption text={STAFF_DELETE} />
+                    <MenuOption onSelect={() => alert('Xóa')} text={STAFF_DELETE} />
                 </MenuOptions>
             </Menu>
         </View>

@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
   Button,
   TouchableOpacity,
@@ -29,7 +28,6 @@ const StaffList = () => {
           );
         }}
       />
-
       <TouchableOpacity style={styles.plusButton}>
         <Icon name="plus" size={30} color={WHITE}></Icon>
       </TouchableOpacity>
