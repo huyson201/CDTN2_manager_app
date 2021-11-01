@@ -47,7 +47,8 @@ const LoginScreen = ({navigation}) => {
     setisLoading(true);
     try {
       const res = await userApi.login(email, password);
-      if (!res.data.msg) {
+      if (!res.data.msg && res.data.data.user.user_role != 2 ) {
+        console.log(res)
         dispatch(login(res.data.data.user));
         await AsyncStorage.setItem('token', res.data.data.token);
         await AsyncStorage.setItem('refresh_token', res.data.data.refreshToken);
