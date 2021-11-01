@@ -30,22 +30,14 @@ const StaffItem = (props) => {
             </View>
 
             {/* Name, position */}
-            <View style={{ paddingLeft: 20, }}>
+            <View style={{ paddingLeft: 20, paddingTop: 15 }}>
                 <View style={styles.flex_row}>
                     <Text style={styles.title1}>Name: </Text>
                     <Text style={styles.content1}>{STAFF_NAME}</Text>
                 </View>
                 <View style={styles.flex_row}>
-                    <Text style={styles.title2}>Position: </Text>
-                    <Text style={styles.content2}>{STAFF_POSITION}</Text>
-                </View>
-                <View style={styles.flex_row}>
-                    <Text style={styles.title2}>Phone: </Text>
-                    <Text style={styles.content2}>{STAFF_PHONE}</Text>
-                </View>
-                <View style={styles.flex_row}>
-                    <Text style={styles.title2}>Email: </Text>
-                    <Text style={styles.content2}>{STAFF_EMAIL}</Text>
+                    <Text style={styles.title1}>Position: </Text>
+                    <Text style={styles.content1}>{STAFF_POSITION}</Text>
                 </View>
             </View>
 
@@ -89,16 +81,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         maxWidth: "75%",
     },
-    title2: {
-        lineHeight: 25,
-        fontSize: 13,
-        fontWeight: "bold",
-    },
-    content2: {
-        lineHeight: 25,
-        fontSize: 14,
-        maxWidth: "75%",
-    }
 });
 
 export default StaffItem;

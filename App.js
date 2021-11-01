@@ -9,10 +9,11 @@ import { MenuProvider } from "react-native-popup-menu";
 import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
-import {isJwtExpired} from 'jwt-check-expiration';
+import { isJwtExpired } from 'jwt-check-expiration';
 import SplashScreen from "./screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { login } from "./features/auth/userSlice";
+import StaffList from "./screens/StaffList";
 const Stack = createNativeStackNavigator();
 const App = () => {
   const dispatch = useDispatch();
@@ -38,7 +39,7 @@ const App = () => {
     };
     getData();
   }, []);
- // set loading
+  // set loading
   useEffect(() => {
     setTimeout(() => {
       setFirstLoading(false);
@@ -48,7 +49,7 @@ const App = () => {
     <View style={{ flex: 1 }}>
       <NavigationContainer>
         <MenuProvider>
-        {firstLoading ? (
+          {/* {firstLoading ? (
           <Stack.Navigator>
             <Stack.Screen
               name="SplashScreen"
@@ -60,7 +61,8 @@ const App = () => {
           <TaskHome />
         ) : (
           <TaskLogin />
-        )}
+        )} */}
+          <StaffList />
         </MenuProvider>
       </NavigationContainer>
     </View>
