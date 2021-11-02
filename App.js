@@ -13,7 +13,8 @@ import { isJwtExpired } from 'jwt-check-expiration';
 import SplashScreen from "./screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { login } from "./features/auth/userSlice";
-import StaffList from "./screens/StaffList";
+
+
 const Stack = createNativeStackNavigator();
 const App = () => {
   const dispatch = useDispatch();
@@ -49,7 +50,7 @@ const App = () => {
     <View style={{ flex: 1 }}>
       <NavigationContainer>
         <MenuProvider>
-          {/* {firstLoading ? (
+          {firstLoading ? (
           <Stack.Navigator>
             <Stack.Screen
               name="SplashScreen"
@@ -61,8 +62,9 @@ const App = () => {
           <TaskHome />
         ) : (
           <TaskLogin />
-        )} */}
-          <StaffList />
+        )}
+
+
         </MenuProvider>
       </NavigationContainer>
     </View>
