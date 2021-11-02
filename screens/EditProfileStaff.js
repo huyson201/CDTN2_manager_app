@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     Text,
     TextInput,
+    ImageBackground,
 } from 'react-native';
 import { WHITE, BLUE1, BLUE2 } from "../src/values/color";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -17,9 +18,16 @@ const EditProfileStaff = () => {
     return (
         <View>
             <View style={{ justifyContent: "center", alignItems: "center", padding: 50, backgroundColor: BLUE2 }}>
-                <Image
-                    style={styles.imgStaff}
-                    source={require('../src/images/detail_hotel_1.jpg')} />
+                <TouchableOpacity>
+                    <ImageBackground
+                        style={styles.imgStaff}
+                        imageStyle={{ borderRadius: 15 }}
+                        source={require('../src/images/detail_hotel_1.jpg')} >
+                        <View style={styles.view_camera}>
+                            <Icon name="camera" size={25} color={WHITE} style={styles.icon_camera} />
+                        </View>
+                    </ImageBackground>
+                </TouchableOpacity>
             </View>
             <View style={{ marginLeft: 20, marginRight: 20 }}>
                 <View style={styles.flex_row}>
@@ -62,9 +70,13 @@ const EditProfileStaff = () => {
                             fontSize: 17
                         }} />
                 </View>
-                <View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <TouchableOpacity style={styles.button}>
-                        <Text>Cancel</Text>
+                        <Text style={{ color: WHITE }}>Cancel</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={{ color: WHITE }}>Save</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -74,9 +86,22 @@ const EditProfileStaff = () => {
 
 const styles = StyleSheet.create({
     imgStaff: {
-        width: 100,
-        height: 100,
-        borderRadius: 15,
+        width: 110,
+        height: 110,
+    },
+    view_camera: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    icon_camera: {
+        opacity: 0.5,
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: WHITE,
+        borderRadius: 10,
+        padding: 5,
     },
     flex_row: {
         flexDirection: "row",
@@ -88,14 +113,13 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: BLUE2,
-        width: 100,
+        width: 150,
         height: 40,
-        position: "absolute",
         borderRadius: 10,
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 50
-      },
+        marginTop: 50,
+    },
 });
 
 export default EditProfileStaff;

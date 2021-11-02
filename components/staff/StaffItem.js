@@ -41,7 +41,7 @@ const StaffItem = (props) => {
                 </View>
             </View>
 
-            <Menu style={{ marginLeft: 15, }}>
+            <Menu style={{ marginLeft: 20, }}>
                 <MenuTrigger>
                     <Icon name="dots-vertical" size={25} />
                 </MenuTrigger>
