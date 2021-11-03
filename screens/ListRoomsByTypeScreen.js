@@ -21,6 +21,7 @@ import {Button} from 'react-native-elements';
 // import About from '../src/components/home/About';
 import ListRoomsScreen from './ListRoomsScreen';
 import {SliderBox} from 'react-native-image-slider-box';
+import ListRoomsTypeStatusMaintainScreen from './ListRoomsTypeStatusMaintainScreen';
 
 const ListRoomsByTypeScreen = function ({navigation}) {
   const [dataSource, setDataSouce] = useState([]);
@@ -38,12 +39,22 @@ const ListRoomsByTypeScreen = function ({navigation}) {
         console.error(error);
       });
   };
-    const handlePressAddNewRoom = () => {
-     navigation.navigate("Add A new Room");
+  const handlePressAddNewRoom = () => {
+    navigation.navigate('Add A new Room');
   };
-  const handlePressUserProfile = () => {
-    navigation.goBack();
+  const handlePressToAvailableRooms = () => {
+    navigation.navigate('Rooms Available');
   };
+  const handlePressToMaintainingRooms = () => {
+    navigation.navigate('Rooms Maintaining');
+  };
+  const handlePressToOrderedRooms = () => {
+    navigation.navigate('Rooms Ordered');
+  };
+  const handlePressToAllRooms = () => {
+    navigation.navigate('Type Rooms');
+  };
+
   // DEMO SLIDERBOX
   const data = {
     images: [
@@ -73,7 +84,7 @@ const ListRoomsByTypeScreen = function ({navigation}) {
   const ItemSeparatorView = () => {
     return <View style={ListRoomsStyle.ItemSeparatorView} />;
   };
-
+  const [selectedValue, setSelectedValue] = useState('1');
   return (
     <View>
       {/* MODIFY HEADER */}
@@ -100,18 +111,25 @@ const ListRoomsByTypeScreen = function ({navigation}) {
         <TouchableOpacity
           onPress={handlePressAddNewRoom}
           style={ListRoomsStyle.filterItems}>
-          <Text style={{textAlign: 'center'}}>1</Text>
+          <Text style={{textAlign: 'center', marginTop: 15}}>Add New Room </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handlePressAddNewRoom}
-          style={ListRoomsStyle.filterItems}>
-          <Text style={{textAlign: 'center'}}>1</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handlePressAddNewRoom}
-          style={ListRoomsStyle.filterItems}>
-          <Text style={{textAlign: 'center'}}>1</Text>
-        </TouchableOpacity>
+        <Picker
+          selectedValue={selectedValue}
+          style={ListRoomsStyle.filterItems}
+          onValueChange={(itemValue, itemIndex) =>
+            itemValue == 1
+              ? handlePressToAllRooms()
+              : itemValue == 2
+              ? handlePressToAvailableRooms()
+              : itemValue == 3
+              ? handlePressToMaintainingRooms()
+              : handlePressToOrderedRooms()
+          }>
+          <Picker.Item label="All Rooms" value="1" />
+          <Picker.Item label="Rooms Available" value="2" />
+          <Picker.Item label="Rooms Maintaining" value="3" />
+          <Picker.Item label="Rooms Ordered" value="4" />
+        </Picker>
       </View>
       <FlatList
         style={{marginTop: 5, height: '100%'}}
@@ -129,7 +147,14 @@ const ListRoomsByTypeScreen = function ({navigation}) {
                   </Text>
                   <Text style={ListRoomsStyle.roomViewText}>
                     Status: {'  '}
-                    <Text style={ListRoomsStyle.roomViewStatus}>
+                    <Text
+                      style={
+                        item.id % 5 == 0
+                          ? ListRoomsStyle.roomViewStatus
+                          : item.id % 3 == 0
+                          ? ListRoomsStyle.roomViewStatusOrdered
+                          : ListRoomsStyle.roomViewStatusMaintaining
+                      }>
                       {/* {item.username} */}
                       Available
                     </Text>
@@ -157,7 +182,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderWidth: 1,
     borderRadius: 10,
-    paddingVertical: 5,
+    paddingVertical: 1,
   },
 });
 
@@ -172,8 +197,6 @@ const Container = styled.View`
 const ListRoomsStyle = StyleSheet.create({
   container: {},
   header: {
-    // height: 150,
-    // position: 'relative',
     backgroundColor: BLUE1,
     paddingTop: 10,
     paddingBottom: 25,
@@ -200,6 +223,24 @@ const ListRoomsStyle = StyleSheet.create({
   },
   roomViewStatus: {
     color: 'green',
+    fontStyle: 'italic',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  roomViewStatusOrdered: {
+    color: 'gray',
+    fontStyle: 'italic',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  genderPicker: {
+    // borderRadius: 40,
+    // borderWidth: 1,
+    // borderColor: '#bdc3c7',
+    overflow: 'hidden',
+  },
+  roomViewStatusMaintaining: {
+    color: 'red',
     fontStyle: 'italic',
     fontSize: 20,
     fontWeight: 'bold',
