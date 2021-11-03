@@ -14,6 +14,10 @@ import SplashScreen from "./screens/SplashScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { login } from "./features/auth/userSlice";
 
+import StaffList from "./screens/StaffList";
+import EditProfileStaff from "./screens/EditProfileStaff";
+import InvoiceList from "./screens/InvoiceList";
+import AddNewStaff from "./screens/AddNewStaff";
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -63,7 +67,6 @@ const App = () => {
         ) : (
           <TaskLogin />
         )}
-
 
         </MenuProvider>
       </NavigationContainer>

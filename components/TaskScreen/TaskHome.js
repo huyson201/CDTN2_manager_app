@@ -6,7 +6,7 @@ import HomeScreen from "../../screens/HomeScreen";
 import ListRoomsScreen from "../../screens/ListRoomsScreen";
 import ListRoomsByTypeScreen from "../../screens/ListRoomsByTypeScreen";
 import AddNewRoomScreen from "../../screens/AddNewRoomScreen";
-
+import AddNewStaff from "../../screens/AddNewStaff";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,22 +28,21 @@ const TaskHome = () => {
         component={Invoice}
         options={{ headerShown: false }}
       />
-        <Stack.Screen
+      <Stack.Screen
         name="All Rooms"
         component={ListRoomsScreen}
         options={{ headerShown: true }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Type Rooms"
         component={ListRoomsByTypeScreen}
         options={{ headerShown: true }}
       />
-  <Stack.Screen
+      <Stack.Screen
         name="Add A new Room"
         component={AddNewRoomScreen}
         options={{ headerShown: true }}
       />
-      
     </Stack.Navigator>
   );
 };
