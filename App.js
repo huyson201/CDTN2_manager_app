@@ -1,3 +1,10 @@
+import React, {useEffect, useState} from 'react';
+import {Text, View} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import TaskHome from './components/TaskScreen/TaskHome';
+import TaskLogin from './components/TaskScreen/TaskLogin';
+import {MenuProvider} from 'react-native-popup-menu';
+
 
 import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
@@ -18,6 +25,7 @@ import StaffList from "./screens/StaffList";
 import EditProfileStaff from "./screens/EditProfileStaff";
 import InvoiceList from "./screens/InvoiceList";
 import AddNewStaff from "./screens/AddNewStaff";
+
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -51,7 +59,7 @@ const App = () => {
     }, 3000);
   }, []);
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <NavigationContainer>
         <MenuProvider>
           {firstLoading ? (

@@ -21,9 +21,8 @@ import {Button} from 'react-native-elements';
 // import About from '../src/components/home/About';
 import ListRoomsScreen from './ListRoomsScreen';
 import {SliderBox} from 'react-native-image-slider-box';
-import ListRoomsTypeStatusMaintainScreen from './ListRoomsTypeStatusMaintainScreen';
 
-const ListRoomsByTypeScreen = function ({navigation}) {
+const ListRoomsTypeStatusOrderedScreen = function ({navigation}) {
   const [dataSource, setDataSouce] = useState([]);
   useEffect(() => {
     getData();
@@ -39,9 +38,6 @@ const ListRoomsByTypeScreen = function ({navigation}) {
         console.error(error);
       });
   };
-  const handlePressAddNewRoom = () => {
-    navigation.navigate('Add A new Room');
-  };
   const handlePressToAvailableRooms = () => {
     navigation.navigate('Rooms Available');
   };
@@ -55,7 +51,7 @@ const ListRoomsByTypeScreen = function ({navigation}) {
     navigation.navigate('Type Rooms');
   };
 
-  // DEMO SLIDERBOX
+  // SLIDERBOX
   const data = {
     images: [
       'https://source.unsplash.com/1024x768/?nature',
@@ -84,7 +80,7 @@ const ListRoomsByTypeScreen = function ({navigation}) {
   const ItemSeparatorView = () => {
     return <View style={ListRoomsStyle.ItemSeparatorView} />;
   };
-  const [selectedValue, setSelectedValue] = useState('1');
+  const [selectedValue, setSelectedValue] = useState('4');
   return (
     <View>
       {/* MODIFY HEADER */}
@@ -98,21 +94,9 @@ const ListRoomsByTypeScreen = function ({navigation}) {
         onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
         currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
       />
-      {/* <SliderBox
-          key={Math.random()}
-          images={dataHotel.images}
-          paginationBoxVerticalPadding={5}
-          dotStyle={{width: 7, height: 7, marginHorizontal: -5}}
-          imageLoadingColor={'#fff'}
-        /> */}
-      {/* </View> */}
+
       {/* FILTER */}
       <View style={ListRoomsStyle.filter}>
-        <TouchableOpacity
-          onPress={handlePressAddNewRoom}
-          style={ListRoomsStyle.filterItems}>
-          <Text style={{textAlign: 'center', marginTop: 15}}>Add New Room </Text>
-        </TouchableOpacity>
         <Picker
           selectedValue={selectedValue}
           style={ListRoomsStyle.filterItems}
@@ -128,7 +112,7 @@ const ListRoomsByTypeScreen = function ({navigation}) {
           <Picker.Item label="All Rooms" value="1" />
           <Picker.Item label="Rooms Available" value="2" />
           <Picker.Item label="Rooms Maintaining" value="3" />
-          <Picker.Item label="Rooms Ordered" value="4" />
+          <Picker.Item label="Rooms Ordered" selected value="4" />
         </Picker>
       </View>
       <FlatList
@@ -147,16 +131,9 @@ const ListRoomsByTypeScreen = function ({navigation}) {
                   </Text>
                   <Text style={ListRoomsStyle.roomViewText}>
                     Status: {'  '}
-                    <Text
-                      style={
-                        item.id % 5 == 0
-                          ? ListRoomsStyle.roomViewStatus
-                          : item.id % 3 == 0
-                          ? ListRoomsStyle.roomViewStatusOrdered
-                          : ListRoomsStyle.roomViewStatusMaintaining
-                      }>
+                    <Text style={ListRoomsStyle.roomViewStatus}>
                       {/* {item.username} */}
-                      Available
+                      Unavailable
                     </Text>
                   </Text>
                 </View>
@@ -222,126 +199,11 @@ const ListRoomsStyle = StyleSheet.create({
     fontSize: 20,
   },
   roomViewStatus: {
-    color: 'green',
-    fontStyle: 'italic',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  roomViewStatusOrdered: {
     color: 'gray',
     fontStyle: 'italic',
     fontSize: 20,
     fontWeight: 'bold',
   },
-  genderPicker: {
-    // borderRadius: 40,
-    // borderWidth: 1,
-    // borderColor: '#bdc3c7',
-    overflow: 'hidden',
-  },
-  roomViewStatusMaintaining: {
-    color: 'red',
-    fontStyle: 'italic',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  headerText: {
-    fontSize: 20,
-  },
-  textTitle: {
-    fontSize: 20,
-    marginLeft: 20,
-  },
-  headerUserCicle: {
-    display: 'flex',
-    marginHorizontal: '33%',
-    marginBottom: 10,
-    height: 100,
-    width: 100,
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
-  },
-  userImg: {
-    maxWidth: 120,
-    maxHeight: 120,
-    borderRadius: 60,
-    resizeMode: 'cover',
-  },
-  headerListItemStyle: {
-    backgroundColor: '#cfcfcf',
-    borderWidth: 2,
-    borderColor: '#f96700',
-    marginTop: 10,
-    padding: 10,
-    borderRadius: 20,
-  },
-  listItemStyle: {
-    borderRadius: 10,
-  },
-  itemBody: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    flex: 1,
-  },
-  itemBoDyText: {
-    flex: 2,
-    flexDirection: 'column',
-    // marginLeft: 'auto',
-    // marginRight: 'auto',
-    // marginBottom: 0,
-    marginTop: '5%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-  },
-  itemBoDyImg: {
-    flex: 1,
-    // flexDirection:'column',
-    marginHorizontal: 5,
-    marginVertical: 10,
-    minWidth: 110,
-    minHeight: 110,
-    maxWidth: 110,
-    maxHeight: 110,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: '#000',
-    resizeMode: 'cover',
-  },
-  ItemSeparatorView: {
-    height: 1,
-    width: '100%',
-    backgroundColor: '#000000',
-  },
-  itemFont_HotelName: {
-    color: '#104FDF',
-    fontSize: 25,
-  },
-  itemFont_HotelStar: {color: '#cfc021', fontSize: 25},
-  itemFont_id: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: 0,
-    marginTop: 0,
-    borderWidth: 3,
-    borderRadius: 20,
-    paddingHorizontal: '40%',
-    // paddingVertical: '3%',
-    backgroundColor: '#808080',
-    color: '#fff',
-  },
-  itemFont: {
-    padding: 10,
-    fontSize: 20,
-  },
-  toPropertiesItemBtn: {
-    height: 35,
-    borderRadius: 50,
-  },
 });
 
-export default ListRoomsByTypeScreen;
+export default ListRoomsTypeStatusOrderedScreen;
