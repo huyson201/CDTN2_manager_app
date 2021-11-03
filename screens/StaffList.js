@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import { WHITE, BLUE1, BLUE2 } from "../src/values/color";
 import Icon from "react-native-vector-icons/FontAwesome";
 import StaffItem from "../components/staff/StaffItem";
 
-const StaffList = () => {
-  const data = [1, 2, 3, 4, 5, 6, 7, 8];
+const StaffList = function ({ navigation }) {
+  const data = [1, 2, 3, 4, 5, 6, 7];
   return (
     <View>
       <FlatList
@@ -28,7 +28,9 @@ const StaffList = () => {
           );
         }}
       />
-      <TouchableOpacity style={styles.plusButton}>
+      <TouchableOpacity
+        style={styles.plusButton}
+      >
         <Icon name="plus" size={30} color={WHITE}></Icon>
       </TouchableOpacity>
     </View>

@@ -12,7 +12,7 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import Icon2 from "react-native-vector-icons/MaterialIcons";
 import { Picker } from '@react-native-picker/picker';
 
-const EditProfileStaff = () => {
+const AddNewStaff = () => {
     const [selectedPosition, setSelectedPosition] = useState();
     return (
         <View>
@@ -20,19 +20,17 @@ const EditProfileStaff = () => {
                 <TouchableOpacity>
                     <ImageBackground
                         style={styles.imgStaff}
-                        imageStyle={{ borderRadius: 15 }}
-                        source={require('../src/images/detail_hotel_1.jpg')} >
+                        imageStyle={{ borderRadius: 15, borderWidth: 1, borderColor: WHITE }}>
                         <View style={styles.view_camera}>
                             <Icon name="camera" size={25} color={WHITE} style={styles.icon_camera} />
                         </View>
                     </ImageBackground>
                 </TouchableOpacity>
             </View>
-            <View style={{ marginLeft: 20, marginRight: 20 }}>
+            <View style={{ marginLeft: 20, marginRight: 20}}>
                 <View style={styles.flex_row}>
                     <Icon name="user" size={23} style={styles.icon} />
                     <TextInput
-                        defaultValue="Staff name"
                         placeholder="Input Your Name"
                         autoCapitalize="none"
                         style={{
@@ -55,7 +53,6 @@ const EditProfileStaff = () => {
                 <View style={styles.flex_row}>
                     <Icon2 name="contact-phone" size={23} style={styles.icon} />
                     <TextInput
-                        defaultValue="0987654321"
                         placeholder="Input Your Phone"
                         autoCapitalize="none"
                         style={{
@@ -66,7 +63,6 @@ const EditProfileStaff = () => {
                 <View style={styles.flex_row}>
                     <Icon2 name="mail-outline" size={25} style={styles.icon} />
                     <TextInput
-                        defaultValue="abc@gmail.com"
                         placeholder="Input Your Email"
                         autoCapitalize="none"
                         style={{
@@ -80,7 +76,7 @@ const EditProfileStaff = () => {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.text_button}>Save</Text>
+                        <Text style={styles.text_button}>Add</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -145,4 +141,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default EditProfileStaff;
+export default AddNewStaff;

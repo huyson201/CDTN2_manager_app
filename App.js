@@ -5,13 +5,27 @@ import TaskHome from './components/TaskScreen/TaskHome';
 import TaskLogin from './components/TaskScreen/TaskLogin';
 import {MenuProvider} from 'react-native-popup-menu';
 
-import {useDispatch, useSelector} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwtDecode from 'jwt-decode';
-import {isJwtExpired} from 'jwt-check-expiration';
-import SplashScreen from './screens/SplashScreen';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {login} from './features/auth/userSlice';
+
+import React, { useEffect, useState } from "react";
+import { Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import TaskHome from "./components/TaskScreen/TaskHome";
+import TaskLogin from "./components/TaskScreen/TaskLogin";
+import { MenuProvider } from "react-native-popup-menu";
+
+import { useDispatch, useSelector } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwtDecode from "jwt-decode";
+import { isJwtExpired } from 'jwt-check-expiration';
+import SplashScreen from "./screens/SplashScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { login } from "./features/auth/userSlice";
+
+import StaffList from "./screens/StaffList";
+import EditProfileStaff from "./screens/EditProfileStaff";
+import InvoiceList from "./screens/InvoiceList";
+import AddNewStaff from "./screens/AddNewStaff";
+
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -61,7 +75,7 @@ const App = () => {
         ) : (
           <TaskLogin />
         )}
-          {/* <TaskHome /> */}
+
         </MenuProvider>
       </NavigationContainer>
     </View>

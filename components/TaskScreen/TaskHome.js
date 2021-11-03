@@ -1,15 +1,17 @@
+
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
 import HomeScreen from '../../screens/HomeScreen';
-// 
+
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
 import AddNewRoomScreen from '../../screens/AddNewRoomScreen';
 import ListRoomsTypeStatusAvailalbeScreen from '../../screens/ListRoomsTypeStatusAvailalbeScreen';
 import ListRoomsTypeStatusMaintainScreen from '../../screens/ListRoomsTypeStatusMaintainScreen';
 import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusOrderedScreen';
+
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
@@ -40,6 +42,7 @@ const TaskHome = () => {
         component={ListRoomsByTypeScreen}
         options={{headerShown: true}}
       />
+
        <Stack.Screen
         name="Rooms Available"
         component={ListRoomsTypeStatusAvailalbeScreen}
@@ -55,6 +58,7 @@ const TaskHome = () => {
         component={ListRoomsTypeStatusOrderedScreen}
         options={{headerShown: true}}
       />
+
       <Stack.Screen
         name="Add A new Room"
         component={AddNewRoomScreen}
