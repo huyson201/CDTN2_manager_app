@@ -10,6 +10,7 @@ import {
   DEPOSITED,
   CANCELED,
   DONE,
+  ALL,
 } from '../src/values/constants';
 const Tab = createMaterialTopTabNavigator();
 
@@ -21,8 +22,10 @@ const TabStatus = () => {
           tabBarLabelStyle: {fontSize: 12},
           tabBarItemStyle: {width: 120},
           tabBarScrollEnabled: true,
+          swipeEnabled: false,
+          tabBarPressColor: 'white',
         }}>
-        <Tab.Screen name="tất cả" component={InvoiceList} />
+        <Tab.Screen name={ALL} component={InvoiceList} />
         <Tab.Screen name={WAIT_COMFIRM} component={InvoiceList} />
         <Tab.Screen name={NOT_DEPOSIT} component={InvoiceList} />
         <Tab.Screen name={DEPOSITED} component={InvoiceList} />

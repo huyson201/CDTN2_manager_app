@@ -1,10 +1,11 @@
 
+
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
 import HomeScreen from '../../screens/HomeScreen';
-
+import StaffList from "../../screens/StaffList";
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
 import AddNewRoomScreen from '../../screens/AddNewRoomScreen';
@@ -27,7 +28,13 @@ const TaskHome = () => {
         component={TabStatus}
         options={{ headerShown: false }}
       /> 
-       <Stack.Screen
+     
+      <Stack.Screen
+        name="StaffList"
+        component={StaffList}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Invoice"
         component={Invoice}
         options={{ headerShown: false }}

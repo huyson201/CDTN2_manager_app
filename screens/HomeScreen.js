@@ -7,7 +7,7 @@ import userApi from "../api/userApi";
 import { logout } from "../features/auth/userSlice";
 import { SIGNOUT_SUCCESSFULLY } from "../src/values/constants";
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const dispatch = useDispatch()
   const handleLogout = async () => {
     try {
@@ -21,6 +21,12 @@ const HomeScreen = () => {
       console.log(e)
     }
   };
+  const handleInvoices = async () => {
+    navigation.navigate('TabStatus')
+  };
+  const handleStaffList = async () => {
+    navigation.navigate('StaffList')
+  };
   return (
     <View
       style={{
@@ -31,6 +37,8 @@ const HomeScreen = () => {
     >
       <Text>HomeScreen</Text>
       <Button onPress={handleLogout} title={"Logout"} ></Button>
+      <Button onPress={handleInvoices} title={"Invoices"} ></Button>
+      <Button onPress={handleStaffList} title={"Staffs"} ></Button>
     </View>
   );
 };

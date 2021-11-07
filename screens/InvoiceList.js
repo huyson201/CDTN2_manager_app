@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   View,
   Text,
@@ -6,21 +6,25 @@ import {
   FlatList,
   Button,
   TouchableOpacity,
-} from "react-native";
-import InvoiceItem from "../components/invoices/InvoiceItem";
-
-const InvoiceList = ({ navigation }) => {
+} from 'react-native';
+import InvoiceItem from '../components/invoices/InvoiceItem';
+import {useIsFocused} from '@react-navigation/native';
+const InvoiceList = ({navigation,route}) => {
   const data = [1, 2, 3, 4, 5, 6];
+  const isFocused = useIsFocused();
+  if (isFocused) {
+    console.log(route.name)
+  }
   return (
     <>
       <FlatList
         data={data}
-        renderItem={({ item }) => {
+        renderItem={({item}) => {
           return (
-            <View style={{ backgroundColor: "#ececec" }}>
+            <View style={{backgroundColor: '#ececec'}}>
               <InvoiceItem
                 key={item}
-                roomName={"deluxe room"}
+                roomName={'deluxe room'}
                 status={1}
                 navigation={navigation}
               />
