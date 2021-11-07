@@ -19,5 +19,20 @@ const userApi = {
       },
     );
   },
+  getUserById: (id,token) => {
+    const url = `/users/${id}`;
+    return axiosClient.get(
+      url,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+  },
+  refreshToken: refreshToken => {
+    const url = "/refresh-token"
+    return axiosClient.post(url, { refreshToken: refreshToken })
+  },
 };
 export default userApi;

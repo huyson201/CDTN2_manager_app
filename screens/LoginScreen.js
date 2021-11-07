@@ -47,15 +47,15 @@ const LoginScreen = ({navigation}) => {
     setisLoading(true);
     try {
       const res = await userApi.login(email, password);
-      if (!res.data.msg && res.data.data.user.user_role != 2 ) {
-        console.log(res)
-        dispatch(login(res.data.data.user));
+      if (!res.data.msg && res.data.data.user.user_role != 3 ) {
+        ToastAndroid.show(LOGIN_SUCCESSFULLY, ToastAndroid.SHORT);
+        dispatch(login(res.data.data));
         await AsyncStorage.setItem('token', res.data.data.token);
         await AsyncStorage.setItem('refresh_token', res.data.data.refreshToken);
         if (_isMouted.current) {
           setisLoading(false);
         }
-        ToastAndroid.show(LOGIN_SUCCESSFULLY, ToastAndroid.SHORT);
+
       } else {
         setisLoading(false);
       }
