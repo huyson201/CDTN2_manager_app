@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image,Alert, ToastAndroid} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {WHITE} from '../../src/values/color';
 import {
@@ -9,15 +9,39 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import {
-  ROLE,
-  STAFF_POSITION,
   STAFF_EDIT,
   STAFF_DELETE,
+  STAFF_ROLE,
+  DELETE_SUCCESSFULLY,
 } from '../../src/values/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteStaffByID } from '../../features/staff/staffSlice';
 
-const StaffItem = ({item}) => {
+const StaffItem = ({item,navigation}) => {
+  const dispatch = useDispatch()
+  const {token} = useSelector(state => state.users);
     const handleDeleteStaff = () =>{
-        
+      Alert.alert(
+        "Thông báo",
+        "Are u sure?",
+        [
+          {
+            cancelable: true,
+            text: "Cancel",
+            style: "cancel"
+          },
+          { text: "OK", onPress: deleteItem }
+        ]
+      );
+    }
+    const deleteItem = ()=>{
+      dispatch(deleteStaffByID({id:item.staff_id,token:token}))
+      ToastAndroid.show(DELETE_SUCCESSFULLY, ToastAndroid.SHORT);
+    }
+    const handleEdit = ()=>{
+      navigation.navigate('AddNewStaff',{
+        id: item.staff_id
+      })
     }
   return (
     <View style={[styles.view, styles.flex_row]}>
@@ -43,7 +67,7 @@ const StaffItem = ({item}) => {
         </View>
         <View style={styles.flex_row}>
           <Text style={styles.title1}>Position: </Text>
-          <Text style={styles.content1}>{Object.values(ROLE[item.role])}</Text>
+          <Text style={styles.content1}>{Object.values(STAFF_ROLE[item.role])}</Text>
         </View>
       </View>
 
@@ -52,8 +76,8 @@ const StaffItem = ({item}) => {
           <Icon name="dots-vertical" size={25} />
         </MenuTrigger>
         <MenuOptions>
-          <MenuOption text={STAFF_EDIT} />
-          <MenuOption onSelect={() => alert('Xóa')} text={STAFF_DELETE} />
+          <MenuOption text={STAFF_EDIT} onSelect={handleEdit}/>
+          <MenuOption onSelect={handleDeleteStaff} text={STAFF_DELETE} />
         </MenuOptions>
       </Menu>
     </View>

@@ -33,9 +33,6 @@ const App = () => {
           const user = jwtDecode(token);
           dispatch(getUserById({id: user.user_uuid, userToken: token}));
           dispatch(setAllToken({token: token, refreshToken: refresh_token}));
-          // else{
-          //   dispatch(setFirstLoading(false));
-          // }
         } else if (
           refresh_token !== null &&
           isJwtExpired(refresh_token) === true

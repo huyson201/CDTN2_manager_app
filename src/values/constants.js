@@ -17,6 +17,13 @@ export const ROLE = {
   2: HOTEL_STAFF_NAME,
   3: USER_ROLE_NAME,
 };
+
+export const STAFF_ROLE = {
+  0: HOTEL_STAFF_NAME,
+  1: "Lễ tân",
+  // 2: HOTEL_STAFF_NAME,
+  // 3: USER_ROLE_NAME,
+};
 /**================================================================================================
  **
  *================================================================================================**/
@@ -115,3 +122,6 @@ export const STAFF_PHONE = '0987654321';
 export const STAFF_EMAIL = 'staff@gmail.com';
 export const STAFF_EDIT = 'Chỉnh sửa';
 export const STAFF_DELETE = 'Xóa';
+export const EDIT_SUCCESSFULLY = 'Chỉnh sửa thành công';
+export const ADD_SUCCESSFULLY = 'Thêm thành công';
+export const DELETE_SUCCESSFULLY = 'Xoá thành công';
