@@ -104,13 +104,14 @@ export const EXPIRED_TOKEN =
  **                                         STATUS
  *================================================================================================**/
 export const ALL = 'Tất cả';
-export const WAIT_COMFIRM = 'Chờ xác nhận';
+export const WAIT_COMFIRM = 'Chưa xác nhận';
 export const COMFIRM = 'Xác nhận';
-export const COMFIRMED = 'Đã xác nhận';
+export const DELETE = 'Hủy';
 export const NOT_DEPOSIT = 'Chưa đặt cọc';
-export const DEPOSITED = 'Đã đặt cọc';
+export const DEPOSITED = 'Chưa thanh toán';
+export const RECEIVED = 'Đã nhận phòng';
 export const CANCELED = 'Đã hủy';
-export const DONE = 'Đã hoàn thành';
+export const DONE = 'Hoàn thành';
 export const CHECK_IN = 'Check in';
 export const CHECK_OUT = 'Check out';
 export const TOTAL = 'Thành tiền';
@@ -125,3 +126,18 @@ export const STAFF_DELETE = 'Xóa';
 export const EDIT_SUCCESSFULLY = 'Chỉnh sửa thành công';
 export const ADD_SUCCESSFULLY = 'Thêm thành công';
 export const DELETE_SUCCESSFULLY = 'Xoá thành công';
+
+export const STATUS_INVOICE = {
+  0: WAIT_COMFIRM,
+  1: NOT_DEPOSIT,
+  2: DEPOSITED,
+  3: RECEIVED,
+  4: DONE,
+  5: CANCELED,
+};
+export const CHANGE_STATUS_INVOICE = {
+  0: "1",
+  1: "2",
+  2: "3",
+  3: "4",
+};
