@@ -71,6 +71,7 @@ export const deleteStaffByID = createAsyncThunk(
     }
   },
 );
+
 const staffAdapter = createEntityAdapter({
   selectId: staff => staff.staff_id,
 });
