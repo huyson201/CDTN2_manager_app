@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {WHITE, BLUE1, BLUE2} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,29 +15,48 @@ import staffApi from '../api/staffApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
 import {getStaff, staffSelectors} from '../features/staff/staffSlice';
-
-const StaffList = () => {
+import {useIsFocused} from '@react-navigation/native';
+const StaffList = ({navigation}) => {
+  const flatList = useRef();
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const staffs = useSelector(staffSelectors.selectAll);
+  const {check, loading} = useSelector(state => state.staffs);
+  const [reverseList, setReverseList] = useState([]);
   useEffect(async () => {
     const token = await AsyncStorage.getItem('token');
     dispatch(getStaff({id: 1, token: token}));
   }, []);
+  // useEffect(() => {
+  //   if (staffs.length > 0) {
+  //     setReverseList(staffs.reverse());
+  //   }
+  //   return () => {};
+  // }, [staffs.length]);
+  useEffect(() => {
+    if (!check && isFocused == true && staffs.length > 0) {
+      flatList.current?.scrollToEnd();
+    }
+  }, [isFocused, staffs.length]);
+  const handlePressAdd = () => {
+    navigation.navigate('AddNewStaff');
+  };
   return (
     <View style={styles.container}>
-      <FlatList
-        data={staffs}
-        renderItem={({item}) => {
-          return (
-            <View style={{backgroundColor: '#ececec'}}>
-              <StaffItem key={item} item={item} status={1} />
-            </View>
-          );
-        }}
-      />
-      <TouchableOpacity
-        style={styles.plusButton}
-      >
+      {staffs.length > 0 && (
+        <FlatList
+          ref={flatList}
+          data={staffs}
+          renderItem={({item}) => {
+            return (
+              <View style={{backgroundColor: '#ececec'}}>
+                <StaffItem navigation={navigation} key={item} item={item} status={1} />
+              </View>
+            );
+          }}
+        />
+      )}
+      <TouchableOpacity style={styles.plusButton} onPress={handlePressAdd}>
         <Icon name="plus" size={30} color={WHITE}></Icon>
       </TouchableOpacity>
     </View>
