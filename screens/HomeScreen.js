@@ -12,6 +12,7 @@ const HomeScreen = ({navigation}) => {
   // const hotels = useSelector(hotelSelectors.selectAll);
   // const hotel = useSelector(state => hotelSelectors.selectById(state, 1));
   const {user, token} = useSelector(state => state.users);
+ 
   const handleLogout = async () => {
     try {
       const token = await AsyncStorage.getItem('token');

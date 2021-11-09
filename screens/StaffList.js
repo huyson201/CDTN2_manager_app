@@ -23,9 +23,12 @@ const StaffList = ({navigation}) => {
   const staffs = useSelector(staffSelectors.selectAll);
   const {check, loading} = useSelector(state => state.staffs);
   const [reverseList, setReverseList] = useState([]);
-  useEffect(async () => {
+  const getData = async () => {
     const token = await AsyncStorage.getItem('token');
     dispatch(getStaff({id: 1, token: token}));
+  };
+  useEffect(() => {
+    getData();
   }, []);
   useEffect(() => {
     if (staffs.length > 0) {
@@ -35,7 +38,7 @@ const StaffList = ({navigation}) => {
       setReverseList(tempList);
     }
     return () => {
-      setReverseList([])
+      setReverseList([]);
     };
   }, [staffs]);
   useEffect(() => {
@@ -52,6 +55,8 @@ const StaffList = ({navigation}) => {
         <FlatList
           ref={flatList}
           data={reverseList}
+          refreshing={loading}
+          onRefresh={getData}
           renderItem={({item}) => {
             return (
               <View style={{backgroundColor: '#ececec'}}>

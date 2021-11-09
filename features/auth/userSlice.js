@@ -1,34 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import jwtDecode from 'jwt-decode';
-import userApi from '../../api/userApi';
 
-export const getUserById = createAsyncThunk(
-  'user/getUserById',
-  async ({id, userToken}, thunkAPI) => {
-    try {
-      const res = await userApi.getUserById(id, userToken);
-      return res.data.data;
-    } catch (error) {
-      console.log(error)
-     resetToken(thunkAPI)
-    }
-  },
-);
-export const resetToken = async(thunkAPI) =>{
-  try {
-    const refreshToken = thunkAPI.getState().users.refreshToken;
-    const res = await userApi.refreshToken(refreshToken);
-    await AsyncStorage.setItem('token', res.data.token);
-    const user = jwtDecode(res.data.token)
-    thunkAPI.dispatch(getUserById({id: user.user_uuid, userToken: token}));
-    thunkAPI.dispatch(setAllToken({token: token}));
-  } catch (error) {
-    console.log(error)
-    thunkAPI.dispatch(logout);
-  }
-
-}
 const userSlice = createSlice({
   name: 'users',
   initialState: {
@@ -70,17 +43,7 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
-    [getUserById.pending]: state => {
-      state.firstLoading = true;
-    },
-    [getUserById.rejected]: state => {
-      state.firstLoading = false;
-    },
-    [getUserById.fulfilled]: (state, action) => {
-      state.user = action.payload;
-      state.isRemembered = true;
-      state.firstLoading = false;
-    },
+  
   },
 });
 
