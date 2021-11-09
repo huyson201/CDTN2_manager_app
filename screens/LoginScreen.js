@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
@@ -12,15 +12,15 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Button} from 'react-native-elements';
-import {BLUE1} from '../src/values/color';
+import { Button } from 'react-native-elements';
+import { BLUE1 } from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {DEVICE_WIDTH, DEVICE_HEIGHT} from '../src/values/size';
-import {LOGIN_SUCCESSFULLY} from '../src/values/constants';
+import { DEVICE_WIDTH, DEVICE_HEIGHT } from '../src/values/size';
+import { LOGIN_SUCCESSFULLY } from '../src/values/constants';
 import userApi from '../api/userApi';
-import {useDispatch} from 'react-redux';
-import {login} from '../features/auth/userSlice';
-const LoginScreen = ({navigation}) => {
+import { useDispatch } from 'react-redux';
+import { login } from '../features/auth/userSlice';
+const LoginScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const emailInput = useRef();
   const passInput = useRef();
@@ -47,15 +47,15 @@ const LoginScreen = ({navigation}) => {
     setisLoading(true);
     try {
       const res = await userApi.login(email, password);
-      if (!res.data.msg && res.data.data.user.user_role != 2 ) {
-        console.log(res)
-        dispatch(login(res.data.data.user));
+      if (!res.data.msg && res.data.data.user.user_role != 3) {
+        ToastAndroid.show(LOGIN_SUCCESSFULLY, ToastAndroid.SHORT);
+        dispatch(login(res.data.data));
         await AsyncStorage.setItem('token', res.data.data.token);
         await AsyncStorage.setItem('refresh_token', res.data.data.refreshToken);
         if (_isMouted.current) {
           setisLoading(false);
         }
-        ToastAndroid.show(LOGIN_SUCCESSFULLY, ToastAndroid.SHORT);
+
       } else {
         setisLoading(false);
       }

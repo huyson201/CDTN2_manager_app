@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import {
   BLUE2,
@@ -7,88 +7,98 @@ import {
   ORANGE,
   MAP_MARKER,
 } from "../../src/values/color";
-import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import Octicons from "react-native-vector-icons/Octicons";
 import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-} from "react-native-popup-menu";
-import {
-  WAIT_COMFIRM,
-  COMFIRM,
-  COMFIRMED,
   TOTAL,
+  STATUS_INVOICE,
 } from "../../src/values/constants";
 import Icon from "react-native-vector-icons/FontAwesome5";
+import hotelApi from "../../api/hotelApi";
+import Menu from "../menu/MenuList"
 
 const InvoiceItem = (props) => {
-  return (
-    <TouchableOpacity
-      activeOpacity={0.9}
-      onPress={() => {
-        // alert("clicked");
-        props.navigation
-          ? props.navigation.navigate("Invoice")
-          : console.log("navigation");
-      }}
-    >
-      <View style={styles.view}>
-        <View style={[styles.flex_row, styles.header]}>
-          <Text style={[styles.padding, styles.roomName]}>
-            {props.roomName}
-          </Text>
-          <Menu style={{ margin: 10, marginTop: 15 }}>
-            <MenuTrigger>
-              <Icon2 style={styles.icon_menu} name="dots-vertical" size={20} />
-            </MenuTrigger>
-            <MenuOptions>
-              <MenuOption onSelect={() => alert(COMFIRMED)} text={COMFIRM} />
-              <MenuOption onSelect={() => alert(COMFIRMED)} text={COMFIRM} />
-              <MenuOption onSelect={() => alert(COMFIRMED)} text={COMFIRM} />
-              <MenuOption onSelect={() => alert(COMFIRMED)} text={COMFIRM} />
-              <MenuOption disabled={true} text="Disabled" />
-            </MenuOptions>
-          </Menu>
-        </View>
+  const [room_name, setRoomName] = useState("")
+  const [room_quantity, setRoomQty] = useState()
+  const rDate = props.data.r_date.split('T')[0].replace(/-/g, '/')
+  const pDate = props.data.p_date.split('T')[0].replace(/-/g, '/')
+  useEffect(() => {
+    if (props.data) {
+      const getRoomName = async () => {
+        try {
+          const res = await hotelApi.getRoomById(props.data.room_id)
+          if (res.data.data) {
+            setRoomQty(res.data.data.room_quantity)
+            setRoomName(res.data.data.room_name)
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      getRoomName()
+    }
+    return () => {
+      setRoomQty()
+      setRoomName()
+    }
+  }, [])
 
-        <View style={[styles.body, styles.padding, styles.flex_row]}>
-          <View>
-            <Text>Thời gian</Text>
-            <Text style={styles.color_text}>2/3/2001 - 5/3/2001</Text>
+  return (
+    <>
+      <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={() => {
+          props.navigation
+            && props.navigation.navigate("Invoice")
+        }}
+      >
+        <View style={styles.view}>
+          <View style={[styles.flex_row, styles.header]}>
+            <Text style={[styles.padding, styles.roomName]}>
+              {room_name}
+            </Text>
+            <Menu status={props.data.status} id={props.data.invoice_id} room_quantity={room_quantity} />
           </View>
-          <View style={[styles.flex_row, styles.padding_status]}>
-            {props.status >= 1 ? (
-              <>
-                <Icon
-                  name="check"
-                  size={14}
-                  color="#05375a"
-                  style={styles.icon}
-                ></Icon>
-                <Text style={styles.color_text}>Còn phòng</Text>
-              </>
-            ) : (
-              <>
-                <Octicons
-                  name="x"
-                  size={14}
-                  style={[styles.icon, styles.color_red]}
-                ></Octicons>
-                <Text style={{ color: MAP_MARKER, fontSize: 12.5 }}>
-                  Hết phòng
-                </Text>
-              </>
-            )}
+          <View style={[styles.body, styles.padding, styles.flex_row]}>
+            <View>
+              <Text>Thời gian</Text>
+              <Text style={styles.color_text}>{rDate} - {pDate}</Text>
+            </View>
+
+            {+props.data.status === 0 ?
+              < View style={[styles.flex_row, styles.padding_status]}>
+                {room_quantity > 0 ?
+                  <>
+                    <Icon
+                      name="check"
+                      size={14}
+                      color="#05375a"
+                      style={styles.icon}
+                    ></Icon>
+                    <Text style={styles.color_text}>Còn phòng</Text>
+                  </>
+                  :
+                  <>
+                    <Octicons
+                      name="x"
+                      size={14}
+                      style={[styles.icon, styles.color_red]}
+                    ></Octicons>
+                    <Text style={{ color: MAP_MARKER, fontSize: 12.5 }}>
+                      Hết phòng
+                    </Text>
+                  </>
+                }
+              </View>
+              : <Text></Text>
+            }
+          </View>
+          <View style={[styles.footer, styles.padding, styles.flex_row]}>
+            <Text>{`${TOTAL}`} :{props.data.price} VND</Text>
+            <Text style={{ color: ORANGE }}>{Object.values(STATUS_INVOICE[props.data.status])}</Text>
           </View>
         </View>
-        <View style={[styles.footer, styles.padding, styles.flex_row]}>
-          <Text>{`${TOTAL}`} : 300000</Text>
-          <Text style={{ color: ORANGE }}>{WAIT_COMFIRM}</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </>
   );
 };
 

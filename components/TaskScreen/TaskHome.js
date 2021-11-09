@@ -1,10 +1,10 @@
-
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
 import HomeScreen from '../../screens/HomeScreen';
-
+import StaffList from '../../screens/StaffList';
+import AddNewStaff from '../../screens/AddNewStaff';
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
 import AddNewRoomScreen from '../../screens/AddNewRoomScreen';
@@ -20,17 +20,29 @@ const TaskHome = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="TabStatus"
         component={TabStatus}
-        options={{ headerShown: false }}
-      /> 
-       <Stack.Screen
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="StaffList"
+        component={StaffList}
+        options={{headerShown: true}}
+      />
+
+      <Stack.Screen
+        name="AddNewStaff"
+        component={AddNewStaff}
+        options={{headerShown: true,title: null}}
+      />
+      <Stack.Screen
         name="Invoice"
         component={Invoice}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="All Rooms"
@@ -43,17 +55,17 @@ const TaskHome = () => {
         options={{headerShown: true}}
       />
 
-       <Stack.Screen
+      <Stack.Screen
         name="Rooms Available"
         component={ListRoomsTypeStatusAvailalbeScreen}
         options={{headerShown: true}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Rooms Maintaining"
         component={ListRoomsTypeStatusMaintainScreen}
         options={{headerShown: true}}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Rooms Ordered"
         component={ListRoomsTypeStatusOrderedScreen}
         options={{headerShown: true}}
