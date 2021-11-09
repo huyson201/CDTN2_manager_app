@@ -113,6 +113,7 @@ const AddNewStaff = ({navigation, route}) => {
                 <View style={styles.header}>
                   <TouchableOpacity>
                     <ImageBackground
+
                       source={{
                         uri:
                           staff.staff_info.user_img === null
@@ -128,11 +129,13 @@ const AddNewStaff = ({navigation, route}) => {
                         borderColor: WHITE,
                       }}></ImageBackground>
                   </TouchableOpacity>
+
                 </View>
                 <View style={{marginLeft: 20, marginRight: 20}}>
                   <View style={styles.flex_row}>
                     <Icon name="user" size={23} style={styles.icon} />
                     <TextInput
+
                       editable={staff ? false : true}
                       value={values.name}
                       onBlur={handleBlur('name')}
@@ -230,6 +233,7 @@ const AddNewStaff = ({navigation, route}) => {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
+
                     <TouchableOpacity style={styles.button}>
                       <Text style={styles.text_button}>Cancel</Text>
                     </TouchableOpacity>

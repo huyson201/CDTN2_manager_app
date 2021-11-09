@@ -5,6 +5,7 @@ import TaskHome from './components/TaskScreen/TaskHome';
 import TaskLogin from './components/TaskScreen/TaskLogin';
 import { MenuProvider } from 'react-native-popup-menu';
 
+
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
@@ -54,6 +55,7 @@ const App = () => {
     <View style={{ flex: 1 }}>
       <NavigationContainer>
         <MenuProvider>
+
           {firstLoading ? (
             <Stack.Navigator>
               <Stack.Screen
