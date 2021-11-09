@@ -22,7 +22,7 @@ import {
 import {Formik} from 'formik';
 import {Button} from 'react-native-elements';
 import * as Yup from 'yup';
-import { EDIT_SUCCESSFULLY,ADD_SUCCESSFULLY } from '../src/values/constants';
+import {EDIT_SUCCESSFULLY, ADD_SUCCESSFULLY} from '../src/values/constants';
 const validationSchema = Yup.object({
   name: Yup.string()
     .trim()
@@ -48,187 +48,204 @@ const AddNewStaff = ({navigation, route}) => {
       navigation.setOptions({
         title: `Edit Staff`,
       });
+    } else {
+      navigation.setOptions({
+        title: `Add Staff`,
+      });
     }
     return () => {
       setId();
     };
   }, [route.params]);
   const staff = useSelector(state => staffSelectors.selectById(state, id));
+  console.log(staff);
   const [selectedPosition, setSelectedPosition] = useState();
   return (
-    <Formik
-      initialValues={user}
-      validationSchema={validationSchema}
-      onSubmit={(values, formikActions) => {
-        if (staff) {
-          dispatch(
-            updateStaffById({id: id, role: selectedPosition, token: token}),
-          );
-          ToastAndroid.show(EDIT_SUCCESSFULLY, ToastAndroid.SHORT);
-
-        } else {
-          dispatch(
-            createStaff({
-              name: values.name,
-              email: values.email,
-              phone: values.phone,
-              staffRole: selectedPosition,
-              hotelId: hotel.hotel_id,
-              token: token,
-            }),
-          );
-          ToastAndroid.show(ADD_SUCCESSFULLY, ToastAndroid.SHORT);
-
-        }
-        formikActions.resetForm();
-      }}>
-      {({
-        values,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        setValues,
-        errors,
-      }) => {
-        useEffect(() => {
-          if (staff) {
-            setValues({
-              name: staff.staff_info.user_name,
-              email: staff.staff_info.user_email,
-              phone: staff.staff_info.user_phone,
-            });
-          }
-        }, [staff]);
-        return (
-          <View>
-            <View style={styles.header}>
-              <TouchableOpacity>
-                <ImageBackground
-                  style={styles.imgStaff}
-                  imageStyle={{
-                    borderRadius: 15,
-                    borderWidth: 1,
-                    borderColor: WHITE,
-                  }}>
-                  <View style={styles.view_camera}>
-                    <Icon
-                      name="camera"
-                      size={25}
-                      color={WHITE}
-                      style={styles.icon_camera}
+    <>
+      {!staff && null}
+      {(staff || route.params == undefined) && (
+        <Formik
+          initialValues={user}
+          validationSchema={validationSchema}
+          onSubmit={(values, formikActions) => {
+            if (staff) {
+              dispatch(
+                updateStaffById({id: id, role: selectedPosition, token: token}),
+              );
+              loading == false &&
+                ToastAndroid.show(EDIT_SUCCESSFULLY, ToastAndroid.SHORT);
+            } else {
+              dispatch(
+                createStaff({
+                  name: values.name,
+                  email: values.email,
+                  phone: values.phone,
+                  staffRole: selectedPosition,
+                  hotelId: hotel.hotel_id,
+                  token: token,
+                }),
+              );
+              loading == false &&
+                ToastAndroid.show(ADD_SUCCESSFULLY, ToastAndroid.SHORT);
+              formikActions.resetForm();
+            }
+          }}>
+          {({
+            values,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            setValues,
+            errors,
+          }) => {
+            useEffect(() => {
+              if (staff) {
+                setValues({
+                  name: staff.staff_info.user_name,
+                  email: staff.staff_info.user_email,
+                  phone: staff.staff_info.user_phone,
+                });
+              }
+            }, [staff]);
+            return (
+              <View>
+                <View style={styles.header}>
+                  <TouchableOpacity>
+                    <ImageBackground
+                      source={{
+                        uri:
+                          staff.staff_info.user_img === null
+                            ? `https://ui-avatars.com/api/?name=${
+                                values.name !== '' ? values.name : 'AVA'
+                              }&background=random&size=256&rounded=true`
+                            : staff.staff_info.user_img,
+                      }}
+                      style={styles.imgStaff}
+                      imageStyle={{
+                        borderRadius: 99,
+                        borderWidth: 1,
+                        borderColor: WHITE,
+                      }}></ImageBackground>
+                  </TouchableOpacity>
+                </View>
+                <View style={{marginLeft: 20, marginRight: 20}}>
+                  <View style={styles.flex_row}>
+                    <Icon name="user" size={23} style={styles.icon} />
+                    <TextInput
+                      editable={staff ? false : true}
+                      value={values.name}
+                      onBlur={handleBlur('name')}
+                      onChangeText={handleChange('name')}
+                      placeholder="Input Your Name"
+                      autoCapitalize="none"
+                      style={{
+                        fontSize: 17,
+                        paddingLeft: 20,
+                      }}
                     />
                   </View>
-                </ImageBackground>
-              </TouchableOpacity>
-            </View>
-            <View style={{marginLeft: 20, marginRight: 20}}>
-              <View style={styles.flex_row}>
-                <Icon name="user" size={23} style={styles.icon} />
-                <TextInput
-                  editable={staff ? false : true}
-                  value={values.name}
-                  onBlur={handleBlur('name')}
-                  onChangeText={handleChange('name')}
-                  placeholder="Input Your Name"
-                  autoCapitalize="none"
-                  style={{
-                    fontSize: 17,
-                    paddingLeft: 20,
-                  }}
-                />
+                  {errors.name && touched.name ? (
+                    <Text
+                      style={{color: 'red', marginLeft: 40, marginBottom: -20}}>
+                      {errors.name}
+                    </Text>
+                  ) : null}
+                  <View style={styles.flex_row}>
+                    <Icon2 name="mail-outline" size={25} style={styles.icon} />
+                    <TextInput
+                      editable={staff ? false : true}
+                      placeholder="Input Your Email"
+                      autoCapitalize="none"
+                      style={{
+                        fontSize: 17,
+                        paddingLeft: 15,
+                      }}
+                      value={values.email}
+                      onBlur={handleBlur('email')}
+                      onChangeText={handleChange('email')}
+                    />
+                  </View>
+                  {errors.email && touched.email ? (
+                    <Text
+                      style={{color: 'red', marginLeft: 40, marginBottom: -20}}>
+                      {errors.email}
+                    </Text>
+                  ) : null}
+                  <View style={styles.flex_row}>
+                    <Icon2 name="contact-phone" size={23} style={styles.icon} />
+                    <TextInput
+                      editable={staff ? false : true}
+                      placeholder="Input Your Phone"
+                      autoCapitalize="none"
+                      style={{
+                        fontSize: 17,
+                        paddingLeft: 17,
+                      }}
+                      value={values.phone}
+                      onBlur={handleBlur('phone')}
+                      onChangeText={handleChange('phone')}
+                    />
+                  </View>
+                  {errors.phone && touched.phone ? (
+                    <Text
+                      style={{color: 'red', marginLeft: 40, marginBottom: -20}}>
+                      {errors.phone}
+                    </Text>
+                  ) : null}
+                  <View style={styles.flex_row}>
+                    <Icon2
+                      name="location-history"
+                      size={25}
+                      style={styles.icon}
+                    />
+                    <Picker
+                      selectedValue={selectedPosition}
+                      style={styles.picker}
+                      onValueChange={(itemValue, itemIndex) => {
+                        if (staff && !firstTime) {
+                          setSelectedPosition(staff.role);
+                          setFirstTime(true);
+                        } else {
+                          setSelectedPosition(itemValue);
+                        }
+                        if (firstTime) {
+                          setSelectedPosition(itemValue);
+                        }
+                      }}>
+                      <Picker.Item
+                        label="Nhân viên"
+                        value={0}
+                        style={{fontSize: 17}}
+                      />
+                      <Picker.Item
+                        label="Lễ Tân"
+                        value={1}
+                        style={{fontSize: 17}}
+                      />
+                    </Picker>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <TouchableOpacity style={styles.button}>
+                      <Text style={styles.text_button}>Cancel</Text>
+                    </TouchableOpacity>
+                    <Button
+                      loading={loading}
+                      onPress={handleSubmit}
+                      buttonStyle={styles.button}
+                      title={staff ? 'Edit' : 'Add'}></Button>
+                  </View>
+                </View>
               </View>
-              {errors.name && touched.name ? (
-                <Text style={{color: 'red', marginLeft: 40, marginBottom: -20}}>
-                  {errors.name}
-                </Text>
-              ) : null}
-              <View style={styles.flex_row}>
-                <Icon2 name="mail-outline" size={25} style={styles.icon} />
-                <TextInput
-                  editable={staff ? false : true}
-                  placeholder="Input Your Email"
-                  autoCapitalize="none"
-                  style={{
-                    fontSize: 17,
-                    paddingLeft: 15,
-                  }}
-                  value={values.email}
-                  onBlur={handleBlur('email')}
-                  onChangeText={handleChange('email')}
-                />
-              </View>
-              {errors.email && touched.email ? (
-                <Text style={{color: 'red', marginLeft: 40, marginBottom: -20}}>
-                  {errors.email}
-                </Text>
-              ) : null}
-              <View style={styles.flex_row}>
-                <Icon2 name="contact-phone" size={23} style={styles.icon} />
-                <TextInput
-                  editable={staff ? false : true}
-                  placeholder="Input Your Phone"
-                  autoCapitalize="none"
-                  style={{
-                    fontSize: 17,
-                    paddingLeft: 17,
-                  }}
-                  value={values.phone}
-                  onBlur={handleBlur('phone')}
-                  onChangeText={handleChange('phone')}
-                />
-              </View>
-              {errors.phone && touched.phone ? (
-                <Text style={{color: 'red', marginLeft: 40, marginBottom: -20}}>
-                  {errors.phone}
-                </Text>
-              ) : null}
-              <View style={styles.flex_row}>
-                <Icon2 name="location-history" size={25} style={styles.icon} />
-                <Picker
-                  selectedValue={selectedPosition}
-                  style={styles.picker}
-                  onValueChange={(itemValue, itemIndex) => {
-                    if(staff && !firstTime)
-                    {
-                      setSelectedPosition(staff.role);
-                      setFirstTime(true)
-                    }
-                    else{
-                      setSelectedPosition(itemValue);
-                    }
-                    if(firstTime){
-                    setSelectedPosition(itemValue);
-                    }
-                  }}>
-                  <Picker.Item
-                    label="Nhân viên"
-                    value={0}
-                    style={{fontSize: 17}}
-                  />
-                  <Picker.Item
-                    label="Lễ Tân"
-                    value={1}
-                    style={{fontSize: 17}}
-                  />
-                </Picker>
-              </View>
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity style={styles.button}>
-                  <Text style={styles.text_button}>Cancel</Text>
-                </TouchableOpacity>
-                <Button
-                  loading={loading}
-                  onPress={handleSubmit}
-                  buttonStyle={styles.button}
-                  title={staff ? 'Edit' : 'Add'}></Button>
-              </View>
-            </View>
-          </View>
-        );
-      }}
-    </Formik>
+            );
+          }}
+        </Formik>
+      )}
+    </>
   );
 };
 

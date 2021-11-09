@@ -29,12 +29,12 @@ export const createStaff = createAsyncThunk(
         token,
       );
       const data = res.data.data;
-      console.log(data)
       data.staff_info = {
         user_email: email,
         user_name: name,
         user_phone: phone,
         user_uuid: res.data.data.user_uuid,
+        user_img: null,
       };
       return data;
     } catch (error) {
@@ -79,8 +79,9 @@ export const staffSelectors = staffAdapter.getSelectors(state => state.staffs);
 const staffSlice = createSlice({
   name: 'staffs',
   initialState: staffAdapter.getInitialState({
-    loading: false,
+    loading: null,
     check: false,
+    checkUpdated: false,
   }),
   reducers: {
     setCheck(state, {payload}) {
@@ -128,7 +129,8 @@ const staffSlice = createSlice({
     },
     [updateStaffById.fulfilled](state, {payload}) {
       state.loading = false;
-      state.check = false;
+      state.checkUpdated = true;
+      state.check = true;
       staffAdapter.updateOne(state, {
         id: payload.id,
         changes: {role: payload.changes},
