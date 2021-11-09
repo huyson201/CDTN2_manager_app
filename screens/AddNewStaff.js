@@ -31,7 +31,7 @@ const AddNewStaff = () => {
                 <View style={styles.flex_row}>
                     <Icon name="user" size={23} style={styles.icon} />
                     <TextInput
-                        placeholder="Input Your Name"
+                        placeholder="Full Name"
                         autoCapitalize="none"
                         style={{
                             fontSize: 17,
@@ -53,7 +53,7 @@ const AddNewStaff = () => {
                 <View style={styles.flex_row}>
                     <Icon2 name="contact-phone" size={23} style={styles.icon} />
                     <TextInput
-                        placeholder="Input Your Phone"
+                        placeholder="Phone Number"
                         autoCapitalize="none"
                         style={{
                             fontSize: 17,
@@ -63,7 +63,7 @@ const AddNewStaff = () => {
                 <View style={styles.flex_row}>
                     <Icon2 name="mail-outline" size={25} style={styles.icon} />
                     <TextInput
-                        placeholder="Input Your Email"
+                        placeholder="Email Address"
                         autoCapitalize="none"
                         style={{
                             fontSize: 17,
