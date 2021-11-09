@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Text,
   TextInput,
-  ImageBackground,
+  Image,
   ToastAndroid,
 } from 'react-native';
 import {WHITE, BLUE1, BLUE2} from '../src/values/color';
@@ -58,7 +58,6 @@ const AddNewStaff = ({navigation, route}) => {
     };
   }, [route.params]);
   const staff = useSelector(state => staffSelectors.selectById(state, id));
-  console.log(staff);
   const [selectedPosition, setSelectedPosition] = useState();
   return (
     <>
@@ -112,22 +111,22 @@ const AddNewStaff = ({navigation, route}) => {
               <View>
                 <View style={styles.header}>
                   <TouchableOpacity>
-                    <ImageBackground
-
-                      source={{
-                        uri:
-                          staff.staff_info.user_img === null
-                            ? `https://ui-avatars.com/api/?name=${
-                                values.name !== '' ? values.name : 'AVA'
-                              }&background=random&size=256&rounded=true`
-                            : staff.staff_info.user_img,
-                      }}
+                    <Image
+                      source={
+                        staff
+                          ? staff.staff_info.user_img !== null
+                            ? {
+                                uri: staff.staff_info.user_img,
+                              }
+                            : require('../src/images/staff.jpg')
+                          : require('../src/images/staff.jpg')
+                      }
                       style={styles.imgStaff}
                       imageStyle={{
                         borderRadius: 99,
                         borderWidth: 1,
                         borderColor: WHITE,
-                      }}></ImageBackground>
+                      }}></Image>
                   </TouchableOpacity>
 
                 </View>

@@ -45,12 +45,13 @@ const StaffItem = ({item, navigation}) => {
       <View style={{flex: 0.8, justifyContent: 'center', alignItems: 'center'}}>
         <Image
           style={styles.imgStaff}
-          source={{
-            uri:
-              item.staff_info.user_img !== null
-                ? item.staff_info.user_img
-                :  `https://ui-avatars.com/api/?name=${item.staff_info.user_name}&background=random&size=800&rounded=true`,
-          }}
+          source={
+            item.staff_info.user_img !== null
+              ? {
+                  uri: item.staff_info.user_img,
+                }
+              : require('../../src/images/staff.jpg')
+          }
         />
       </View>
 

@@ -3,17 +3,29 @@ import {
   createAsyncThunk,
   createEntityAdapter,
 } from '@reduxjs/toolkit';
+import {isJwtExpired} from 'jwt-check-expiration';
 import {ToastAndroid} from 'react-native';
 import staffApi from '../../api/staffApi';
 import {EXPIRED_TOKEN} from '../../src/values/constants';
 import {logout} from '../auth/userSlice';
+import {resetToken} from '../../src/utilFunc'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export const getStaff = createAsyncThunk(
   'staffs/get',
   async ({id, token}, thunkAPI) => {
     try {
       const res = await staffApi.getStaffByHotelId(id, token);
       return res.data.data;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      const refreshToken = await AsyncStorage.getItem('refresh_token')
+      const token = await AsyncStorage.getItem('token')
+      console.log(token,"OLD")
+      const newToken = await resetToken(thunkAPI.dispatch,refreshToken)
+      console.log(newToken,"NEW")
+      const res = await staffApi.getStaffByHotelId(id, newToken);
+      return res.data.data;
+    }
   },
 );
 export const createStaff = createAsyncThunk(
@@ -39,6 +51,28 @@ export const createStaff = createAsyncThunk(
       return data;
     } catch (error) {
       console.log(error);
+      const refreshToken = await AsyncStorage.getItem('refresh_token')
+      // const token = await AsyncStorage.getItem('token')
+      // console.log(token,"OLD")
+      const newToken = await resetToken(thunkAPI.dispatch,refreshToken)
+      // console.log(newToken,"NEW")
+      const res = await staffApi.createStaff(
+        name,
+        email,
+        phone,
+        staffRole,
+        hotelId,
+        newToken,
+      );
+      const data = res.data.data;
+      data.staff_info = {
+        user_email: email,
+        user_name: name,
+        user_phone: phone,
+        user_uuid: res.data.data.user_uuid,
+        user_img: null,
+      };
+      return data;
     }
   },
 );
@@ -47,15 +81,21 @@ export const updateStaffById = createAsyncThunk(
   async ({id, role, token}, thunkAPI) => {
     try {
       await staffApi.updateStaff(id, role, token);
-      // data.staff_info = {
-      //   user_email: email,
-      //   user_name: name,
-      //   user_phone: phone,
-      //   user_uuid: res.data.data.user_uuid,
-      // };
+     
       return {id: id, changes: role};
     } catch (error) {
       console.log(error);
+      const refreshToken = await AsyncStorage.getItem('refresh_token')
+      const token = await AsyncStorage.getItem('token')
+      if(isJwtExpired(token)==true){
+        const newToken = await resetToken(thunkAPI.dispatch,refreshToken)
+        await staffApi.updateStaff(id, role, newToken);
+        return {id: id, changes: role};
+      }
+      else{
+        // getStaff()
+        console.log("loi")
+      }
     }
   },
 );
@@ -66,8 +106,7 @@ export const deleteStaffByID = createAsyncThunk(
       await staffApi.deleteStaffById(id, token);
       return id;
     } catch (error) {
-      ToastAndroid.show(EXPIRED_TOKEN, ToastAndroid.SHORT);
-      dispatch(logout());
+      console.log(error)
     }
   },
 );

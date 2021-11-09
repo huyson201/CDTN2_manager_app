@@ -6,8 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import hotelApi from '../../api/hotelApi';
 import userApi from '../../api/userApi';
-import {resetToken} from '../auth/userSlice';
-
+import {resetToken} from '../../src/utilFunc'
 export const getHotelsOfUser = createAsyncThunk(
   'hotels/getHotelsOfUser',
   async ({id, userToken}, thunkAPI) => {
@@ -15,8 +14,11 @@ export const getHotelsOfUser = createAsyncThunk(
       const res = await hotelApi.getHotelsOfOwner(id, userToken);
       return res.data.data;
     } catch (error) {
-      console.log(error);
-      resetToken(thunkAPI);
+      const refreshToken = await AsyncStorage.getItem('refresh_token')
+      const newToken = resetToken(thunkAPI.dispatch,refreshToken)
+      console.log(newToken)
+      const res = await hotelApi.getHotelsOfOwner(id, newToken);
+      return res.data.data;
     }
   },
 );
