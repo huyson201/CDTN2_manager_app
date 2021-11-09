@@ -27,15 +27,20 @@ const StaffList = ({navigation}) => {
     const token = await AsyncStorage.getItem('token');
     dispatch(getStaff({id: 1, token: token}));
   }, []);
-  // useEffect(() => {
-  //   if (staffs.length > 0) {
-  //     setReverseList(staffs.reverse());
-  //   }
-  //   return () => {};
-  // }, [staffs.length]);
+  useEffect(() => {
+    if (staffs.length > 0) {
+      const tempList = staffs.sort((a, b) =>
+        b.createdAt > a.createdAt ? 1 : -1,
+      );
+      setReverseList(tempList);
+    }
+    return () => {
+      setReverseList([])
+    };
+  }, [staffs]);
   useEffect(() => {
     if (!check && isFocused == true && staffs.length > 0) {
-      flatList.current?.scrollToEnd();
+      flatList.current?.scrollToIndex({index: 0});
     }
   }, [isFocused, staffs.length]);
   const handlePressAdd = () => {
@@ -43,14 +48,19 @@ const StaffList = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
-      {staffs.length > 0 && (
+      {reverseList.length > 0 && (
         <FlatList
           ref={flatList}
-          data={staffs}
+          data={reverseList}
           renderItem={({item}) => {
             return (
               <View style={{backgroundColor: '#ececec'}}>
-                <StaffItem navigation={navigation} key={item} item={item} status={1} />
+                <StaffItem
+                  navigation={navigation}
+                  key={item}
+                  item={item}
+                  status={1}
+                />
               </View>
             );
           }}

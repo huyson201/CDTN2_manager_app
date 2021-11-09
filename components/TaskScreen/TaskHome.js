@@ -37,7 +37,7 @@ const TaskHome = () => {
       <Stack.Screen
         name="AddNewStaff"
         component={AddNewStaff}
-        options={{headerShown: true}}
+        options={{headerShown: true,title: null}}
       />
       <Stack.Screen
         name="Invoice"
