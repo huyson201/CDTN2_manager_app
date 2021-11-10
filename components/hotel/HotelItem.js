@@ -8,6 +8,10 @@ import {useDispatch} from 'react-redux';
 import {setSelectedHotel} from '../../features/hotel/hotelSlice';
 export const HotelItem = ({item, navigation}) => {
   const dispatch = useDispatch();
+  let stars = [];
+  for (let i = 0; i < item.hotel_star; i++) {
+    stars.push(<Icon key={i} name="star" size={15} color={GOLD_COLOR} />);
+  }
   return (
     <>
       <ItemContainer
@@ -28,12 +32,7 @@ export const HotelItem = ({item, navigation}) => {
             {/* Hotel name */}
             <Text style={styles.headText}>{item.hotel_name}</Text>
             {/* Star */}
-            <ViewRow>
-              <Icon name="star" size={15} color={GOLD_COLOR} />
-              <Icon name="star" size={15} color={GOLD_COLOR} />
-              <Icon name="star" size={15} />
-              <Icon name="star" size={15} />
-            </ViewRow>
+            <ViewRow>{stars}</ViewRow>
             {/* Address */}
             <ViewRow>
               <Icon
