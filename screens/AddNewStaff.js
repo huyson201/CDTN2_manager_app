@@ -35,7 +35,8 @@ const validationSchema = Yup.object({
   phone: Yup.string().min(10, 'Invalid phone!').required('phone is required!'),
 });
 const AddNewStaff = ({navigation, route}) => {
-  const hotel = useSelector(state => hotelSelectors.selectById(state, 1));
+  const {selectedHotel} = useSelector(state => state.hotels);
+  const hotel = useSelector(state => hotelSelectors.selectById(state, selectedHotel));
   const [id, setId] = useState();
   const {token} = useSelector(state => state.users);
   const {loading} = useSelector(state => state.staffs);
@@ -233,7 +234,9 @@ const AddNewStaff = ({navigation, route}) => {
                       justifyContent: 'space-between',
                     }}>
 
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity onPress={()=>{
+                      navigation.goBack()
+                    }} style={styles.button}>
                       <Text style={styles.text_button}>Cancel</Text>
                     </TouchableOpacity>
                     <Button
