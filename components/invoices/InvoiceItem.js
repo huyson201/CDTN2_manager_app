@@ -54,7 +54,7 @@ const InvoiceItem = props => {
               style={[styles.padding, styles.roomName]}>
               {room_name}
             </Text>
-            {props.data.status != 4 && (
+            {(props.data.status != 4 && props.data.status != 5) && (
               <Menu
                 status={props.data.status}
                 id={props.data.invoice_id}
