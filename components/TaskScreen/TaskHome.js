@@ -2,12 +2,13 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
-import HomeScreen from '../../screens/HomeScreen';
+import DashBoardScreen from '../../screens/DashBoardScreen';
 import StaffList from '../../screens/StaffList';
 import AddNewStaff from '../../screens/AddNewStaff';
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
 import AddNewRoomScreen from '../../screens/AddNewRoomScreen';
+import TabHome from '../../screens/TabHome';
 import ListRoomsTypeStatusAvailalbeScreen from '../../screens/ListRoomsTypeStatusAvailalbeScreen';
 import ListRoomsTypeStatusMaintainScreen from '../../screens/ListRoomsTypeStatusMaintainScreen';
 import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusOrderedScreen';
@@ -17,11 +18,17 @@ const Stack = createNativeStackNavigator();
 const TaskHome = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="HomeScreen"
-        component={HomeScreen}
+       <Stack.Screen
+        name="TabHome"
+        component={TabHome}
         options={{headerShown: false}}
       />
+      <Stack.Screen
+        name="DashBoard"
+        component={DashBoardScreen}
+        options={{headerShown: true,title: "Quản lý khách sạn"}}
+      />
+    
       <Stack.Screen
         name="TabStatus"
         component={TabStatus}
