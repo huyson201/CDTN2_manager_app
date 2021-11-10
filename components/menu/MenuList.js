@@ -36,10 +36,21 @@ const MenuList = (props) => {
     }
 
     const handleCancel = async () => {
+        // try {
+        //     const res = await invoiceApi.delete(props.id, token)
+        //     if (res.data) {
+        //         console.log(res.data);
+        //         dispatch(setCheck(true))
+        //     }
+        // } catch (error) {
+        //     console.log(error);
+        // }
         try {
-            const res = await invoiceApi.delete(props.id, token)
-            if (res.data) {
-                console.log(res.data);
+            // const status = Object.values(CHANGE_STATUS_INVOICE[props.status])
+            // console.log(status, "status");
+            const res = await invoiceApi.update(props.id, 5, props.room_quantity, token)
+            if (res.data.data) {
+                console.log(res.data.data);
                 dispatch(setCheck(true))
             }
         } catch (error) {
