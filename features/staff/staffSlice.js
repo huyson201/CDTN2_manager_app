@@ -8,7 +8,7 @@ import {ToastAndroid} from 'react-native';
 import staffApi from '../../api/staffApi';
 import {EXPIRED_TOKEN} from '../../src/values/constants';
 import {logout} from '../auth/userSlice';
-import {resetToken} from '../../src/utilFunc'
+import {resetToken} from '../../src/utilFunc';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export const getStaff = createAsyncThunk(
   'staffs/get',
@@ -18,11 +18,11 @@ export const getStaff = createAsyncThunk(
       return res.data.data;
     } catch (error) {
       console.log(error);
-      const refreshToken = await AsyncStorage.getItem('refresh_token')
-      const token = await AsyncStorage.getItem('token')
-      console.log(token,"OLD")
-      const newToken = await resetToken(thunkAPI.dispatch,refreshToken)
-      console.log(newToken,"NEW")
+      const refreshToken = await AsyncStorage.getItem('refresh_token');
+      const token = await AsyncStorage.getItem('token');
+      console.log(token, 'OLD');
+      const newToken = await resetToken(thunkAPI.dispatch, refreshToken);
+      console.log(newToken, 'NEW');
       const res = await staffApi.getStaffByHotelId(id, newToken);
       return res.data.data;
     }
@@ -51,10 +51,10 @@ export const createStaff = createAsyncThunk(
       return data;
     } catch (error) {
       console.log(error);
-      const refreshToken = await AsyncStorage.getItem('refresh_token')
+      const refreshToken = await AsyncStorage.getItem('refresh_token');
       // const token = await AsyncStorage.getItem('token')
       // console.log(token,"OLD")
-      const newToken = await resetToken(thunkAPI.dispatch,refreshToken)
+      const newToken = await resetToken(thunkAPI.dispatch, refreshToken);
       // console.log(newToken,"NEW")
       const res = await staffApi.createStaff(
         name,
@@ -81,20 +81,19 @@ export const updateStaffById = createAsyncThunk(
   async ({id, role, token}, thunkAPI) => {
     try {
       await staffApi.updateStaff(id, role, token);
-     
+
       return {id: id, changes: role};
     } catch (error) {
       console.log(error);
-      const refreshToken = await AsyncStorage.getItem('refresh_token')
-      const token = await AsyncStorage.getItem('token')
-      if(isJwtExpired(token)==true){
-        const newToken = await resetToken(thunkAPI.dispatch,refreshToken)
+      const refreshToken = await AsyncStorage.getItem('refresh_token');
+      const token = await AsyncStorage.getItem('token');
+      if (isJwtExpired(token) == true) {
+        const newToken = await resetToken(thunkAPI.dispatch, refreshToken);
         await staffApi.updateStaff(id, role, newToken);
         return {id: id, changes: role};
-      }
-      else{
+      } else {
         // getStaff()
-        console.log("loi")
+        console.log('loi');
       }
     }
   },
@@ -106,7 +105,7 @@ export const deleteStaffByID = createAsyncThunk(
       await staffApi.deleteStaffById(id, token);
       return id;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
 );
@@ -125,6 +124,9 @@ const staffSlice = createSlice({
   reducers: {
     setCheck(state, {payload}) {
       state.check = payload;
+    },
+    removeStaffList(state) {
+      staffAdapter.removeAll(state);
     },
   },
   extraReducers: {
@@ -178,5 +180,5 @@ const staffSlice = createSlice({
   },
 });
 
-export const {setCheck} = staffSlice.actions;
+export const {setCheck, removeStaffList} = staffSlice.actions;
 export default staffSlice.reducer;

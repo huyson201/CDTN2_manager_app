@@ -6,7 +6,7 @@ import {
 } from '@reduxjs/toolkit';
 import hotelApi from '../../api/hotelApi';
 import userApi from '../../api/userApi';
-import {resetToken} from '../../src/utilFunc'
+import {resetToken} from '../../src/utilFunc';
 export const getHotelsOfUser = createAsyncThunk(
   'hotels/getHotelsOfUser',
   async ({id, userToken}, thunkAPI) => {
@@ -14,9 +14,9 @@ export const getHotelsOfUser = createAsyncThunk(
       const res = await hotelApi.getHotelsOfOwner(id, userToken);
       return res.data.data;
     } catch (error) {
-      const refreshToken = await AsyncStorage.getItem('refresh_token')
-      const newToken = resetToken(thunkAPI.dispatch,refreshToken)
-      console.log(newToken)
+      const refreshToken = await AsyncStorage.getItem('refresh_token');
+      const newToken = resetToken(thunkAPI.dispatch, refreshToken);
+      console.log(newToken);
       const res = await hotelApi.getHotelsOfOwner(id, newToken);
       return res.data.data;
     }
@@ -33,7 +33,11 @@ const hotelSlice = createSlice({
     selectedHotel: null,
     loading: false,
   }),
-  reducers: {},
+  reducers: {
+    setSelectedHotel(state,{payload}) {
+      state.selectedHotel = payload
+    },
+  },
   extraReducers: {
     [getHotelsOfUser.pending]: state => {
       state.loading = true;
@@ -48,5 +52,5 @@ const hotelSlice = createSlice({
   },
 });
 
-export const {} = hotelSlice.actions;
+export const {setSelectedHotel} = hotelSlice.actions;
 export default hotelSlice.reducer;

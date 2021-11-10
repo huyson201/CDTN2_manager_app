@@ -30,7 +30,6 @@ const App = () => {
   const getUserInfo = async (user, token, refresh_token) => {
     try {
       const res = await userApi.getUserById(user.user_uuid, token);
-      console.log(res);
       dispatch(
         login({
           user: res.data.data,

@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   View,
   Text,
   FlatList,
@@ -11,10 +12,11 @@ import {
 import {WHITE, BLUE1, BLUE2} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StaffItem from '../components/staff/StaffItem';
+import Loading from '../components/Loading'
 import staffApi from '../api/staffApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
-import {getStaff, staffSelectors} from '../features/staff/staffSlice';
+import {getStaff, removeStaffList, staffSelectors} from '../features/staff/staffSlice';
 import {useIsFocused} from '@react-navigation/native';
 const StaffList = ({navigation}) => {
   const flatList = useRef();
@@ -22,13 +24,18 @@ const StaffList = ({navigation}) => {
   const dispatch = useDispatch();
   const staffs = useSelector(staffSelectors.selectAll);
   const {check, loading} = useSelector(state => state.staffs);
+  const {selectedHotel} = useSelector(state => state.hotels);
+  console.log(selectedHotel)
   const [reverseList, setReverseList] = useState([]);
   const getData = async () => {
     const token = await AsyncStorage.getItem('token');
-    dispatch(getStaff({id: 1, token: token}));
+    dispatch(getStaff({id: selectedHotel, token: token}));
   };
   useEffect(() => {
     getData();
+    return()=>{
+      dispatch(removeStaffList())
+    }
   }, []);
   useEffect(() => {
     if (staffs.length > 0) {
@@ -51,7 +58,7 @@ const StaffList = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
-      {reverseList.length > 0 && (
+      {reverseList.length > 0 ? (
         <FlatList
           ref={flatList}
           data={reverseList}
@@ -70,7 +77,7 @@ const StaffList = ({navigation}) => {
             );
           }}
         />
-      )}
+      ): <Loading></Loading>}
       <TouchableOpacity style={styles.plusButton} onPress={handlePressAdd}>
         <Icon name="plus" size={30} color={WHITE}></Icon>
       </TouchableOpacity>
