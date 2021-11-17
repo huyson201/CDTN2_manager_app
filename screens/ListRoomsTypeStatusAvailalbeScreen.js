@@ -55,10 +55,10 @@ const ListRoomsTypeStatusAvailalbeScreen = function ({navigation}) {
   // DEMO SLIDERBOX
   const data = {
     images: [
-      'https://source.unsplash.com/1024x768/?nature',
-      'https://source.unsplash.com/1024x768/?water',
-      'https://source.unsplash.com/1024x768/?girl',
-      'https://source.unsplash.com/1024x768/?tree', // Network image
+       'https://source.unsplash.com/1024x768/?room',
+      'https://source.unsplash.com/1024x768/?hotel',
+      'https://source.unsplash.com/1024x768/?bathroom',
+      'https://source.unsplash.com/1024x768/?car', // Network image
       // require('./assets/images/girl.jpg'), // Local image
     ],
   };
