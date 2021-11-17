@@ -36,8 +36,18 @@ const ListRoomsScreen = function ({navigation}) {
         console.error(error);
       });
   };
-  const handlePressUserProfile = () => {
-     navigation.navigate("Type Rooms");
+  // Handle Press Navigation
+  const handlePressAddNewRoom = () => {
+    navigation.navigate('Add A new Room');
+  };
+   const handlePressToCommissionScreen = () => {
+    navigation.navigate('Commission');
+  };
+  const handlePressToListTypeRooms = () => {
+    navigation.navigate('Status Type Rooms');
+  };
+     const handlePressToAllRooms = () => {
+    navigation.navigate('All Rooms');
   };
   // PRINT RATING
   const printRating = star => {
@@ -58,10 +68,10 @@ const ListRoomsScreen = function ({navigation}) {
   const ItemSeparatorView = () => {
     return <View style={ListRoomsStyle.ItemSeparatorView} />;
   };
-
+  const [selectedValue, setSelectedValue] = useState('1');
   return (
     <View>
-    {/* MODIFY HEADER */}
+      {/* MODIFY HEADER */}
       <View style={ListRoomsStyle.header}>
         <View style={ListRoomsStyle.headerUserCicle}>
           <View>
@@ -72,6 +82,25 @@ const ListRoomsScreen = function ({navigation}) {
           </View>
         </View>
       </View>
+      <View style={ListRoomsStyle.filter}>
+        <Picker
+          selectedValue={selectedValue}
+          style={ListRoomsStyle.filterItems}
+          onValueChange={(itemValue, itemIndex) =>
+            itemValue == 1
+              ? handlePressToAllRooms()
+              : itemValue == 2
+              ? handlePressAddNewRoom()
+              // : itemValue == 3
+              // ? handlePressToMaintainingRooms()
+              : handlePressToCommissionScreen()
+          }>
+          <Picker.Item label="All Type Rooms" value="1" />
+          <Picker.Item label="Add new Room" value="2" />
+          <Picker.Item label="Commission" value="3" />
+          {/* <Picker.Item label="Rooms Ordered" value="4" /> */}
+        </Picker>
+      </View>
       <FlatList
         style={{marginTop: 5}}
         data={dataSource}
@@ -79,14 +108,14 @@ const ListRoomsScreen = function ({navigation}) {
           return (
             // MODIFY ITEMSVIEW HERE
             <TouchableOpacity
-              onPress={handlePressUserProfile}
+              onPress={handlePressToListTypeRooms}
               key={index}
               style={ListRoomsStyle.listItemStyle}>
               <View style={ListRoomsStyle.itemBody}>
-                <Image
+                {/* <Image
                   style={ListRoomsStyle.itemBoDyImg}
                   source={require('../src/images/detail_hotel_2.jpeg')}
-                />
+                /> */}
                 <View style={ListRoomsStyle.itemBoDyText}>
                   <Text
                     style={ListRoomsStyle.itemFont_HotelName}
@@ -194,9 +223,6 @@ const ListRoomsStyle = StyleSheet.create({
   itemBoDyText: {
     flex: 2,
     flexDirection: 'column',
-    // marginLeft: 'auto',
-    // marginRight: 'auto',
-    // marginBottom: 0,
     marginTop: '5%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -244,10 +270,7 @@ const ListRoomsStyle = StyleSheet.create({
     padding: 10,
     fontSize: 20,
   },
-  toPropertiesItemBtn: {
-    height: 35,
-    borderRadius: 50,
-  },
+
 });
 
 export default ListRoomsScreen;
