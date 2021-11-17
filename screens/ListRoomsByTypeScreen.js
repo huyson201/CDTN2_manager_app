@@ -58,10 +58,10 @@ const ListRoomsByTypeScreen = function ({navigation}) {
   // DEMO SLIDERBOX
   const data = {
     images: [
-      'https://source.unsplash.com/1024x768/?nature',
-      'https://source.unsplash.com/1024x768/?water',
-      'https://source.unsplash.com/1024x768/?girl',
-      'https://source.unsplash.com/1024x768/?tree', // Network image
+      'https://source.unsplash.com/1024x768/?room',
+      'https://source.unsplash.com/1024x768/?hotel',
+      'https://source.unsplash.com/1024x768/?bathroom',
+      'https://source.unsplash.com/1024x768/?car', // Network image
       // require('./assets/images/girl.jpg'), // Local image
     ],
   };
@@ -95,8 +95,8 @@ const ListRoomsByTypeScreen = function ({navigation}) {
         paginationBoxVerticalPadding={5}
         dotStyle={{width: 7, height: 7, marginHorizontal: -5}}
         imageLoadingColor={'#fff'}
-        onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
-        currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
+        // onCurrentImagePressed={index => console.warn(`image ${index} pressed`)}
+        // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
       />
       {/* <SliderBox
           key={Math.random()}
@@ -108,11 +108,11 @@ const ListRoomsByTypeScreen = function ({navigation}) {
       {/* </View> */}
       {/* FILTER */}
       <View style={ListRoomsStyle.filter}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={handlePressAddNewRoom}
           style={ListRoomsStyle.filterItems}>
           <Text style={{textAlign: 'center', marginTop: 15}}>Add New Room </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Picker
           selectedValue={selectedValue}
           style={ListRoomsStyle.filterItems}
