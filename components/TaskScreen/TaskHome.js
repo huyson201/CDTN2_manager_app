@@ -12,13 +12,13 @@ import TabHome from '../../screens/TabHome';
 import ListRoomsTypeStatusAvailalbeScreen from '../../screens/ListRoomsTypeStatusAvailalbeScreen';
 import ListRoomsTypeStatusMaintainScreen from '../../screens/ListRoomsTypeStatusMaintainScreen';
 import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusOrderedScreen';
-
+import CommissionScreen from '../../screens/CommissionScreen';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
   return (
     <Stack.Navigator>
-       <Stack.Screen
+      <Stack.Screen
         name="TabHome"
         component={TabHome}
         options={{headerShown: false}}
@@ -26,9 +26,9 @@ const TaskHome = () => {
       <Stack.Screen
         name="DashBoard"
         component={DashBoardScreen}
-        options={{headerShown: true,title: "Quản lý khách sạn"}}
+        options={{headerShown: true, title: 'Quản lý khách sạn'}}
       />
-    
+
       <Stack.Screen
         name="TabStatus"
         component={TabStatus}
@@ -44,20 +44,26 @@ const TaskHome = () => {
       <Stack.Screen
         name="AddNewStaff"
         component={AddNewStaff}
-        options={{headerShown: true,title: null}}
+        options={{headerShown: true, title: null}}
       />
       <Stack.Screen
         name="Invoice"
         component={Invoice}
         options={{headerShown: false}}
       />
+
       <Stack.Screen
         name="All Rooms"
         component={ListRoomsScreen}
         options={{headerShown: true}}
       />
       <Stack.Screen
-        name="Type Rooms"
+        name="Commission"
+        component={CommissionScreen}
+        options={{headerShown: true}}
+      />
+       <Stack.Screen
+        name="Status Type Rooms"
         component={ListRoomsByTypeScreen}
         options={{headerShown: true}}
       />
