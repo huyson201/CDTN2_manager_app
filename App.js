@@ -87,6 +87,7 @@ const App = () => {
           ) : (
             <TaskLogin />
           )}
+
         </MenuProvider>
       </NavigationContainer>
     </View>
