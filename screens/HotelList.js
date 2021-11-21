@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {HotelItem} from '../components/hotel/HotelItem';
-import {getHotelsOfUser, hotelSelectors} from '../features/hotel/hotelSlice';
+import {getHotelsOfUser, hotelSelectors, removeSelectedHotel} from '../features/hotel/hotelSlice';
 import {removeStaffList, staffSelectors} from '../features/staff/staffSlice';
 const HotelList = ({navigation}) => {
   const isFocused = useIsFocused();
@@ -13,8 +13,13 @@ const HotelList = ({navigation}) => {
   const staffs = useSelector(staffSelectors.selectAll);
   useEffect(() => {
     dispatch(getHotelsOfUser({id: user.user_uuid, userToken: token}));
+    dispatch(removeSelectedHotel())
   }, []);
-  console.log(staffs);
+  useEffect(() => {
+   if(isFocused){
+    dispatch(removeSelectedHotel())
+   }
+  }, [isFocused]);
   return (
     <View>
       <FlatList
@@ -25,10 +30,6 @@ const HotelList = ({navigation}) => {
             <View>
               <HotelItem
                 item={item}
-                // key={item.hotel_id}
-                // hotelId={item.hotel_id}
-                // priceSale={5000000}
-                // sale={0.5}
                 navigation={navigation}
               />
             </View>

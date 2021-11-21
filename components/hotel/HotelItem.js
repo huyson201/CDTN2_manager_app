@@ -5,7 +5,7 @@ import {DARK_GRAY, GOLD_COLOR, WHITE} from '../../src/values/color';
 import {HOTEL_TEXT, VND} from '../../src/values/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
-import {setSelectedHotel} from '../../features/hotel/hotelSlice';
+import {removeSelectedHotel, setSelectedHotel} from '../../features/hotel/hotelSlice';
 export const HotelItem = ({item, navigation}) => {
   const dispatch = useDispatch();
   let stars = [];
@@ -18,7 +18,7 @@ export const HotelItem = ({item, navigation}) => {
         activeOpacity={0.9}
         onPress={() => {
           dispatch(setSelectedHotel(item.hotel_id));
-          navigation.navigate('DashBoard');
+          navigation.push('DashBoard');
         }}>
         <ViewRow>
           {/* Hotel image */}

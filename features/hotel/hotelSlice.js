@@ -37,6 +37,9 @@ const hotelSlice = createSlice({
     setSelectedHotel(state,{payload}) {
       state.selectedHotel = payload
     },
+    removeSelectedHotel(state){
+      state.selectedHotel = null
+    }
   },
   extraReducers: {
     [getHotelsOfUser.pending]: state => {
@@ -52,5 +55,5 @@ const hotelSlice = createSlice({
   },
 });
 
-export const {setSelectedHotel} = hotelSlice.actions;
+export const {setSelectedHotel,removeSelectedHotel} = hotelSlice.actions;
 export default hotelSlice.reducer;

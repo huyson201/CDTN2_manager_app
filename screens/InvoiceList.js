@@ -6,22 +6,66 @@ import invoiceApi from '../api/invoiceApi';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCheck} from '../features/invoice/invoiceSlice';
 import Loading from '../components/Loading';
+import hotelApi from '../api/hotelApi';
+import userApi from '../api/userApi';
 
 const InvoiceList = ({navigation, route}) => {
+  //hotel name rd pd quantity room name room info user info price status invoice
   const isFocused = useIsFocused();
   const [invoices, setInvoices] = useState();
   const check = useSelector(state => state.invoice.check);
   const dispatch = useDispatch();
+  const {token} = useSelector(state => state.users);
   const {selectedHotel} = useSelector(state => state.hotels);
   const hotelId = selectedHotel;
-  console.log(hotelId);
-
+  const getRoom = async id => {
+    try {
+      const res = await hotelApi.getRoomById(id);
+      if (res.data.data) {
+        return res.data.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getUserInfo = async id => {
+    try {
+      const res = await userApi.getUserById(id, token);
+      if (res.data.data) {
+        return res.data.data;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const setValue = async data => {
+    for (let index = 0; index < data.length; index++) {
+      const e = data[index];
+      let roomInfo = await getRoom(e.room_id);
+      let userInfo = await getUserInfo(e.user_uuid);
+      const res = await Promise.all([roomInfo, userInfo]);
+      const room = {
+        room_name: res[0].room_name,
+        room_beds: res[0].room_beds,
+        room_people: res[0].room_num_people,
+        room_quantity: res[0].room_quantity,
+      };
+      e.roomInfo = room;
+      const user = {
+        user_name: res[1].user_name,
+        user_phone: res[1].user_phone,
+        user_email: res[1].user_email,
+      };
+      e.userInfo = user;
+    }
+    setInvoices(data);
+  };
   const getAllInvoices = async params => {
     try {
       const res = await invoiceApi.getAll(params);
-      console.log(res)
       if (res.data.data) {
-        setInvoices(res.data.data);
+        setValue(res.data.data);
+       
       }
     } catch (error) {
       console.log(error);
@@ -31,9 +75,8 @@ const InvoiceList = ({navigation, route}) => {
   const getAllInvoicesByStatus = async (hotelId, status) => {
     try {
       const res = await invoiceApi.getInvoiceByStatus(status, hotelId);
-      console.log(res)
       if (res.data.data) {
-        setInvoices(res.data.data);
+        setValue(res.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -41,7 +84,7 @@ const InvoiceList = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    if (isFocused || check) {
+    if (isFocused ||isFocused && check) {
       if (route.params.param === -1) {
         getAllInvoices(hotelId);
       } else {
@@ -53,10 +96,9 @@ const InvoiceList = ({navigation, route}) => {
       dispatch(setCheck(false));
     };
   }, [isFocused, check]);
-
   return (
     <>
-      {invoices && invoices !== [] ? (
+      {invoices && invoices!== [] ? (
         <>
           <FlatList
             data={invoices}

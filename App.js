@@ -25,7 +25,9 @@ import {resetToken} from './src/utilFunc';
 const Stack = createNativeStackNavigator();
 const App = () => {
   const dispatch = useDispatch();
-  const {isRemembered, user} = useSelector(state => state.users);
+  //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiI4NDYxZTk1OS0yYTMzLTQyNGItYTQwYy0yOGU4YTFiYjU4MDMiLCJ1c2VyX3JvbGUiOjEsImlhdCI6MTYzNzQ4OTEwOCwiZXhwIjoxNjM3NDk2MzA4fQ.-aDZkI7Og4NHze23SC2XtY39gKK9LXqPD5RpEH08BGM
+  const {isRemembered, user,token} = useSelector(state => state.users);
+  console.log(token)
   const [firstLoading, setFirstLoading] = useState(true);
   const getUserInfo = async (user, token, refresh_token) => {
     try {
@@ -69,6 +71,7 @@ const App = () => {
     };
     getData();
   }, []);
+  console.log(isRemembered)
   return (
     <View style={{flex: 1}}>
       <NavigationContainer>

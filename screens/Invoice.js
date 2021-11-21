@@ -20,7 +20,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 import { formatCurrency } from "../src/utilFunction";
 import { Button } from "react-native-elements";
 
-const Invoice = (props) => {
+const Invoice = ({ route, navigation }) => {
+  const {data} = route.params
+  console.log(data)
   // const [showDetailPrice, setShowDetailPrice] = useState(false);
   // let detailPrice = null;
   // let sumPriceRoom = (props.route.params.sum) - (props.route.params.taxes);
@@ -61,7 +63,6 @@ const Invoice = (props) => {
                 style={styles.textCap}
               >
                 Hotel Name
-                {/* {props.route.params.hotelName} */}
               </Text>
             </RowView>
             <View style={styles.dateBox}>
@@ -78,8 +79,8 @@ const Invoice = (props) => {
                   numberOfLines={1}
                   style={styles.receivedDate}
                 >
-                  Received Date
-                  {/* {props.route.params.receivedDate} (14:00) */}
+                  {/* Received Date */}
+                  {data.r_date} (14:00)
                 </Text>
               </RowView>
               <RowView style={styles.mTop}>
@@ -95,7 +96,7 @@ const Invoice = (props) => {
                   numberOfLines={1}
                   style={styles.receivedDate}
                 >
-                  Pay Date
+                  {data.p_date}
                   {/* {props.route.params.payDate} (12:00) */}
                 </Text>
               </RowView>
@@ -172,7 +173,7 @@ const Invoice = (props) => {
         {/* {detailPrice} */}
       </View>
 
-      <View style={styles.paddingDefault}>
+      {/* <View style={styles.paddingDefault}>
         <Button
           onPress={handlePressConfirm}
           title={CONFIRM_BTN}
@@ -184,7 +185,7 @@ const Invoice = (props) => {
             marginBottom: 12,
           }}
         />
-      </View>
+      </View> */}
     </ScrollView>
   );
 };
