@@ -7,10 +7,15 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  ToastAndroid,
 } from 'react-native';
 import {WHITE, BLUE1, BLUE2, LIGHT_GRAY, DARK_GRAY} from '../src/values/color';
 import {useDispatch, useSelector} from 'react-redux';
-import {removeStaffList, staffSelectors} from '../features/staff/staffSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import userApi from '../api/userApi';
+import {SIGNOUT_SUCCESSFULLY} from '../src/values/constants';
+import {logout} from '../features/auth/userSlice';
+import {resetToken} from '../src/utilFunc';
 const data = [
   {
     key: 'Phòng',
@@ -19,7 +24,7 @@ const data = [
 
   {
     key: 'Dịch vụ',
-    image:  require(`../src/images/customer.png`),
+    image: require(`../src/images/customer.png`),
   },
   {
     key: 'Nhân viên',
@@ -29,25 +34,66 @@ const data = [
     key: 'Hoá đơn',
     image: require(`../src/images/bill.png`),
   },
-  //   {
-  //     key: 'Sign out',
-  //     image:
-  //       'https://cdn-icons.flaticon.com/png/512/3808/premium/3808289.png?token=exp=1636438377~hmac=6008919cd949702a100dbb40d5fe4df7',
-  //     onPress: handlePressDashBoard.handleSignout,
-  //   },
+];
+const data2 = [
+  {
+    key: 'Tài khoản',
+    image: require(`../src/images/user.png`),
+  },
+  {
+    key: 'Khách sạn',
+    image: require(`../src/images/hotel.png`),
+  },
+  {
+    key: 'Đăng xuất',
+    image: require(`../src/images/logout.png`),
+  },
 ];
 
+const data3 = [
+  {
+    key: 'Tài khoản',
+    image: require(`../src/images/user.png`),
+  },
+  {
+    key: 'Quản lí users',
+    image: require(`../src/images/team.png`),
+  },
+  {
+    key: 'Đăng xuất',
+    image: require(`../src/images/logout.png`),
+  },
+];
 const numColumns = 2;
 
 const DashboardItem = props => {
   const {key, image} = props.dashboardItem;
-  const handlePress = () => {
+  const dispatch = useDispatch();
+
+  const handlePress = async () => {
     switch (key) {
       case 'Nhân viên':
         props.navigation.navigate('StaffList');
         break;
       case 'Hoá đơn':
         props.navigation.navigate('TabStatus');
+        break;
+      case 'Đăng xuất':
+        try {
+          const token = await AsyncStorage.getItem('token');
+          await userApi.logout(token);
+          await AsyncStorage.removeItem('token');
+          await AsyncStorage.removeItem('refresh_token');
+          dispatch(logout());
+          ToastAndroid.show(SIGNOUT_SUCCESSFULLY, ToastAndroid.SHORT);
+        } catch (e) {
+          console.log(e);
+          const refresh = await AsyncStorage.getItem('refresh_token');
+          resetToken(dispatch, refresh);
+        }
+        break;
+      case 'Khách sạn':
+        props.navigation.navigate('HotelList');
         break;
       default:
         break;
@@ -63,11 +109,15 @@ const DashboardItem = props => {
 };
 
 const DashBoardScreen = function ({navigation}) {
+  const {selectedHotel} = useSelector(state => state.hotels);
+  const {user} = useSelector(state => state.users);
   return (
     <View style={styles.container}>
       <FlatList
         numColumns={2}
-        data={data}
+        data={
+          selectedHotel !== null ? data : user.user_role === 0 ? data3 : data2
+        }
         renderItem={({item}) => (
           <DashboardItem dashboardItem={item} navigation={navigation} />
         )}></FlatList>

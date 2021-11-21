@@ -8,27 +8,28 @@ import AddNewStaff from '../../screens/AddNewStaff';
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
 import AddNewRoomScreen from '../../screens/AddNewRoomScreen';
-import TabHome from '../../screens/TabHome';
 import ListRoomsTypeStatusAvailalbeScreen from '../../screens/ListRoomsTypeStatusAvailalbeScreen';
 import ListRoomsTypeStatusMaintainScreen from '../../screens/ListRoomsTypeStatusMaintainScreen';
 import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusOrderedScreen';
 import CommissionScreen from '../../screens/CommissionScreen';
+import HotelList from '../../screens/HotelList';
+import { useSelector } from 'react-redux';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
+  const {selectedHotel} = useSelector(state => state.hotels);
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="TabHome"
-        component={TabHome}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
+       <Stack.Screen
         name="DashBoard"
         component={DashBoardScreen}
-        options={{headerShown: true, title: 'Quản lý khách sạn'}}
+        options={{headerShown: true, title: selectedHotel ? 'Quản lý khách sạn': 'Home'}}
       />
-
+      <Stack.Screen
+        name="HotelList"
+        component={HotelList}
+        options={{headerShown: true}}
+      />
       <Stack.Screen
         name="TabStatus"
         component={TabStatus}

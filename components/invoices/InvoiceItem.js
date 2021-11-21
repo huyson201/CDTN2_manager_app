@@ -13,38 +13,19 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import hotelApi from '../../api/hotelApi';
 import Menu from '../menu/MenuList';
 
-const InvoiceItem = props => {
-  const [room_name, setRoomName] = useState('');
-  const [room_quantity, setRoomQty] = useState();
+const InvoiceItem = (props) => {
   const rDate = props.data.r_date.split('T')[0].replace(/-/g, '/');
   const pDate = props.data.p_date.split('T')[0].replace(/-/g, '/');
-  useEffect(() => {
-    if (props.data) {
-      const getRoomName = async () => {
-        try {
-          const res = await hotelApi.getRoomById(props.data.room_id);
-          if (res.data.data) {
-            setRoomQty(res.data.data.room_quantity);
-            setRoomName(res.data.data.room_name);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      getRoomName();
-    }
-    return () => {
-      setRoomQty();
-      setRoomName();
-    };
-  }, []);
+ 
 
   return (
     <>
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() => {
-          props.navigation && props.navigation.navigate('Invoice');
+          props.navigation && props.navigation.navigate('Invoice',{
+            data:props.data
+          });
         }}>
         <View style={styles.view}>
           <View style={[styles.flex_row, styles.header]}>
@@ -52,13 +33,13 @@ const InvoiceItem = props => {
               numberOfLines={1}
               ellipsizeMode="tail"
               style={[styles.padding, styles.roomName]}>
-              {room_name}
+              {props.data.roomInfo.room_name}
             </Text>
             {(props.data.status != 4 && props.data.status != 5) && (
               <Menu
                 status={props.data.status}
                 id={props.data.invoice_id}
-                room_quantity={room_quantity}
+                room_quantity={props.data.roomInfo.room_quantity}
               />
             )}
           </View>
@@ -72,7 +53,7 @@ const InvoiceItem = props => {
 
             {+props.data.status === 0 ? (
               <View style={[styles.flex_row, styles.padding_status]}>
-                {room_quantity > 0 ? (
+                {props.data.roomInfo.room_quantity > 0 ? (
                   <>
                     <Icon
                       name="check"
