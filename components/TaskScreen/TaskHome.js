@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
 import DashBoardScreen from '../../screens/DashBoardScreen';
@@ -14,6 +14,8 @@ import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusO
 import CommissionScreen from '../../screens/CommissionScreen';
 import HotelList from '../../screens/HotelList';
 import { useSelector } from 'react-redux';
+import AddHotel from '../hotel/AddHotel';
+import EditHotel from '../hotel/EditHotel';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
@@ -33,62 +35,74 @@ const TaskHome = () => {
       <Stack.Screen
         name="TabStatus"
         component={TabStatus}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="StaffList"
         component={StaffList}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
 
       <Stack.Screen
         name="AddNewStaff"
         component={AddNewStaff}
-        options={{headerShown: true, title: null}}
+        options={{ headerShown: true, title: null }}
       />
       <Stack.Screen
         name="Invoice"
         component={Invoice}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
 
       <Stack.Screen
         name="All Rooms"
         component={ListRoomsScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name="Commission"
         component={CommissionScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="Status Type Rooms"
         component={ListRoomsByTypeScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
 
       <Stack.Screen
         name="Rooms Available"
         component={ListRoomsTypeStatusAvailalbeScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name="Rooms Maintaining"
         component={ListRoomsTypeStatusMaintainScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
       <Stack.Screen
         name="Rooms Ordered"
         component={ListRoomsTypeStatusOrderedScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
       />
 
       <Stack.Screen
         name="Add A new Room"
         component={AddNewRoomScreen}
-        options={{headerShown: true}}
+        options={{ headerShown: true }}
+      />
+
+      <Stack.Screen
+        name="AddHotel"
+        component={AddHotel}
+        options={{ headerShown: true, title: null }}
+      />
+
+      <Stack.Screen
+        name="EditHotel"
+        component={EditHotel}
+        options={{ headerShown: true, title: null }}
       />
     </Stack.Navigator>
   );
