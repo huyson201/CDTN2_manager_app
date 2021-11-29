@@ -5,49 +5,56 @@ import {DARK_GRAY, GOLD_COLOR, WHITE} from '../../src/values/color';
 import {HOTEL_TEXT, VND} from '../../src/values/constants';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch} from 'react-redux';
-import {removeSelectedHotel, setSelectedHotel} from '../../features/hotel/hotelSlice';
+import {
+  removeSelectedHotel,
+  setSelectedHotel,
+} from '../../features/hotel/hotelSlice';
 export const HotelItem = ({item, navigation}) => {
   const dispatch = useDispatch();
   let stars = [];
   for (let i = 0; i < item.hotel_star; i++) {
     stars.push(<Icon key={i} name="star" size={15} color={GOLD_COLOR} />);
   }
+
+  const handleDelete = () => {
+    alert('delete');
+  };
   return (
     <>
-      <ItemContainer
-        activeOpacity={0.9}
-        onPress={() => {
-          dispatch(setSelectedHotel(item.hotel_id));
-          navigation.push('DashBoard');
-        }}>
-        <ViewRow>
-          {/* Hotel image */}
-          <Image
-            style={styles.hotelImage}
-            source={{
-              uri: item.hotel_img,
-            }}
-          />
-          <ItemContent>
-            {/* Hotel name */}
-            <Text style={styles.headText}>{item.hotel_name}</Text>
-            {/* Star */}
-            <ViewRow>{stars}</ViewRow>
-            {/* Address */}
-            <ViewRow>
-              <Icon
-                name="map-marker"
-                size={12}
-                color={DARK_GRAY}
-                style={{marginTop: 8}}
-              />
-              <Text style={styles.addressText}>{item.hotel_address}</Text>
-            </ViewRow>
+        <ItemContainer
+          activeOpacity={0.9}
+          onPress={() => {
+            dispatch(setSelectedHotel(item.hotel_id));
+            navigation.push('DashBoard');
+          }}>
+          <ViewRow>
+            {/* Hotel image */}
+            <Image
+              style={styles.hotelImage}
+              source={{
+                uri: item.hotel_img,
+              }}
+            />
+            <ItemContent>
+              {/* Hotel name */}
+              <Text style={styles.headText}>{item.hotel_name}</Text>
+              {/* Star */}
+              <ViewRow>{stars}</ViewRow>
+              {/* Address */}
+              <ViewRow>
+                <Icon
+                  name="map-marker"
+                  size={12}
+                  color={DARK_GRAY}
+                  style={{marginTop: 8}}
+                />
+                <Text style={styles.addressText}>{item.hotel_address}</Text>
+              </ViewRow>
 
-            {/* <Text style={styles.contentText}>{HOTEL_TEXT}</Text> */}
-          </ItemContent>
-        </ViewRow>
-      </ItemContainer>
+              {/* <Text style={styles.contentText}>{HOTEL_TEXT}</Text> */}
+            </ItemContent>
+          </ViewRow>
+        </ItemContainer>
     </>
   );
 };

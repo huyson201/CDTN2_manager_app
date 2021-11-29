@@ -32,14 +32,18 @@ const hotelSlice = createSlice({
   initialState: hotelAdapter.getInitialState({
     selectedHotel: null,
     loading: false,
+    services: null,
   }),
   reducers: {
-    setSelectedHotel(state,{payload}) {
-      state.selectedHotel = payload
+    setSelectedHotel(state, {payload}) {
+      state.selectedHotel = payload;
     },
-    removeSelectedHotel(state){
-      state.selectedHotel = null
-    }
+    removeSelectedHotel(state) {
+      state.selectedHotel = null;
+    },
+    setServices(state, {payload}) {
+      state.services = payload;
+    },
   },
   extraReducers: {
     [getHotelsOfUser.pending]: state => {
@@ -55,5 +59,5 @@ const hotelSlice = createSlice({
   },
 });
 
-export const {setSelectedHotel,removeSelectedHotel} = hotelSlice.actions;
+export const {setSelectedHotel, removeSelectedHotel,setServices} = hotelSlice.actions;
 export default hotelSlice.reducer;
