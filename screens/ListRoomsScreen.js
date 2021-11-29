@@ -42,19 +42,10 @@ const ListRoomsScreen = function ({navigation}) {
   const handlePressAddNewRoom = () => {
     navigation.navigate('Add A new Room', {id: selectedHotel});
   };
-  const handlePressToCommissionScreen = () => {
-    navigation.navigate('Commission');
-  };
-  const handlePressToListTypeRooms = () => {
-    navigation.navigate('Status Type Rooms');
-  };
   const handlePressToAllRooms = () => {
-    navigation.navigate('All Rooms');
+    navigation.navigate('AllRooms');
   };
-  // MODIFY cái cây màu đen nằm giữa các ITEMS
-  const ItemSeparatorView = () => {
-    return <View style={ListRoomsStyle.ItemSeparatorView} />;
-  };
+ 
   const [selectedValue, setSelectedValue] = useState(1);
   return (
     <View>
@@ -96,7 +87,7 @@ const ListRoomsScreen = function ({navigation}) {
           <View style={styles.rowBack}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('EditHotel', {id: data.item.hotel_id});
+                navigation.navigate('EditRoom', {id: data.item.room_id});
               }}
               style={{
                 backgroundColor: 'green',

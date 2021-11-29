@@ -18,6 +18,7 @@ import AddHotel from '../hotel/AddHotel';
 import EditHotel from '../hotel/EditHotel';
 import UserList from '../../screens/UserList';
 import AddNewUser from '../../screens/AddNewUser';
+import EditRoom from '../../screens/EditRoom';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
@@ -77,8 +78,8 @@ const TaskHome = () => {
         options={{headerShown: true}}
       />
       <Stack.Screen
-        name="Commission"
-        component={CommissionScreen}
+        name="EditRoom"
+        component={EditRoom}
         options={{headerShown: true}}
       />
       <Stack.Screen
