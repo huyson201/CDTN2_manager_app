@@ -191,6 +191,7 @@ const EditHotel = ({navigation, route}) => {
               });
             });
           } else {
+            arr=[...hotel_slide]
             image.forEach(e => {
               arr.push({
                 uri: e.path,

@@ -40,7 +40,7 @@ const ListRoomsScreen = function ({navigation}) {
   };
   // Handle Press Navigation
   const handlePressAddNewRoom = () => {
-    navigation.navigate('Add A new Room');
+    navigation.navigate('Add A new Room', {id: selectedHotel});
   };
   const handlePressToCommissionScreen = () => {
     navigation.navigate('Commission');
