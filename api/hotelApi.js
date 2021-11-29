@@ -47,5 +47,13 @@ const hotelApi = {
       },
     });
   },
+  delete: (id, token) => {
+    const url = `/hotels/${id}`;
+    return axiosClient.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
 };
 export default hotelApi;
