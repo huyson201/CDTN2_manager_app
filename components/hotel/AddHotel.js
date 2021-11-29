@@ -475,6 +475,7 @@ const AddHotel = ({navigation, route}) => {
           />
           <ModalServices ref={serviceRef} services={services} />
           <Button
+          
             title={
               'Chọn dịch vụ' +
               `${serviceRedux ? ' (' + serviceRedux.length + ')' : ''}`

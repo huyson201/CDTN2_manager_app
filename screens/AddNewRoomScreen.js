@@ -174,7 +174,7 @@ const AddNewRoomScreen = function ({navigation}) {
   return (
     <View>
       {/* MODIFY HEADER */}
-      <Image
+      {/* <Image
         style={{
           width: '100%',
           height: '50%',
@@ -184,9 +184,9 @@ const AddNewRoomScreen = function ({navigation}) {
         source={{
           uri: 'https://images.homify.com/c_fill,f_auto,q_0,w_740/v1513411774/p/photo/image/2361746/STYLOME_01.jpg',
         }}
-      />
+      /> */}
       {/* BODY CONTENT */}
-      <ScrollView style={{height: 350, width: '100%'}}>
+      <ScrollView style={{height: '100%', width: '100%'}}>
         {/* <Text style={ListRoomsStyle.textTitle}>Full Name</Text> */}
         {/* Room name */}
         <View style={ListRoomsStyle.action}>
