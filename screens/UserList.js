@@ -6,16 +6,34 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  Alert,
   Image,
 } from 'react-native';
-import {WHITE, BLUE2} from '../src/values/color';
+import {WHITE, BLUE1, BLUE2} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import StaffItem from '../components/staff/StaffItem';
+import Loading from '../components/Loading';
 import staffApi from '../api/staffApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch, useSelector} from 'react-redux';
+import {
+  getStaff,
+  removeStaffList,
+  staffSelectors,
+} from '../features/staff/staffSlice';
 import {useIsFocused} from '@react-navigation/native';
+import userApi from '../api/userApi';
+import UserItem from '../components/user/UserItem';
 import ModalPopup from '../components/user/ModalPopup';
-import {STAFF_ROLE} from '../src/values/constants';
+import {
+  Menu,
+  MenuOption,
+  MenuOptions,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+import {ROLE, STAFF_DELETE} from '../src/values/constants';
+import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {Button} from 'react-native-elements';
 const UserList = ({navigation}) => {
@@ -29,6 +47,7 @@ const UserList = ({navigation}) => {
   const [loadingUpdate, setLoadingUpdate] = useState(false);
   const [id, setId] = useState(-1);
   const [user, setUser] = useState();
+  const [role, setRole] = useState();
   const [check, setCheck] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState();
   const [firstTime, setFirstTime] = useState(false);
@@ -37,7 +56,7 @@ const UserList = ({navigation}) => {
   };
   const getUsers = async () => {
     setLoading(true);
-    const res = await staffApi.getStaffByHotelId(selectedHotel, token);
+    const res = await userApi.getUsers(token);
     if (res.data.data) {
       setUsers(res.data.data);
     }
@@ -51,25 +70,24 @@ const UserList = ({navigation}) => {
       setUsers([]);
       setCheck(false);
     };
-  }, [check, isFocused]);
+  }, [check,isFocused]);
   const updateRole = async () => {
-    const res = await staffApi.updateStaff(
-      id,
-      selectedPosition ? selectedPosition : user.role,
-      token,
-    );
-    console.log(res.data.data);
+    const formData = new FormData();
+    formData.append('user_role',   selectedPosition ? selectedPosition : user.user_role,);
+    setLoadingUpdate(true)
+    const res = await userApi.update(id, formData, token);
     if (res.data.data) {
       setFirstTime(false);
       setSelectedPosition();
       setVisibleRoleModal(false);
-      setLoadingUpdate(false);
+      setLoadingUpdate(false)
       setCheck(true);
       setUser();
     }
   };
   const [visible, setVisible] = useState(false);
   const [visibleRoleModal, setVisibleRoleModal] = useState(false);
+  
   return (
     <View style={styles.container}>
       {user && (
@@ -87,9 +105,9 @@ const UserList = ({navigation}) => {
             <Image
               style={styles.imgStaff}
               source={
-                user.staff_info.user_img !== null
+                user.user_img !== null
                   ? {
-                      uri: user.staff_info.user_img,
+                      uri: user.user_img,
                     }
                   : require('../src/images/staff.jpg')
               }
@@ -99,19 +117,19 @@ const UserList = ({navigation}) => {
           <View style={{flex: 1, flexDirection: 'column', marginLeft: 5}}>
             <View style={styles.flex_row}>
               <Text style={styles.title1}>Họ tên: </Text>
-              <Text style={styles.content1}>{user.staff_info.user_name}</Text>
+              <Text style={styles.content1}>{user.user_name}</Text>
             </View>
             <View style={styles.flex_row}>
               <Text style={styles.title1}>Email: </Text>
-              <Text style={styles.content1}>{user.staff_info.user_email}</Text>
+              <Text style={styles.content1}>{user.user_email}</Text>
             </View>
             <View style={styles.flex_row}>
               <Text style={styles.title1}>SĐT: </Text>
-              <Text style={styles.content1}>{user.staff_info.user_phone}</Text>
+              <Text style={styles.content1}>{user.user_phone}</Text>
             </View>
             <View style={styles.flex_row}>
               <Text style={styles.title1}>Vai trò: </Text>
-              <Text style={styles.content1}>{STAFF_ROLE[user.role]}</Text>
+              <Text style={styles.content1}>{ROLE[user.user_role]}</Text>
             </View>
           </View>
         </ModalPopup>
@@ -131,18 +149,23 @@ const UserList = ({navigation}) => {
             {/* <Icon2 name="location-history" size={25} style={styles.icon} /> */}
             <View style={{borderWidth: 1, marginLeft: 17, borderRadius: 10}}>
               <Picker
-                selectedValue={!firstTime ? user.role : selectedPosition}
+                selectedValue={!firstTime ? user.user_role : selectedPosition}
                 style={styles.picker}
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedPosition(itemValue);
                   setFirstTime(true);
                 }}>
+                <Picker.Item label="Admin" value={0} style={{fontSize: 17}} />
                 <Picker.Item
-                  label="Nhân viên"
-                  value={0}
+                  label="Chủ sở hữu khách sạn"
+                  value={1}
                   style={{fontSize: 17}}
                 />
-                <Picker.Item label="Lễ tân" value={1} style={{fontSize: 17}} />
+                <Picker.Item
+                  label="Khách hàng"
+                  value={3}
+                  style={{fontSize: 17}}
+                />
               </Picker>
             </View>
             <Button
@@ -161,8 +184,9 @@ const UserList = ({navigation}) => {
         renderItem={({item}) => {
           return (
             <View style={{backgroundColor: '#ececec'}}>
-              <StaffItem
-                setCheck={setCheck}
+              <UserItem
+              setCheck={setCheck}
+                setRole={setRole}
                 setVisibleRoleModal={setVisibleRoleModal}
                 setVisible={setVisible}
                 setId={setId}
@@ -170,7 +194,7 @@ const UserList = ({navigation}) => {
                 navigation={navigation}
                 key={item}
                 item={item}
-                status={1}></StaffItem>
+                status={1}></UserItem>
             </View>
           );
         }}

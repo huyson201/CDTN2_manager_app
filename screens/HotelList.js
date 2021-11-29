@@ -1,11 +1,11 @@
 import { useIsFocused } from '@react-navigation/core';
 import React, { useEffect } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View,TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { HotelItem } from '../components/hotel/HotelItem';
-import { getHotelsOfUser, hotelSelectors } from '../features/hotel/hotelSlice';
-import { removeStaffList, staffSelectors } from '../features/staff/staffSlice';
-import { WHITE } from '../src/values/color';
+import { getHotelsOfUser, hotelSelectors, removeSelectedHotel } from '../features/hotel/hotelSlice';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { WHITE,BLUE2 } from '../src/values/color';
 const HotelList = ({ navigation }) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();

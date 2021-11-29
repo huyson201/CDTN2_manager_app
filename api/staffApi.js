@@ -8,7 +8,19 @@ const staffApi = {
       },
     });
   },
-  createStaff: (name,email,phone,staffRole,hotelId, token) => {
+  getHotelOfStaffId: (id, token) => {
+    const url = `/staffs/${id}/hotels`;
+    return axiosClient.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  },
+  getStaffByUserId: (id) => {
+    const url = `/staffs?user_uuid=${id}`;
+    return axiosClient.get(url);
+  },
+  createStaff: (name, email, phone, staffRole, hotelId, token) => {
     const url = `/staffs`;
     return axiosClient.post(
       url,
@@ -27,7 +39,7 @@ const staffApi = {
       },
     );
   },
-  updateStaff: (id,staffRole, token) => {
+  updateStaff: (id, staffRole, token) => {
     const url = `/staffs/${id}`;
     return axiosClient.patch(
       url,

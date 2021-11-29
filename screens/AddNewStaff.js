@@ -23,6 +23,9 @@ import {Formik} from 'formik';
 import {Button} from 'react-native-elements';
 import * as Yup from 'yup';
 import {EDIT_SUCCESSFULLY, ADD_SUCCESSFULLY} from '../src/values/constants';
+import Loading from '../components/Loading';
+import moment from 'moment';
+
 const validationSchema = Yup.object({
   name: Yup.string()
     .trim()
@@ -60,10 +63,11 @@ const AddNewStaff = ({navigation, route}) => {
   }, [route.params]);
   const staff = useSelector(state => staffSelectors.selectById(state, id));
   const [selectedPosition, setSelectedPosition] = useState();
+  const [loading1, setLoading1] = useState(true);
   return (
     <>
-      {!staff && null}
-      {(staff || route.params == undefined) && (
+      {staff && loading1 && <Loading/>}
+      {(staff || route.params == undefined || !loading1) && (
         <Formik
           initialValues={user}
           validationSchema={validationSchema}
@@ -106,6 +110,7 @@ const AddNewStaff = ({navigation, route}) => {
                   email: staff.staff_info.user_email,
                   phone: staff.staff_info.user_phone,
                 });
+                setLoading1(false)
               }
             }, [staff]);
             return (
@@ -135,7 +140,6 @@ const AddNewStaff = ({navigation, route}) => {
                   <View style={styles.flex_row}>
                     <Icon name="user" size={23} style={styles.icon} />
                     <TextInput
-
                       editable={staff ? false : true}
                       value={values.name}
                       onBlur={handleBlur('name')}

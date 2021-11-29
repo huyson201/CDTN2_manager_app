@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -17,15 +17,21 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import {
+  STAFF_EDIT,
   STAFF_DELETE,
   STAFF_ROLE,
   DELETE_SUCCESSFULLY,
+  ROLE,
 } from '../../src/values/constants';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteStaffByID} from '../../features/staff/staffSlice';
 import moment from 'moment';
-import staffApi from '../../api/staffApi';
-const StaffItem = ({
+import ModalPopup from './ModalPopup';
+import userApi from '../../api/userApi';
+const UserItem = ({
   item,
+  navigation,
+  children,
   setId,
   setVisible,
   setVisibleRoleModal,
@@ -33,15 +39,16 @@ const StaffItem = ({
   setUser,
 }) => {
   const date = moment(item.updatedAt).format('DD/MM/YYYY hh:mm:ss');
+  const dispatch = useDispatch();
   const {token} = useSelector(state => state.users);
   const deleteItem = async () => {
-    const res = await staffApi.deleteStaffById(item.staff_id, token);
+    const res = await userApi.delete(item.user_uuid, token);
     if (res.data.data) {
-      setCheck(true);
       ToastAndroid.show(DELETE_SUCCESSFULLY, ToastAndroid.SHORT);
+      setCheck(true);
     }
   };
-  const handleDeleteStaff = () => {
+  const handleDelete = () => {
     Alert.alert('Thông báo', 'Are u sure?', [
       {
         cancelable: true,
@@ -53,14 +60,13 @@ const StaffItem = ({
   };
   return (
     <View style={[styles.view, styles.flex_row]}>
-      {/* Image */}
       <View style={{flex: 0.8, justifyContent: 'center', alignItems: 'center'}}>
         <Image
           style={styles.imgStaff}
           source={
-            item.staff_info.user_img !== null
+            item.user_img !== null
               ? {
-                  uri: item.staff_info.user_img,
+                  uri: item.user_img,
                 }
               : require('../../src/images/staff.jpg')
           }
@@ -76,13 +82,13 @@ const StaffItem = ({
           alignItems: 'flex-start',
         }}>
         <View style={styles.flex_row}>
-          <Text style={styles.title1}>Tên: </Text>
-          <Text style={styles.content1}>{item.staff_info.user_name}</Text>
+          <Text style={styles.title1}>Họ tên: </Text>
+          <Text style={styles.content1}>{item.user_name}</Text>
         </View>
         <View style={styles.flex_row}>
-          <Text style={styles.title1}>Vị trí: </Text>
+          <Text style={styles.title1}>Vai trò: </Text>
           <Text style={styles.content1}>
-            {Object.values(STAFF_ROLE[item.role])}
+            {Object.values(ROLE[item.user_role])}
           </Text>
         </View>
         <View style={styles.flex_row}>
@@ -90,40 +96,41 @@ const StaffItem = ({
           <Text style={styles.content1}>{date}</Text>
         </View>
       </View>
-
-      <Menu style={{flex: 0.2}}>
-        <MenuTrigger>
-          <Icon name="dots-vertical" size={25} />
-        </MenuTrigger>
-        <MenuOptions>
-          <MenuOption
-            text={'Xem chi tiết'}
-            onSelect={() => {
-              setId(item.user_uuid);
-              setVisible(true);
-              setUser(item);
-            }}
-          />
-          <MenuOption
-            disabled={
-              item.user_role === 0 || item.user_role === 2 ? true : false
-            }
-            text={'Thay đổi vai trò'}
-            onSelect={() => {
-              setId(item.staff_id);
-              setVisibleRoleModal(true);
-              setUser(item && item);
-            }}
-          />
-          <MenuOption
-            disabled={
-              item.user_role === 0 || item.user_role === 2 ? true : false
-            }
-            onSelect={handleDeleteStaff}
-            text={STAFF_DELETE}
-          />
-        </MenuOptions>
-      </Menu>
+      <View style={{flex: 0.15}}>
+        <Menu>
+          <MenuTrigger>
+            <Icon name="dots-vertical" size={25} />
+          </MenuTrigger>
+          <MenuOptions>
+            <MenuOption
+              text={'Xem chi tiết'}
+              onSelect={() => {
+                setId(item.user_uuid);
+                setVisible(true);
+                setUser(item);
+              }}
+            />
+            <MenuOption
+              disabled={
+                item.user_role === 0 || item.user_role === 2 ? true : false
+              }
+              text={'Thay đổi vai trò'}
+              onSelect={() => {
+                setId(item.user_uuid);
+                setVisibleRoleModal(true);
+                setUser(item && item);
+              }}
+            />
+            <MenuOption
+              disabled={
+                item.user_role === 0 || item.user_role === 2 ? true : false
+              }
+              onSelect={handleDelete}
+              text={STAFF_DELETE}
+            />
+          </MenuOptions>
+        </Menu>
+      </View>
     </View>
   );
 };
@@ -157,4 +164,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StaffItem;
+export default UserItem;

@@ -7,7 +7,7 @@ import {
     TextInput,
     ImageBackground,
 } from 'react-native';
-import { WHITE, BLUE1, BLUE2 } from "../src/values/color";
+import { WHITE, BLUE1, BLUE2 } from "../../src/values/color";
 import Icon from "react-native-vector-icons/FontAwesome5";
 import Icon2 from "react-native-vector-icons/MaterialIcons";
 import { Picker } from '@react-native-picker/picker';
@@ -21,7 +21,7 @@ const EditHotel = () => {
                     <ImageBackground
                         style={styles.imgStaff}
                         imageStyle={{ borderRadius: 15 }}
-                        source={require('../src/images/detail_hotel_1.jpg')} >
+                        source={require('../../src/images/detail_hotel_1.jpg')} >
                         <View style={styles.view_camera}>
                             <Icon name="camera" size={25} color={WHITE} style={styles.icon_camera} />
                         </View>

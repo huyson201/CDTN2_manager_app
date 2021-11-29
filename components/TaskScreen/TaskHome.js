@@ -1,5 +1,5 @@
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
 import DashBoardScreen from '../../screens/DashBoardScreen';
@@ -13,19 +13,24 @@ import ListRoomsTypeStatusMaintainScreen from '../../screens/ListRoomsTypeStatus
 import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusOrderedScreen';
 import CommissionScreen from '../../screens/CommissionScreen';
 import HotelList from '../../screens/HotelList';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import AddHotel from '../hotel/AddHotel';
 import EditHotel from '../hotel/EditHotel';
+import UserList from '../../screens/UserList';
+import AddNewUser from '../../screens/AddNewUser';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
   const {selectedHotel} = useSelector(state => state.hotels);
   return (
     <Stack.Navigator>
-       <Stack.Screen
+      <Stack.Screen
         name="DashBoard"
         component={DashBoardScreen}
-        options={{headerShown: true, title: selectedHotel ? 'Quản lý khách sạn': 'Home'}}
+        options={{
+          headerShown: true,
+          title: selectedHotel ? 'Quản lý khách sạn' : 'Home',
+        }}
       />
       <Stack.Screen
         name="HotelList"
@@ -35,74 +40,85 @@ const TaskHome = () => {
       <Stack.Screen
         name="TabStatus"
         component={TabStatus}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
 
       <Stack.Screen
         name="StaffList"
         component={StaffList}
-        options={{ headerShown: true }}
+        options={{headerShown: true,title:"Danh sách nhân viên"}}
       />
 
       <Stack.Screen
         name="AddNewStaff"
         component={AddNewStaff}
-        options={{ headerShown: true, title: null }}
+        options={{headerShown: true, title: null}}
+      />
+
+      <Stack.Screen
+        name="UserList"
+        component={UserList}
+        options={{headerShown: true,title:"Danh sách user"}}
+      />
+       <Stack.Screen
+        name="AddNewUser"
+        component={AddNewUser}
+        options={{headerShown: true, title: "Thêm mới"}}
       />
       <Stack.Screen
         name="Invoice"
         component={Invoice}
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
       />
 
       <Stack.Screen
-        name="All Rooms"
+        name="AllRooms"
         component={ListRoomsScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="Commission"
         component={CommissionScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="Status Type Rooms"
         component={ListRoomsByTypeScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
 
       <Stack.Screen
         name="Rooms Available"
         component={ListRoomsTypeStatusAvailalbeScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="Rooms Maintaining"
         component={ListRoomsTypeStatusMaintainScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
       <Stack.Screen
         name="Rooms Ordered"
         component={ListRoomsTypeStatusOrderedScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
 
       <Stack.Screen
         name="Add A new Room"
         component={AddNewRoomScreen}
-        options={{ headerShown: true }}
+        options={{headerShown: true}}
       />
 
       <Stack.Screen
         name="AddHotel"
         component={AddHotel}
-        options={{ headerShown: true, title: null }}
+        options={{headerShown: true, title: null}}
       />
 
       <Stack.Screen
         name="EditHotel"
         component={EditHotel}
-        options={{ headerShown: true, title: null }}
+        options={{headerShown: true, title: null}}
       />
     </Stack.Navigator>
   );
