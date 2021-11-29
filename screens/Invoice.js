@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,23 +6,22 @@ import {
   ToastAndroid,
   TouchableNativeFeedback,
   View,
-} from "react-native";
-import styled from "styled-components";
-import { BLUE1, DARK_GRAY, LIGHT_GRAY, ORANGE } from "../src/values/color";
+} from 'react-native';
+import styled from 'styled-components';
+import {BLUE1, DARK_GRAY, LIGHT_GRAY, ORANGE} from '../src/values/color';
 import {
   CONFIRM_BTN,
   CONTACT_INFO,
   DETAIL_PRICE,
   SMALL_TEXT_TITLE,
   SUM_PRICE_SRT,
-} from "../src/values/constants";
-import Icon from "react-native-vector-icons/FontAwesome5";
-import { formatCurrency } from "../src/utilFunction";
-import { Button } from "react-native-elements";
+} from '../src/values/constants';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {formatCurrency} from '../src/utilFunc';
+import {Button} from 'react-native-elements';
 
-const Invoice = ({ route, navigation }) => {
-  const {data} = route.params
-  console.log(data)
+const Invoice = ({route, navigation}) => {
+  const {data, rDate, pDate} = route.params;
   // const [showDetailPrice, setShowDetailPrice] = useState(false);
   // let detailPrice = null;
   // let sumPriceRoom = (props.route.params.sum) - (props.route.params.taxes);
@@ -47,85 +46,78 @@ const Invoice = ({ route, navigation }) => {
   // };
 
   const handlePressConfirm = () => {
-    ToastAndroid.show("xác nhận", ToastAndroid.SHORT);
+    ToastAndroid.show('xác nhận', ToastAndroid.SHORT);
   };
   return (
-    <ScrollView style={{ backgroundColor: "rgba(0,0,0,.05)" }}>
+    <ScrollView style={{backgroundColor: 'rgba(0,0,0,.05)'}}>
       <MainBackground>
         <Text style={styles.textWhite}>{SMALL_TEXT_TITLE}</Text>
         <InvoiceBox>
           <View>
             <RowView style={styles.paddingDefault}>
-              <Icon name="hotel" size={16} color={BLUE1} />
+              {/* <Icon name="hotel" size={16} color={BLUE1} />
               <Text
                 ellipsizeMode="tail"
                 numberOfLines={1}
-                style={styles.textCap}
-              >
+                style={styles.textCap}>
                 Hotel Name
-              </Text>
+              </Text> */}
             </RowView>
             <View style={styles.dateBox}>
               <RowView>
                 <Text
                   ellipsizeMode="tail"
                   numberOfLines={1}
-                  style={styles.receivedText}
-                >
+                  style={styles.receivedText}>
                   Nhận phòng
                 </Text>
                 <Text
                   ellipsizeMode="tail"
                   numberOfLines={1}
-                  style={styles.receivedDate}
-                >
+                  style={styles.receivedDate}>
                   {/* Received Date */}
-                  {data.r_date} (14:00)
+                  {rDate} (14:00)
                 </Text>
               </RowView>
               <RowView style={styles.mTop}>
                 <Text
                   ellipsizeMode="tail"
                   numberOfLines={1}
-                  style={styles.receivedText}
-                >
+                  style={styles.receivedText}>
                   Trả phòng
                 </Text>
                 <Text
                   ellipsizeMode="tail"
                   numberOfLines={1}
-                  style={styles.receivedDate}
-                >
-                  {data.p_date}
+                  style={styles.receivedDate}>
+                  {pDate}
                   {/* {props.route.params.payDate} (12:00) */}
                 </Text>
               </RowView>
             </View>
             <View style={styles.paddingDefault}>
               <Text style={styles.roomTitle}>
-                (2x) Room Name
+                ({data.room_quantity}x) {data.roomInfo.room_name}
                 {/* {props.route.params.data.roomName} */}
               </Text>
               <Text style={styles.roomInfo}>
-                1 giường
+              {data.roomInfo.room_beds} giường
                 {/* (x{props.route.params.data.beds}) */}
               </Text>
               <Text style={styles.roomInfo}>
                 {/* {props.route.params.data.adult +
                   props.route.params.data.children}{" "} */}
-                4 khách/phòng
+                {data.roomInfo.room_people} khách/phòng
               </Text>
             </View>
           </View>
-          <View
-            style={{ ...styles.paddingDefault, backgroundColor: LIGHT_GRAY }}
-          >
+          <View style={{...styles.paddingDefault, backgroundColor: LIGHT_GRAY}}>
             <RowView>
-              <Icon name="list-alt" size={16} color={"rgba(0,0,0,.6)"} />
+              <Icon name="list-alt" size={16} color={'rgba(0,0,0,.6)'} />
               <Text style={styles.textCondition}>Không hoàn tiền</Text>
             </RowView>
             <RowView>
-              <Icon name="list-alt" size={16} color={"rgba(0,0,0,.6)"} />
+              <Icon name="list-alt" size={16} color={'rgba(0,0,0,.6)'} />
               <Text style={styles.textCondition}>
                 Không thể thay đổi lịch trình
               </Text>
@@ -135,15 +127,15 @@ const Invoice = ({ route, navigation }) => {
       </MainBackground>
       <InfoBox>
         <Text style={styles.textCap}>{CONTACT_INFO}</Text>
-        <InvoiceBox style={{ ...styles.paddingDefault, ...styles.mTop }}>
-          <Text style={styles.textName}>Son</Text>
-          <Text style={styles.textInfo}>Email: huyson201@gmail.com</Text>
-          <Text style={styles.textInfo}>Phone: +84987458246</Text>
+        <InvoiceBox style={{...styles.paddingDefault, ...styles.mTop}}>
+          <Text style={styles.textName}>{data.userInfo.user_name}</Text>
+          <Text style={styles.textInfo}>Email: {data.userInfo.user_email}</Text>
+          <Text style={styles.textInfo}>Phone: {data.userInfo.user_phone}</Text>
         </InvoiceBox>
       </InfoBox>
 
       <View>
-        <Text style={{ ...styles.textCap, ...styles.paddingDefault }}>
+        <Text style={{...styles.textCap, ...styles.paddingDefault}}>
           {DETAIL_PRICE}
         </Text>
         {/* onPress={handlePressShowDetailPrice} */}
@@ -151,10 +143,9 @@ const Invoice = ({ route, navigation }) => {
           <RowView
             style={{
               ...styles.paddingDefault,
-              backgroundColor: "#fff",
+              backgroundColor: '#fff',
               ...styles.space,
-            }}
-          >
+            }}>
             <RowView>
               <Icon
                 // name={showDetailPrice ? "angle-up" : "angle-down"}
@@ -165,8 +156,7 @@ const Invoice = ({ route, navigation }) => {
               <Text style={styles.sumPriceString}>{SUM_PRICE_SRT}</Text>
             </RowView>
             <Text style={styles.priceStyle}>
-              SUM VND
-              {/* {formatCurrency(props.route.params.sum, "VND")} */}
+              {formatCurrency(+data.price, "VND")}
             </Text>
           </RowView>
         </TouchableNativeFeedback>
@@ -216,13 +206,13 @@ const DetailPrice = styled.View`
 `;
 const styles = StyleSheet.create({
   textWhite: {
-    color: "#fff",
-    textAlign: "center",
+    color: '#fff',
+    textAlign: 'center',
     marginBottom: 12,
   },
   textCap: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginLeft: 8,
   },
   dateBox: {
@@ -231,14 +221,14 @@ const styles = StyleSheet.create({
     paddingRight: 15,
     borderBottomColor: LIGHT_GRAY,
     borderBottomWidth: 1,
-    borderStyle: "solid",
+    borderStyle: 'solid',
   },
   receivedText: {
-    width: "30%",
-    marginRight: "10%",
+    width: '30%',
+    marginRight: '10%',
   },
   receivedDate: {
-    width: "70%",
+    width: '70%',
   },
   mTop: {
     marginTop: 8,
@@ -247,7 +237,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   roomTitle: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   roomInfo: {
     color: DARK_GRAY,
@@ -259,16 +249,16 @@ const styles = StyleSheet.create({
   },
   textName: {
     fontSize: 18,
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
   },
   textInfo: {
     color: DARK_GRAY,
   },
   space: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
   },
   priceStyle: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
   },
   sumPriceString: {

@@ -12,20 +12,23 @@ import {TOTAL, STATUS_INVOICE} from '../../src/values/constants';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import hotelApi from '../../api/hotelApi';
 import Menu from '../menu/MenuList';
+import {useSelector} from 'react-redux';
 
-const InvoiceItem = (props) => {
+const InvoiceItem = props => {
   const rDate = props.data.r_date.split('T')[0].replace(/-/g, '/');
   const pDate = props.data.p_date.split('T')[0].replace(/-/g, '/');
- 
-
+  const {user} = useSelector(state => state.users);
   return (
     <>
       <TouchableOpacity
         activeOpacity={0.9}
         onPress={() => {
-          props.navigation && props.navigation.navigate('Invoice',{
-            data:props.data
-          });
+          props.navigation &&
+            props.navigation.navigate('Invoice', {
+              data: props.data,
+              rDate : rDate,
+              pDate: pDate,
+            });
         }}>
         <View style={styles.view}>
           <View style={[styles.flex_row, styles.header]}>
@@ -36,12 +39,12 @@ const InvoiceItem = (props) => {
               {props.data.roomInfo.room_name}
             </Text>
             {(props.data.status != 4 && props.data.status != 5) && (
-              <Menu
-                status={props.data.status}
-                id={props.data.invoice_id}
-                room_quantity={props.data.roomInfo.room_quantity}
-              />
-            )}
+                <Menu
+                  status={props.data.status}
+                  id={props.data.invoice_id}
+                  room_quantity={props.data.roomInfo.room_quantity}
+                />
+              )}
           </View>
           <View style={[styles.body, styles.padding, styles.flex_row]}>
             <View>

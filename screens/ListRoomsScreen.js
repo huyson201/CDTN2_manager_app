@@ -17,53 +17,38 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {BLUE1, DARK_GRAY, MAP_MARKER} from '../src/values/color';
 import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../src/values/size';
 import {Button} from 'react-native-elements';
-// import History from '../src/components/home/History';
-// import About from '../src/components/home/About';
-
+import RoomItem from '../components/room/RoomItem';
+import {useSelector} from 'react-redux';
+import hotelApi from '../api/hotelApi';
 const ListRoomsScreen = function ({navigation}) {
   const [dataSource, setDataSouce] = useState([]);
+  const {token} = useSelector(state => state.users);
+  const {selectedHotel} = useSelector(state => state.hotels);
+  const [rooms,setRooms] = useState([])
   useEffect(() => {
-    getData();
-  }, []);
+    getRooms(selectedHotel);
+  }, [selectedHotel]);
   // MODIFY DATASOUCE HERE
-  const getData = () => {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => response.json())
-      .then(responseJson => {
-        setDataSouce(responseJson);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+  const getRooms = async id => {
+    const res = await hotelApi.getAllRoomsByIdHotel(id);
+    if (res.data.data) {
+      console.log(res.data.data);
+      setRooms(res.data.data)
+    }
   };
   // Handle Press Navigation
   const handlePressAddNewRoom = () => {
     navigation.navigate('Add A new Room');
   };
-   const handlePressToCommissionScreen = () => {
+  const handlePressToCommissionScreen = () => {
     navigation.navigate('Commission');
   };
   const handlePressToListTypeRooms = () => {
     navigation.navigate('Status Type Rooms');
   };
-     const handlePressToAllRooms = () => {
+  const handlePressToAllRooms = () => {
     navigation.navigate('All Rooms');
   };
-  // PRINT RATING
-  const printRating = star => {
-    var rating = [];
-    for (let i = 0; i < 5; i++) {
-      rating.push(
-        <Icon
-          name="star"
-          size={25}
-          backgroundColor="#cfc021"
-          color="#cfc021"></Icon>,
-      );
-    }
-    return rating;
-  };
-
   // MODIFY cái cây màu đen nằm giữa các ITEMS
   const ItemSeparatorView = () => {
     return <View style={ListRoomsStyle.ItemSeparatorView} />;
@@ -71,17 +56,6 @@ const ListRoomsScreen = function ({navigation}) {
   const [selectedValue, setSelectedValue] = useState('1');
   return (
     <View>
-      {/* MODIFY HEADER */}
-      <View style={ListRoomsStyle.header}>
-        <View style={ListRoomsStyle.headerUserCicle}>
-          <View>
-            <Image
-              style={ListRoomsStyle.userImg}
-              source={require('../src/images/list.png')}
-            />
-          </View>
-        </View>
-      </View>
       <View style={ListRoomsStyle.filter}>
         <Picker
           selectedValue={selectedValue}
@@ -91,52 +65,54 @@ const ListRoomsScreen = function ({navigation}) {
               ? handlePressToAllRooms()
               : itemValue == 2
               ? handlePressAddNewRoom()
-              // : itemValue == 3
-              // ? handlePressToMaintainingRooms()
-              : handlePressToCommissionScreen()
+              : // : itemValue == 3
+                // ? handlePressToMaintainingRooms()
+                handlePressToCommissionScreen()
           }>
           <Picker.Item label="All Type Rooms" value="1" />
           <Picker.Item label="Add new Room" value="2" />
-          <Picker.Item label="Commission" value="3" />
+          {/* <Picker.Item label="Commission" value="3" /> */}
           {/* <Picker.Item label="Rooms Ordered" value="4" /> */}
         </Picker>
       </View>
       <FlatList
         style={{marginTop: 5}}
-        data={dataSource}
+        data={rooms}
         renderItem={({item, index}) => {
           return (
             // MODIFY ITEMSVIEW HERE
-            <TouchableOpacity
-              onPress={handlePressToListTypeRooms}
-              key={index}
-              style={ListRoomsStyle.listItemStyle}>
-              <View style={ListRoomsStyle.itemBody}>
-                {/* <Image
-                  style={ListRoomsStyle.itemBoDyImg}
-                  source={require('../src/images/detail_hotel_2.jpeg')}
-                /> */}
-                <View style={ListRoomsStyle.itemBoDyText}>
-                  <Text
-                    style={ListRoomsStyle.itemFont_HotelName}
-                    numberOfLines={1}>
-                    {item.username}
-                  </Text>
-                  <Text
-                    style={ListRoomsStyle.itemFont_HotelStar}
-                    numberOfLines={1}>
-                    {printRating(item.id)}
-                  </Text>
-                  <Text style={ListRoomsStyle.itemFont} numberOfLines={1}>
-                    Total: {item.id} $
-                  </Text>
-                  <Text numberOfLines={1}>
-                    Address:{item.address.suite},{item.address.city}
-                  </Text>
-                </View>
-              </View>
-              <ItemSeparatorView />
-            </TouchableOpacity>
+            // <TouchableOpacity
+            //   onPress={handlePressToListTypeRooms}
+            //   key={index}
+            //   style={ListRoomsStyle.listItemStyle}>
+            //   <View style={ListRoomsStyle.itemBody}>
+            //     {/* <Image
+            //       style={ListRoomsStyle.itemBoDyImg}
+            //       source={require('../src/images/detail_hotel_2.jpeg')}
+            //     /> */}
+            //     <View style={ListRoomsStyle.itemBoDyText}>
+            //       <Text
+            //         style={ListRoomsStyle.itemFont_HotelName}
+            //         numberOfLines={1}>
+            //         {item.username}
+            //       </Text>
+            //       <Text
+            //         style={ListRoomsStyle.itemFont_HotelStar}
+            //         numberOfLines={1}>
+            //         {printRating(item.id)}
+            //       </Text>
+            //       <Text style={ListRoomsStyle.itemFont} numberOfLines={1}>
+            //         Total: {item.id} $
+            //       </Text>
+            //       <Text numberOfLines={1}>
+            //         Address:{item.address.suite},{item.address.city}
+            //       </Text>
+            //     </View>
+            //   </View>
+            //   <ItemSeparatorView />
+            // </TouchableOpacity>
+
+            <RoomItem item={item}></RoomItem>
           );
         }}
       />
@@ -270,7 +246,6 @@ const ListRoomsStyle = StyleSheet.create({
     padding: 10,
     fontSize: 20,
   },
-
 });
 
 export default ListRoomsScreen;

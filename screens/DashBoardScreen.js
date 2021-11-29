@@ -16,6 +16,8 @@ import userApi from '../api/userApi';
 import {SIGNOUT_SUCCESSFULLY} from '../src/values/constants';
 import {logout} from '../features/auth/userSlice';
 import {resetToken} from '../src/utilFunc';
+import staffApi from '../api/staffApi';
+import {setSelectedHotel} from '../features/hotel/hotelSlice';
 const data = [
   {
     key: 'Phòng',
@@ -64,6 +66,20 @@ const data3 = [
     image: require(`../src/images/logout.png`),
   },
 ];
+const data4 = [
+  {
+    key: 'Tài khoản',
+    image: require(`../src/images/user.png`),
+  },
+  {
+    key: 'Hoá đơn',
+    image: require(`../src/images/bill.png`),
+  },
+  {
+    key: 'Đăng xuất',
+    image: require(`../src/images/logout.png`),
+  },
+];
 const numColumns = 2;
 
 const DashboardItem = props => {
@@ -95,6 +111,12 @@ const DashboardItem = props => {
       case 'Khách sạn':
         props.navigation.navigate('HotelList');
         break;
+      case 'Quản lí users':
+        props.navigation.navigate('UserList');
+        break;
+      case 'Phòng':
+        props.navigation.navigate('AllRooms');
+        break;
       default:
         break;
     }
@@ -111,12 +133,28 @@ const DashboardItem = props => {
 const DashBoardScreen = function ({navigation}) {
   const {selectedHotel} = useSelector(state => state.hotels);
   const {user} = useSelector(state => state.users);
+  const dispatch = useDispatch();
+  const getStaffByUserId = async () => {
+    const res = await staffApi.getStaffByUserId(user.user_uuid);
+    if (res.data.data.length > 0) {
+      dispatch(setSelectedHotel(res.data.data[0].hotel_id));
+    }
+  };
+  useEffect(() => {
+    getStaffByUserId();
+  }, []);
   return (
     <View style={styles.container}>
       <FlatList
         numColumns={2}
         data={
-          selectedHotel !== null ? data : user.user_role === 0 ? data3 : data2
+          user.user_role === 2
+            ? data4
+            : selectedHotel && user.user_role === 1
+            ? data
+            : !selectedHotel && user.user_role === 1
+            ? data2
+            : data3
         }
         renderItem={({item}) => (
           <DashboardItem dashboardItem={item} navigation={navigation} />

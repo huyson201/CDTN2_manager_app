@@ -8,21 +8,21 @@ import {
   Image,
   ToastAndroid,
 } from 'react-native';
-import {WHITE, BLUE1, BLUE2} from '../src/values/color';
+import {WHITE, BLUE1, BLUE2} from '../../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {useDispatch, useSelector} from 'react-redux';
-import {hotelSelectors} from '../features/hotel/hotelSlice';
+import {hotelSelectors} from '../../features/hotel/hotelSlice';
 import {
   createStaff,
   staffSelectors,
   updateStaffById,
-} from '../features/staff/staffSlice';
+} from '../../features/staff/staffSlice';
 import {Formik} from 'formik';
 import {Button} from 'react-native-elements';
 import * as Yup from 'yup';
-import {EDIT_SUCCESSFULLY, ADD_SUCCESSFULLY} from '../src/values/constants';
+import {EDIT_SUCCESSFULLY, ADD_SUCCESSFULLY} from '../../src/values/constants';
 const validationSchema = Yup.object({
   name: Yup.string()
     .trim()
@@ -119,8 +119,8 @@ const AddHotel = ({navigation, route}) => {
                             ? {
                                 uri: staff.staff_info.user_img,
                               }
-                            : require('../src/images/staff.jpg')
-                          : require('../src/images/staff.jpg')
+                            : require('../../src/images/staff.jpg')
+                          : require('../../src/images/staff.jpg')
                       }
                       style={styles.imgStaff}
                       imageStyle={{

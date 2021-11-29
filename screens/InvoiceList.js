@@ -55,6 +55,7 @@ const InvoiceList = ({navigation, route}) => {
         user_name: res[1].user_name,
         user_phone: res[1].user_phone,
         user_email: res[1].user_email,
+        user_role: res[1].user_role
       };
       e.userInfo = user;
     }

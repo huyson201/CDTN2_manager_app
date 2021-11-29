@@ -24,5 +24,7 @@ const hotelApi = {
       },
     });
   },
+  
+ 
 };
 export default hotelApi;

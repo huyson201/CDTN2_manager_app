@@ -8,6 +8,7 @@
  import App from './App';
  import { name as appName } from './app.json';
  import store from './features/store';
+import 'moment/locale/vi'
  const RNRedux = () => {
      return (
          <Provider store={store}>

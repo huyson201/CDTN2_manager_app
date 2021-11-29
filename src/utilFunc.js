@@ -16,3 +16,10 @@ export const resetToken = async (dispatch, refreshToken) => {
     dispatch(logout());
   }
 };
+export const formatCurrency = (n, currency) => {
+  return (
+    currency +
+    " " +
+    n.toFixed(1).replace(/(\d)(?=(\d{3})+\.)/g, "$1,")
+  ).slice(0, -2);
+};
