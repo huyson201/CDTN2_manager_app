@@ -5,7 +5,6 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 import hotelApi from '../../api/hotelApi';
-import userApi from '../../api/userApi';
 import {resetToken} from '../../src/utilFunc';
 export const getHotelsOfUser = createAsyncThunk(
   'hotels/getHotelsOfUser',
@@ -22,6 +21,18 @@ export const getHotelsOfUser = createAsyncThunk(
     }
   },
 );
+
+// export const deleteHotelSlice = createAsyncThunk(
+//   'hotels/delete',
+//   async ({id, token}, thunkAPI) => {
+//     try {
+//       await hotelApi.delete(id, token);
+//       return id;
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   },
+// );
 
 const hotelAdapter = createEntityAdapter({
   selectId: hotel => hotel.hotel_id,
@@ -56,8 +67,19 @@ const hotelSlice = createSlice({
       hotelAdapter.setAll(state, payload);
       state.loading = false;
     },
+    // [deleteHotelSlice.pending]: state => {
+    //   state.loading = true;
+    // },
+    // [deleteHotelSlice.rejected]: state => {
+    //   state.loading = false;
+    // },
+    // [deleteHotelSlice.fulfilled]: (state, {payload}) => {
+    //   hotelAdapter.removeOne(state, payload);
+    //   state.loading = false;
+    // },
   },
 });
 
-export const {setSelectedHotel, removeSelectedHotel,setServices} = hotelSlice.actions;
+export const {setSelectedHotel, removeSelectedHotel, setServices} =
+  hotelSlice.actions;
 export default hotelSlice.reducer;

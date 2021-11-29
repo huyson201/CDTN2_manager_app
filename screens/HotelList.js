@@ -1,9 +1,17 @@
 import {useIsFocused} from '@react-navigation/core';
-import React, {useEffect} from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {HotelItem} from '../components/hotel/HotelItem';
 import {
+  deleteHotelSlice,
   getHotelsOfUser,
   hotelSelectors,
   removeSelectedHotel,
@@ -13,8 +21,10 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {BLUE2, WHITE} from '../src/values/color';
+import hotelApi from '../api/hotelApi';
 const HotelList = ({navigation}) => {
   const isFocused = useIsFocused();
+  const [check, setCheck] = useState(false);
   const dispatch = useDispatch();
   const {user, token} = useSelector(state => state.users);
   const {loading} = useSelector(state => state.hotels);
@@ -22,9 +32,11 @@ const HotelList = ({navigation}) => {
   const getHotels = () => {
     dispatch(getHotelsOfUser({id: user.user_uuid, userToken: token}));
   }
+  
   useEffect(() => {
     getHotels()
-  }, [isFocused]);
+    return setCheck(false);
+  }, [isFocused, check]);
   useEffect(() => {
     if (isFocused) {
       dispatch(removeSelectedHotel());
@@ -33,7 +45,16 @@ const HotelList = ({navigation}) => {
   const handlePressAdd = () => {
     navigation.navigate('AddHotel');
   };
-
+  const deleteHotel = async ({id}) => {
+    try {
+      await hotelApi.delete(id, token);
+      // dispatch(deleteHotelSlice({id: id, token: token}));
+      setCheck(true);
+      ToastAndroid.show('DELETE SUCCESSFULLY', ToastAndroid.SHORT);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={styles.container}>
       <SwipeListView
@@ -72,7 +93,9 @@ const HotelList = ({navigation}) => {
               <Icon name="edit" size={22} color={WHITE} />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => console.log('swipe')}
+              onPress={() => {
+                deleteHotel({id: data.item.hotel_id});
+              }}
               style={{
                 backgroundColor: 'red',
                 width: 45,
