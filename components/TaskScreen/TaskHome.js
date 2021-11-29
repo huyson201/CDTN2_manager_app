@@ -112,13 +112,13 @@ const TaskHome = () => {
       <Stack.Screen
         name="AddHotel"
         component={AddHotel}
-        options={{headerShown: true, title: null}}
+        options={{ headerShown: true, title: "Thêm khách sạn" }}
       />
 
       <Stack.Screen
         name="EditHotel"
         component={EditHotel}
-        options={{headerShown: true, title: null}}
+        options={{ headerShown: true, title: "Chỉnh sửa khách sạn" }}
       />
     </Stack.Navigator>
   );
