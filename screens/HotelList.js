@@ -17,9 +17,13 @@ const HotelList = ({navigation}) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const {user, token} = useSelector(state => state.users);
+  const {loading} = useSelector(state => state.hotels);
   const hotels = useSelector(hotelSelectors.selectAll);
-  useEffect(() => {
+  const getHotels = () => {
     dispatch(getHotelsOfUser({id: user.user_uuid, userToken: token}));
+  }
+  useEffect(() => {
+    getHotels()
   }, [isFocused]);
   useEffect(() => {
     if (isFocused) {
@@ -33,6 +37,8 @@ const HotelList = ({navigation}) => {
   return (
     <View style={styles.container}>
       <SwipeListView
+        refreshing={loading}
+        onRefresh={getHotels}
         style={{marginTop: 5}}
         // disableLeftSwipe={true}
         disableRightSwipe={true}
