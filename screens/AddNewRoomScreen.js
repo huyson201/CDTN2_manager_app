@@ -3,14 +3,12 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
   Text,
   TextInput,
-  Picker,
-  Image,
   StatusBar,
-  FlatList,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -18,179 +16,147 @@ import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {BLUE1, BLUE2, DARK_GRAY, MAP_MARKER, WHITE} from '../src/values/color';
 import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../src/values/size';
-import {Button} from 'react-native-elements';
-import {
-  launchCamera,
-  launchImageLibrary,
-  ImagePicker,
-} from 'react-native-image-picker';
+import {Button, Image} from 'react-native-elements';
+import ImagePicker from 'react-native-image-crop-picker';
+import {androidCameraPermission} from '../components/permission/permission';
+import roomApi from '../api/roomApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import ImagePicker from 'react-native-image-picker';
 // import History from '../src/components/home/History';
 // import About from '../src/components/home/About';
 
-const AddNewRoomScreen = function ({navigation}) {
-  // const [imageUri, setimageUri] = useState('');
-  // const [dataSource, setDataSouce] = useState([]);
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-  // MODIFY DATASOUCE HERE
-  // const getData = () => {
-  //   fetch('https://jsonplaceholder.typicode.com/users')
-  //     .then(response => response.json())
-  //     .then(responseJson => {
-  //       setDataSouce(responseJson);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-  // };
-  const handlePressUserProfile = () => {
-    navigation.navigate('Type Rooms');
+const AddNewRoomScreen = function ({navigation, route}) {
+  // room_name, hotel_id: +hotel_id, room_desc, room_area, room_price, room_bed: +room_bed, room_quantity: +room_quantity, room_num_people: +room_num_people, room_imgs: roomImgsUrl.join()
+  const id = route.params.id;
+  console.log(id, 'id hotel ne');
+  const [room_name, setRoomName] = useState();
+  const [room_desc, setRoomDesc] = useState();
+  const [room_area, setRoomArea] = useState();
+  const [room_price, setRoomPrice] = useState();
+  const [room_bed, setRoomBed] = useState();
+  const [room_quantity, setRoomQuantity] = useState();
+  const [room_num_people, setNumPeople] = useState();
+  const [services, setServices] = useState();
+  const [roomImgsUrl, setRoomImg] = useState([]);
+  const [checkSelectImage, setCheckSelectImage] = useState(false);
+
+  const handlePressAdd = async () => {
+    const token = await AsyncStorage.getItem('token');
+    let formData = new FormData();
+    try {
+      formData.append('hotel_id', id && id);
+      formData.append('room_name', room_name && room_name);
+      formData.append('room_desc', room_desc && room_desc);
+      formData.append('room_area', room_area && room_area);
+      formData.append('room_price', room_price && room_price);
+      formData.append('room_bed', room_bed && room_bed);
+      formData.append('room_quantity', room_quantity && room_quantity);
+      formData.append('room_num_people', room_num_people && room_num_people);
+      formData.append('services', services && services);
+
+      if (roomImgsUrl.length > 0) {
+        roomImgsUrl.forEach(element => {
+          formData.append('room_imgs', element);
+        });
+      }
+      const res = await roomApi.create(formData, token);
+      if (res.data.data) {
+        ToastAndroid.show('Thêm phòng thành công', ToastAndroid.SHORT);
+        // dispatch(setServices(null));
+        navigation.navigate('AllRooms');
+      }
+      console.log(
+        res.data.data,
+        '===================add thành công òi ne=================',
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
   const handlePressCancel = () => {
     navigation.goBack();
   };
-  // PRINT RATING
-  const printRating = star => {
-    var rating = [];
-    for (let i = 0; i < 5; i++) {
-      rating.push(
-        <Icon
-          name="star"
-          size={25}
-          backgroundColor="#cfc021"
-          color="#cfc021"></Icon>,
-      );
+
+  const onSlectImage = async () => {
+    const permission = await androidCameraPermission();
+    // console.log(permission);
+    if (permission) {
+      Alert.alert('', 'Ảnh chi tiết phòng', [
+        {text: 'Hủy', onPress: () => {}},
+        {text: 'Chọn ảnh từ thư viện', onPress: onGallery},
+        {text: 'Chụp ảnh mới', onPress: onCamera},
+      ]);
     }
-    return rating;
   };
-  // Import img
-  const [imageUri, setimageUri] = useState('');
-  const OpenCamera = () => {
-    const options = {
-      storageOptions: {
-        path: 'images',
-        mediaType: 'photo',
-      },
-      includeBase64: true,
-    };
-    launchCamera(options, response => {
-      // console.log('Response = ', response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        //  display the image:
 
-        const source = {
-          uri: response.assets[0].uri,
-        };
-        console.log(source);
-        // console.log('uri',response.assets[0].uri);
-        setimageUri(source);
-      }
+  const onCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 400,
+      cropping: true,
+      includeBase64: true,
+      useFrontCamera: true,
+      // mediaType: 'any',
+    }).then(image => {
+      setRoomImg({
+        uri: image.path,
+        type: image.mime,
+        name: image.path.split('/')[image.path.split('/').length - 1],
+        data: image.data,
+      });
     });
   };
-  const OpenGalery = () => {
-    const options = {
-      storageOptions: {
-        path: 'images',
-        mediaType: 'photo',
-        selectionLimit: 0,
-      },
-      includeBase64: true,
-    };
-    launchImageLibrary(options, response => {
-      // console.log('Response = ', response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        //  display the image:
 
-        const source = {
-          uri: response.assets[0].uri,
-        };
-        console.log(source);
-        // console.log('uri',response.assets[0].uri);
-        setimageUri(source);
+  const onGallery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+      multiple: true,
+      includeBase64: true,
+    }).then(image => {
+      let arr = [];
+      if (image.length > 0) {
+        if (!roomImgsUrl || roomImgsUrl.length === 0) {
+          image.forEach(e => {
+            arr.push({
+              uri: e.path,
+              type: e.mime,
+              name: e.path.split('/')[e.path.split('/').length - 1],
+              data: e.data,
+            });
+          });
+        } else {
+          arr = [...roomImgsUrl];
+          image.forEach(e => {
+            arr.push({
+              uri: e.path,
+              type: e.mime,
+              name: e.path.split('/')[e.path.split('/').length - 1],
+              data: e.data,
+            });
+          });
+        }
       }
+      setRoomImg([...arr]);
     });
   };
-  const [selectedValue, setSelectedValue] = useState('1');
-  const ItemButtonView = () => {
-    return (
-      <View
-        style={[
-          styles.container,
-          {
-            flexDirection: 'row',
-          },
-        ]}>
-        {/* To ListRooms Screen */}
 
-        <View
-          style={[ListRoomsStyle.funtionBtnItem, {backgroundColor: 'gray'}]}>
-          <TouchableOpacity onPress={handlePressCancel}>
-            <Text>
-              <Icon
-                style={ListRoomsStyle.icon}
-                name="ban"
-                size={40}
-                backgroundColor="#05375a"
-                color="#05375a"
-              />
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View
-          style={[ListRoomsStyle.funtionBtnItem, {backgroundColor: 'green'}]}>
-          <TouchableOpacity
-          //  onPress={handleToListRooms}
-          >
-            <Text>
-              <Icon
-                style={ListRoomsStyle.icon}
-                name="check"
-                size={40}
-                backgroundColor="#05375a"
-                color="#05375a"></Icon>
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  };
+  useEffect(() => {
+    if (checkSelectImage) {
+      onSlectImage();
+    }
+    return setCheckSelectImage();
+  }, [checkSelectImage]);
 
   return (
     <View>
-      {/* MODIFY HEADER */}
-      {/* <Image
-        style={{
-          width: '100%',
-          height: '50%',
-          maxHeight: 200,
-          resizeMode: 'stretch',
-        }}
-        source={{
-          uri: 'https://images.homify.com/c_fill,f_auto,q_0,w_740/v1513411774/p/photo/image/2361746/STYLOME_01.jpg',
-        }}
-      /> */}
       {/* BODY CONTENT */}
       <ScrollView style={{height: '100%', width: '100%'}}>
-        {/* <Text style={ListRoomsStyle.textTitle}>Full Name</Text> */}
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={() => {
-              setCheckSelectImage('gallery');
-              // onSlectImage();
+              setCheckSelectImage(true);
             }}
             style={styles.scrollImg}>
             <View style={styles.borderImg}>
@@ -201,6 +167,37 @@ const AddNewRoomScreen = function ({navigation}) {
               />
             </View>
           </TouchableOpacity>
+          <ScrollView
+            style={styles.scrollImg}
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}>
+            {roomImgsUrl.length > 0 &&
+              roomImgsUrl.map((e, i) => {
+                return (
+                  <View key={i} style={styles.borderImg}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => {
+                        console.log('update hoac delete slide item');
+                      }}>
+                      <Image
+                        style={{
+                          width: 100,
+                          height: 100,
+                          resizeMode: 'cover',
+                          borderWidth: 2,
+                          borderColor: '#ccc',
+                          borderRadius: 10,
+                        }}
+                        source={{
+                          uri: `data:${e.type};base64,${e.data}`,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+          </ScrollView>
         </View>
         {/* Room name */}
         <View style={ListRoomsStyle.action}>
@@ -211,10 +208,11 @@ const AddNewRoomScreen = function ({navigation}) {
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Room Name "
             autoCapitalize="none"
-            style={ListRoomsStyle.textInput}></TextInput>
+            onChangeText={val => setRoomName(val)}
+            style={ListRoomsStyle.textInput}
+          />
         </View>
         {/* Room price */}
         <View style={ListRoomsStyle.action}>
@@ -225,10 +223,11 @@ const AddNewRoomScreen = function ({navigation}) {
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Room price"
             autoCapitalize="none"
-            style={ListRoomsStyle.textInput}></TextInput>
+            onChangeText={val => setRoomPrice(val)}
+            style={ListRoomsStyle.textInput}
+          />
         </View>
         {/* Room Bed */}
         <View style={ListRoomsStyle.action}>
@@ -239,8 +238,8 @@ const AddNewRoomScreen = function ({navigation}) {
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Room bed"
+            onChangeText={val => setRoomBed(val)}
             autoCapitalize="none"
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
@@ -253,9 +252,9 @@ const AddNewRoomScreen = function ({navigation}) {
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Room Area"
             autoCapitalize="none"
+            onChangeText={val => setRoomArea(val)}
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
         {/* Room Quantity */}
@@ -267,9 +266,9 @@ const AddNewRoomScreen = function ({navigation}) {
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Room Quantity"
             autoCapitalize="none"
+            onChangeText={val => setRoomQuantity(val)}
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
         {/* Room Max People */}
@@ -281,26 +280,36 @@ const AddNewRoomScreen = function ({navigation}) {
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Max people"
             autoCapitalize="none"
+            onChangeText={val => setNumPeople(val)}
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
         {/* Room Services */}
         <View style={ListRoomsStyle.action}>
-        <MaterialIcons
+          <MaterialIcons
             name="miscellaneous-services"
             size={25}
             style={ListRoomsStyle.icon}
+            color="#05375a"
           />
           <TextInput
-            // defaultValue="Name of user"
             placeholder="Room Services"
             autoCapitalize="none"
+            onChangeText={val => setServices(val)}
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
-        {/* Room Surcharnge */}
-
+        {/* room desc */}
+        <View style={ListRoomsStyle.action}>
+          <Text style={{fontSize: 17, paddingTop: 10}}>Mô tả: </Text>
+          <TextInput
+            onChangeText={val => setRoomDesc(val)}
+            multiline={true}
+            numberOfLines={3}
+            style={{textAlignVertical: 'top', flex: 1}}
+          />
+        </View>
+        {/* Action */}
         <View
           style={{
             flexDirection: 'row',
@@ -308,10 +317,10 @@ const AddNewRoomScreen = function ({navigation}) {
             marginBottom: 10,
             marginHorizontal: 20,
           }}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handlePressCancel}>
             <Text style={styles.text_button}>Cancel</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handlePressAdd}>
             <Text style={styles.text_button}>Add</Text>
           </TouchableOpacity>
         </View>
@@ -410,7 +419,7 @@ const ListRoomsStyle = StyleSheet.create({
   },
 
   textInput: {
-    paddingLeft:20,
+    paddingLeft: 20,
     fontSize: 15,
     flex: 1,
     color: '#000',

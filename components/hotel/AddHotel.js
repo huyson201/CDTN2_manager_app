@@ -185,6 +185,7 @@ const AddHotel = ({navigation, route}) => {
               });
             });
           } else {
+            arr = [...hotel_slide];
             image.forEach(e => {
               arr.push({
                 uri: e.path,
@@ -475,7 +476,6 @@ const AddHotel = ({navigation, route}) => {
           />
           <ModalServices ref={serviceRef} services={services} />
           <Button
-          
             title={
               'Chọn dịch vụ' +
               `${serviceRedux ? ' (' + serviceRedux.length + ')' : ''}`
