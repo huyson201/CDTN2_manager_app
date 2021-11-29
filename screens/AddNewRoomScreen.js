@@ -12,10 +12,11 @@ import {
   StatusBar,
   FlatList,
 } from 'react-native';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {BLUE1, DARK_GRAY, MAP_MARKER} from '../src/values/color';
+import {BLUE1, BLUE2, DARK_GRAY, MAP_MARKER, WHITE} from '../src/values/color';
 import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../src/values/size';
 import {Button} from 'react-native-elements';
 import {
@@ -47,7 +48,7 @@ const AddNewRoomScreen = function ({navigation}) {
   const handlePressUserProfile = () => {
     navigation.navigate('Type Rooms');
   };
-    const handlePressCancel = () => {
+  const handlePressCancel = () => {
     navigation.goBack();
   };
   // PRINT RATING
@@ -136,6 +137,20 @@ const AddNewRoomScreen = function ({navigation}) {
         {/* To ListRooms Screen */}
 
         <View
+          style={[ListRoomsStyle.funtionBtnItem, {backgroundColor: 'gray'}]}>
+          <TouchableOpacity onPress={handlePressCancel}>
+            <Text>
+              <Icon
+                style={ListRoomsStyle.icon}
+                name="ban"
+                size={40}
+                backgroundColor="#05375a"
+                color="#05375a"
+              />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View
           style={[ListRoomsStyle.funtionBtnItem, {backgroundColor: 'green'}]}>
           <TouchableOpacity
           //  onPress={handleToListRooms}
@@ -147,23 +162,6 @@ const AddNewRoomScreen = function ({navigation}) {
                 size={40}
                 backgroundColor="#05375a"
                 color="#05375a"></Icon>
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {/* Handle Logout */}
-        <View
-          style={[ListRoomsStyle.funtionBtnItem, {backgroundColor: 'gray'}]}>
-          <TouchableOpacity
-           onPress={handlePressCancel}
-          >
-            <Text>
-              <Icon
-                style={ListRoomsStyle.icon}
-                name="ban"
-                size={40}
-                backgroundColor="#05375a"
-                color="#05375a"
-              />
             </Text>
           </TouchableOpacity>
         </View>
@@ -188,12 +186,28 @@ const AddNewRoomScreen = function ({navigation}) {
       {/* BODY CONTENT */}
       <ScrollView style={{height: '100%', width: '100%'}}>
         {/* <Text style={ListRoomsStyle.textTitle}>Full Name</Text> */}
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={() => {
+              setCheckSelectImage('gallery');
+              // onSlectImage();
+            }}
+            style={styles.scrollImg}>
+            <View style={styles.borderImg}>
+              <MaterialCommunityIcons
+                name="camera-plus"
+                size={25}
+                color={DARK_GRAY}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
         {/* Room name */}
         <View style={ListRoomsStyle.action}>
           <Icon
             style={ListRoomsStyle.icon}
             name="monument"
-            size={18}
+            size={20}
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
@@ -207,7 +221,7 @@ const AddNewRoomScreen = function ({navigation}) {
           <Icon
             style={ListRoomsStyle.icon}
             name="money-bill-wave"
-            size={18}
+            size={20}
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
@@ -221,7 +235,7 @@ const AddNewRoomScreen = function ({navigation}) {
           <Icon
             style={ListRoomsStyle.icon}
             name="bed"
-            size={18}
+            size={20}
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
@@ -235,7 +249,7 @@ const AddNewRoomScreen = function ({navigation}) {
           <Icon
             style={ListRoomsStyle.icon}
             name="chart-area"
-            size={18}
+            size={20}
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
@@ -249,7 +263,7 @@ const AddNewRoomScreen = function ({navigation}) {
           <Icon
             style={ListRoomsStyle.icon}
             name="sort-numeric-up-alt"
-            size={18}
+            size={20}
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
@@ -263,7 +277,7 @@ const AddNewRoomScreen = function ({navigation}) {
           <Icon
             style={ListRoomsStyle.icon}
             name="user-alt"
-            size={18}
+            size={20}
             backgroundColor="#05375a"
             color="#05375a"></Icon>
           <TextInput
@@ -274,12 +288,11 @@ const AddNewRoomScreen = function ({navigation}) {
         </View>
         {/* Room Services */}
         <View style={ListRoomsStyle.action}>
-          <Icon
+        <MaterialIcons
+            name="miscellaneous-services"
+            size={25}
             style={ListRoomsStyle.icon}
-            name="servicestack"
-            size={18}
-            backgroundColor="#05375a"
-            color="#05375a"></Icon>
+          />
           <TextInput
             // defaultValue="Name of user"
             placeholder="Room Services"
@@ -287,54 +300,21 @@ const AddNewRoomScreen = function ({navigation}) {
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
         {/* Room Surcharnge */}
-        <View style={ListRoomsStyle.action}>
-          <Icon
-            style={ListRoomsStyle.icon}
-            name="pound-sign"
-            size={18}
-            backgroundColor="#05375a"
-            color="#05375a"></Icon>
-          <TextInput
-            // defaultValue="Name of user"
-            placeholder="Room Surcharnge "
-            autoCapitalize="none"
-            style={ListRoomsStyle.textInput}></TextInput>
-        </View>
-        {/* Room IMG */}
-        <Picker
-          // selectedValue={selectedValue}
-          style={ListRoomsStyle.filterItems}
-          onValueChange={(itemValue, itemIndex) =>
-            itemValue == 1 ? '' : itemValue == 2 ? OpenCamera() : OpenGalery()
-          }>
-          <Picker.Item label="Add Img"  value="1" />
-          <Picker.Item label="OpenCamera" value="2" />
-          <Picker.Item label="OpenGalery" value="3" />
-        </Picker>
-        <View style={ListRoomsStyle.action}>
-          {/* <Button
-            title="OpenCamera"
-            onPress={() => {
-              OpenCamera();
-            }}></Button>
-          <Button
-            title="OpenGalery"
-            onPress={() => {
-              OpenGalery();
-            }}></Button> */}
 
-          <Image
-            source={imageUri}
-            style={{
-              height: 100,
-              width: 100,
-              borderColor: 'black',
-              borderWidth: 5,
-            }}
-          />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+            marginHorizontal: 20,
+          }}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.text_button}>Cancel</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.text_button}>Add</Text>
+          </TouchableOpacity>
         </View>
-        <ItemButtonView />
-        <View style={ListRoomsStyle.action}></View>
       </ScrollView>
     </View>
   );
@@ -353,6 +333,36 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 32,
+  },
+  scrollImg: {
+    marginVertical: 10,
+    marginRight: 5,
+  },
+  borderImg: {
+    width: 100,
+    height: 100,
+    borderWidth: 2,
+    borderColor: BLUE2,
+    borderRadius: 10,
+    // display: 'flex',
+    // alignContent:'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 5,
+  },
+  button: {
+    backgroundColor: BLUE2,
+    width: 150,
+    height: 40,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  text_button: {
+    color: WHITE,
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 });
 
@@ -400,20 +410,23 @@ const ListRoomsStyle = StyleSheet.create({
   },
 
   textInput: {
+    paddingLeft:20,
+    fontSize: 15,
+    flex: 1,
     color: '#000',
   },
   icon: {
     paddingTop: 13,
-    paddingRight: 15,
+    // paddingRight: 15,
   },
   action: {
-    paddingLeft: 20,
-    marginTop: 10,
+    paddingLeft: 5,
+    marginHorizontal: 25,
     flexDirection: 'row',
-    borderTopWidth: 1,
-    borderTopColor: '#000',
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#000',
+    // borderTopWidth: 1,
+    // borderTopColor: '#000',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#010101',
   },
   funtionBtnItem: {
     marginTop: 10,
