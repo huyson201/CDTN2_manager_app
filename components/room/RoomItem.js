@@ -11,9 +11,7 @@ import {
 } from '../../features/hotel/hotelSlice';
 import {formatCurrency} from '../../src/utilFunc';
 const RoomItem = ({item}) => {
-  console.log(item);
   const images = item.room_imgs.split(',');
-  console.log(images);
   return (
     <>
       <ItemContainer

@@ -9,7 +9,7 @@ const hotelApi = {
     return axiosClient.get(url);
   },
   getAllRoomsByIdHotel: idHotel => {
-    const url = `/hotels/${idHotel}/rooms`;
+    const url = `/hotels/${idHotel}/rooms?sort=updatedAt:desc`;
     return axiosClient.get(url);
   },
   getRoomById: id => {
