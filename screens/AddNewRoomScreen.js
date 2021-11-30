@@ -21,19 +21,16 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {androidCameraPermission} from '../components/permission/permission';
 import roomApi from '../api/roomApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import ImagePicker from 'react-native-image-picker';
-// import History from '../src/components/home/History';
-// import About from '../src/components/home/About';
 
 const AddNewRoomScreen = function ({navigation, route}) {
-  // room_name, hotel_id: +hotel_id, room_desc, room_area, room_price, room_bed: +room_bed, room_quantity: +room_quantity, room_num_people: +room_num_people, room_imgs: roomImgsUrl.join()
+  // room_name, hotel_id: +hotel_id, room_desc, room_area, room_price, room_beds: +room_beds, room_quantity: +room_quantity, room_num_people: +room_num_people, room_imgs: roomImgsUrl.join()
   const id = route.params.id;
   console.log(id, 'id hotel ne');
   const [room_name, setRoomName] = useState();
   const [room_desc, setRoomDesc] = useState();
   const [room_area, setRoomArea] = useState();
   const [room_price, setRoomPrice] = useState();
-  const [room_bed, setRoomBed] = useState();
+  const [room_beds, setRoomBed] = useState();
   const [room_quantity, setRoomQuantity] = useState();
   const [room_num_people, setNumPeople] = useState();
   const [services, setServices] = useState();
@@ -49,7 +46,7 @@ const AddNewRoomScreen = function ({navigation, route}) {
       formData.append('room_desc', room_desc && room_desc);
       formData.append('room_area', room_area && room_area);
       formData.append('room_price', room_price && room_price);
-      formData.append('room_bed', room_bed && room_bed);
+      formData.append('room_beds', room_beds && room_beds);
       formData.append('room_quantity', room_quantity && room_quantity);
       formData.append('room_num_people', room_num_people && room_num_people);
       formData.append('services', services && services);
