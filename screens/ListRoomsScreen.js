@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Text,
   TextInput,
-  Picker,
   Image,
   StatusBar,
   FlatList,
@@ -22,21 +21,30 @@ import RoomItem from '../components/room/RoomItem';
 import {useSelector} from 'react-redux';
 import hotelApi from '../api/hotelApi';
 import {SwipeListView} from 'react-native-swipe-list-view';
+import {Picker} from '@react-native-picker/picker';
+import {useIsFocused} from '@react-navigation/native';
 const ListRoomsScreen = function ({navigation}) {
-  const [dataSource, setDataSouce] = useState([]);
+  const isFocused = useIsFocused();
   const {token} = useSelector(state => state.users);
   const {selectedHotel} = useSelector(state => state.hotels);
   const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(false);
+  console.log(isFocused,"FOCUS")
   useEffect(() => {
-    getRooms(selectedHotel);
-  }, [selectedHotel]);
+    getRooms();
+    return () => {
+      // setLoading(false);
+      setRooms([]);
+    };
+  }, [selectedHotel,isFocused]);
   // MODIFY DATASOUCE HERE
-  const getRooms = async id => {
-    const res = await hotelApi.getAllRoomsByIdHotel(id);
+  const getRooms = async () => {
+    setLoading(true);
+    const res = await hotelApi.getAllRoomsByIdHotel(selectedHotel);
     if (res.data.data) {
-      console.log(res.data.data);
       setRooms(res.data.data);
     }
+    setLoading(false);
   };
   // Handle Press Navigation
   const handlePressAddNewRoom = () => {
@@ -45,7 +53,7 @@ const ListRoomsScreen = function ({navigation}) {
   const handlePressToAllRooms = () => {
     navigation.navigate('AllRooms');
   };
- 
+
   const [selectedValue, setSelectedValue] = useState(1);
   return (
     <View>
@@ -54,26 +62,25 @@ const ListRoomsScreen = function ({navigation}) {
           selectedValue={selectedValue}
           style={ListRoomsStyle.filterItems}
           onValueChange={(itemValue, itemIndex) =>
-            itemValue == 1
-              ? handlePressToAllRooms()
-              : itemValue == 2
-              ? handlePressAddNewRoom()
-              : // : itemValue == 3
-                // ? handlePressToMaintainingRooms()
-                handlePressToCommissionScreen()
+            itemValue == 2 && handlePressAddNewRoom()
           }>
           <Picker.Item label="All Type Rooms" value="1" />
           <Picker.Item label="Add new Room" value="2" />
-          {/* <Picker.Item label="Commission" value="3" /> */}
-          {/* <Picker.Item label="Rooms Ordered" value="4" /> */}
         </Picker>
       </View>
 
       <SwipeListView
+        refreshing={loading}
+        onRefresh={getRooms}
         style={{marginTop: 5}}
         // disableLeftSwipe={true}
         disableRightSwipe={true}
         data={rooms}
+        onSwipeValueChange={({key, value}) => {
+          if (isFocused) {
+            value = 0;
+          }
+        }}
         renderItem={(data, rowMap) => (
           <>
             <View style={{borderBottomWidth: 1, borderBottomColor: '#ccc'}}>
