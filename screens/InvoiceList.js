@@ -44,6 +44,7 @@ const InvoiceList = ({navigation, route}) => {
       let roomInfo = await getRoom(e.room_id);
       let userInfo = await getUserInfo(e.user_uuid);
       const res = await Promise.all([roomInfo, userInfo]);
+      // e.invoiceCreatedAt=e.createdAt
       const room = {
         room_name: res[0].room_name,
         room_beds: res[0].room_beds,
@@ -59,6 +60,7 @@ const InvoiceList = ({navigation, route}) => {
       };
       e.userInfo = user;
     }
+    console.log(data,"data invoices");
     setInvoices(data);
   };
   const getAllInvoices = async params => {

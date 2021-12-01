@@ -33,7 +33,8 @@ const AddNewRoomScreen = function ({navigation, route}) {
   const [room_beds, setRoomBed] = useState();
   const [room_quantity, setRoomQuantity] = useState();
   const [room_num_people, setNumPeople] = useState();
-  const [services, setServices] = useState();
+  const [room_surcharge, setSurcharge] = useState();
+  const [room_services, setServices] = useState();
   const [roomImgsUrl, setRoomImg] = useState([]);
   const [checkSelectImage, setCheckSelectImage] = useState(false);
 
@@ -49,7 +50,8 @@ const AddNewRoomScreen = function ({navigation, route}) {
       formData.append('room_beds', room_beds && room_beds);
       formData.append('room_quantity', room_quantity && room_quantity);
       formData.append('room_num_people', room_num_people && room_num_people);
-      formData.append('services', services && services);
+      formData.append('room_services', room_services && room_services);
+      formData.append('room_surcharge', room_surcharge && room_surcharge);
 
       if (roomImgsUrl.length > 0) {
         roomImgsUrl.forEach(element => {
@@ -294,6 +296,21 @@ const AddNewRoomScreen = function ({navigation, route}) {
             placeholder="Room Services"
             autoCapitalize="none"
             onChangeText={val => setServices(val)}
+            style={ListRoomsStyle.textInput}></TextInput>
+        </View>
+        {/* Room surcharge */}
+        <View style={ListRoomsStyle.action}>
+          <Icon
+            style={ListRoomsStyle.icon}
+            name="pound-sign"
+            size={25}
+            backgroundColor="#05375a"
+            color="#05375a"></Icon>
+          <TextInput
+            // defaultValue="Name of user"
+            placeholder="Room Surcharge "
+            autoCapitalize="none"
+            onChangeText={val => setSurcharge(val)}
             style={ListRoomsStyle.textInput}></TextInput>
         </View>
         {/* room desc */}

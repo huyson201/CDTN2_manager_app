@@ -11,6 +11,7 @@ import jwtDecode from 'jwt-decode';
 import {isJwtExpired} from 'jwt-check-expiration';
 import SplashScreen from './screens/SplashScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import "moment/locale/vi";
 import {
   getUserById,
   login,
