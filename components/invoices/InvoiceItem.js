@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import hotelApi from '../../api/hotelApi';
 import Menu from '../menu/MenuList';
 import {useSelector} from 'react-redux';
+import moment from 'moment';
+import {xoaDau} from '../../src/utilFunc';
 
 const InvoiceItem = props => {
   const rDate = props.data.r_date.split('T')[0].replace(/-/g, '/');
@@ -26,7 +28,7 @@ const InvoiceItem = props => {
           props.navigation &&
             props.navigation.navigate('Invoice', {
               data: props.data,
-              rDate : rDate,
+              rDate: rDate,
               pDate: pDate,
             });
         }}>
@@ -38,13 +40,13 @@ const InvoiceItem = props => {
               style={[styles.padding, styles.roomName]}>
               {props.data.roomInfo.room_name}
             </Text>
-            {(props.data.status != 4 && props.data.status != 5) && (
-                <Menu
-                  status={props.data.status}
-                  id={props.data.invoice_id}
-                  room_quantity={props.data.roomInfo.room_quantity}
-                />
-              )}
+            {props.data.status != 4 && props.data.status != 5 && (
+              <Menu
+                status={props.data.status}
+                id={props.data.invoice_id}
+                room_quantity={props.data.roomInfo.room_quantity}
+              />
+            )}
           </View>
           <View style={[styles.body, styles.padding, styles.flex_row]}>
             <View>
@@ -89,11 +91,19 @@ const InvoiceItem = props => {
               {Object.values(STATUS_INVOICE[props.data.status])}
             </Text>
           </View>
+          {/* <Text>
+            Current Date: {xoaDau(moment(props.data.updatedAt).fromNow())}
+          </Text> */}
         </View>
       </TouchableOpacity>
     </>
   );
 };
+
+// function getHoursInvoice(arr, status) {
+//   if (arr[0] === 'mot' && arr[1] === 'ngay' && +status === +2) {
+//   }
+// }
 
 const styles = StyleSheet.create({
   view: {

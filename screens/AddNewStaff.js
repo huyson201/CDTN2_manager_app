@@ -61,6 +61,7 @@ const AddNewStaff = ({navigation, route}) => {
       setId();
     };
   }, [route.params]);
+  console.log(token);
   const staff = useSelector(state => staffSelectors.selectById(state, id));
   const [selectedPosition, setSelectedPosition] = useState();
   const [loading1, setLoading1] = useState(true);
