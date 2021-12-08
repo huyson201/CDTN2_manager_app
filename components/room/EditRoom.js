@@ -10,18 +10,25 @@ import {
   StatusBar,
   FlatList,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {BLUE1, BLUE2, DARK_GRAY, MAP_MARKER, WHITE} from '../src/values/color';
-import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../src/values/size';
+import {
+  BLUE1,
+  BLUE2,
+  DARK_GRAY,
+  MAP_MARKER,
+  WHITE,
+} from '../../src/values/color';
+import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../../src/values/size';
 import {Button} from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
-import hotelApi from '../api/hotelApi';
-import {androidCameraPermission} from '../components/permission/permission';
-import roomApi from '../api/roomApi';
+import hotelApi from '../../api/hotelApi';
+import {androidCameraPermission} from '../permission/permission';
+import roomApi from '../../api/roomApi';
 import {useSelector} from 'react-redux';
 
 const EditRoom = function ({navigation, route}) {
@@ -36,8 +43,10 @@ const EditRoom = function ({navigation, route}) {
   const [room_num_people, setRoomPeople] = useState('');
   const [room_services, setServices] = useState('');
   const [room_desc, setRoomDesc] = useState('');
+  const [room_surcharge, setSurcharge] = useState();
   const [room_imgs, setRoomSlide] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isLoading, setisLoading] = useState(false);
   const handlePressCancel = () => {
     navigation.goBack();
   };
@@ -54,6 +63,7 @@ const EditRoom = function ({navigation, route}) {
       setRoomDesc(res.data.data.room_desc);
       setServices(res.data.data.room_services);
       setRoomSlide(res.data.data.room_imgs.split(','));
+      setSurcharge(res.data.data.room_surcharge);
     }
     setLoading(false);
   };
@@ -131,6 +141,7 @@ const EditRoom = function ({navigation, route}) {
     return setCheckSelectImage();
   }, [checkSelectImage]);
   const update = async () => {
+    setisLoading(true);
     let formData = new FormData();
     formData.append('room_name', room_name && room_name);
     formData.append('room_desc', room_desc && room_desc);
@@ -140,24 +151,31 @@ const EditRoom = function ({navigation, route}) {
     formData.append('room_quantity', room_quantity && room_quantity);
     formData.append('room_num_people', room_num_people && room_num_people);
     formData.append('room_services', room_services && room_services);
+    formData.append('room_surcharge', room_surcharge);
     if (room_imgs.length > 0) {
       room_imgs.forEach(element => {
         formData.append('room_imgs', element);
       });
     }
-    await roomApi.update(formData, token, id);
+    try {
+      const res = await roomApi.update(formData, token, id);
+      if (res.data.data) {
+        ToastAndroid.show('Chỉnh sửa phòng thành công', ToastAndroid.SHORT);
+        setisLoading(false);
+      }
+    } catch (error) {
+      setisLoading(false);
+    }
   };
 
   return (
     <View>
       {!loading && (
         <ScrollView style={{height: '100%', width: '100%'}}>
-          {/* <Text style={ListRoomsStyle.textTitle}>Full Name</Text> */}
           <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => {
                 setCheckSelectImage(true);
-                // onSlectImage();
               }}
               style={styles.scrollImg}>
               <View style={styles.borderImg}>
@@ -297,6 +315,22 @@ const EditRoom = function ({navigation, route}) {
               onChangeText={val => setRoomPeople(val)}
               style={ListRoomsStyle.textInput}></TextInput>
           </View>
+          {/* Room surcharge */}
+          <View style={ListRoomsStyle.action}>
+            <Icon
+              style={ListRoomsStyle.icon}
+              name="pound-sign"
+              size={25}
+              backgroundColor="#05375a"
+              color="#05375a"></Icon>
+            <TextInput
+              // defaultValue="Name of user"
+              value={room_surcharge}
+              placeholder="Room Surcharge "
+              autoCapitalize="none"
+              onChangeText={val => setSurcharge(val)}
+              style={ListRoomsStyle.textInput}></TextInput>
+          </View>
           {/* Room Services */}
           <View style={ListRoomsStyle.action}>
             <MaterialIcons
@@ -330,12 +364,15 @@ const EditRoom = function ({navigation, route}) {
               marginBottom: 10,
               marginHorizontal: 20,
             }}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.text_button}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={update} style={styles.button}>
-              <Text style={styles.text_button}>Lưu</Text>
-            </TouchableOpacity>
+            <Button
+              title={'CANCEL'}
+              buttonStyle={styles.buttonStyle}
+              onPress={handlePressCancel}/>
+            <Button
+              title={'UPDATE'}
+              buttonStyle={styles.buttonStyle}
+              onPress={update}
+              loading={isLoading}/>
           </View>
         </ScrollView>
       )}
@@ -347,6 +384,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
+  },
+  buttonStyle: {
+    backgroundColor: BLUE2,
+    borderRadius: 10,
+    marginTop: 20,
+    fontWeight: 'bold',
+    paddingHorizontal: 40,
   },
   item: {
     backgroundColor: '#f9c2ff',

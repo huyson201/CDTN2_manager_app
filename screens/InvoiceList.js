@@ -10,7 +10,6 @@ import hotelApi from '../api/hotelApi';
 import userApi from '../api/userApi';
 
 const InvoiceList = ({navigation, route}) => {
-  //hotel name rd pd quantity room name room info user info price status invoice
   const isFocused = useIsFocused();
   const [invoices, setInvoices] = useState();
   const check = useSelector(state => state.invoice.check);
@@ -18,6 +17,7 @@ const InvoiceList = ({navigation, route}) => {
   const {token} = useSelector(state => state.users);
   const {selectedHotel} = useSelector(state => state.hotels);
   const hotelId = selectedHotel;
+
   const getRoom = async id => {
     try {
       const res = await hotelApi.getRoomById(id);
@@ -28,6 +28,7 @@ const InvoiceList = ({navigation, route}) => {
       console.log(error);
     }
   };
+
   const getUserInfo = async id => {
     try {
       const res = await userApi.getUserById(id, token);
@@ -38,37 +39,39 @@ const InvoiceList = ({navigation, route}) => {
       console.log(error);
     }
   };
+
   const setValue = async data => {
     for (let index = 0; index < data.length; index++) {
       const e = data[index];
-      let roomInfo = await getRoom(e.room_id);
-      let userInfo = await getUserInfo(e.user_uuid);
-      const res = await Promise.all([roomInfo, userInfo]);
-      // e.invoiceCreatedAt=e.createdAt
-      const room = {
-        room_name: res[0].room_name,
-        room_beds: res[0].room_beds,
-        room_people: res[0].room_num_people,
-        room_quantity: res[0].room_quantity,
-      };
-      e.roomInfo = room;
-      const user = {
-        user_name: res[1].user_name,
-        user_phone: res[1].user_phone,
-        user_email: res[1].user_email,
-        user_role: res[1].user_role
-      };
-      e.userInfo = user;
+      let roomInfo = await getRoom(data[index].room_id);
+      let userInfo = await getUserInfo(data[index].user_uuid);
+      // console.log(userInfo);
+      if (roomInfo && userInfo) {
+        const res = await Promise.all([roomInfo, userInfo]);
+        const room = {
+          room_name: res[0].room_name,
+          room_beds: res[0].room_beds,
+          room_people: res[0].room_num_people,
+          room_quantity: res[0].room_quantity,
+        };
+        e.roomInfo = room;
+        const user = {
+          user_name: res[1].user_name,
+          user_phone: res[1].user_phone,
+          user_email: res[1].user_email,
+          user_role: res[1].user_role,
+        };
+        e.userInfo = user;
+      }
     }
-    console.log(data,"data invoices");
     setInvoices(data);
   };
+
   const getAllInvoices = async params => {
     try {
       const res = await invoiceApi.getAll(params);
       if (res.data.data) {
         setValue(res.data.data);
-       
       }
     } catch (error) {
       console.log(error);
@@ -87,7 +90,7 @@ const InvoiceList = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    if (isFocused ||isFocused && check) {
+    if (isFocused || (isFocused && check)) {
       if (route.params.param === -1) {
         getAllInvoices(hotelId);
       } else {
@@ -99,9 +102,11 @@ const InvoiceList = ({navigation, route}) => {
       dispatch(setCheck(false));
     };
   }, [isFocused, check]);
+
+  console.log(invoices, '33333333333333333333');
   return (
     <>
-      {invoices && invoices!== [] ? (
+      {invoices && invoices !== [] ? (
         <>
           <FlatList
             data={invoices}

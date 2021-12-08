@@ -1,47 +1,26 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  ActivityIndicator,
   View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   Image,
 } from 'react-native';
 import {WHITE, BLUE1, BLUE2} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
-import StaffItem from '../components/staff/StaffItem';
-import Loading from '../components/Loading';
-import staffApi from '../api/staffApi';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  getStaff,
-  removeStaffList,
-  staffSelectors,
-} from '../features/staff/staffSlice';
+import {useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import userApi from '../api/userApi';
 import UserItem from '../components/user/UserItem';
 import ModalPopup from '../components/user/ModalPopup';
-import {
-  Menu,
-  MenuOption,
-  MenuOptions,
-  MenuTrigger,
-} from 'react-native-popup-menu';
-import {ROLE, STAFF_DELETE} from '../src/values/constants';
-import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import {ROLE} from '../src/values/constants';
 import {Picker} from '@react-native-picker/picker';
 import {Button} from 'react-native-elements';
 const UserList = ({navigation}) => {
   const flatList = useRef();
   const isFocused = useIsFocused();
-  const dispatch = useDispatch();
   const {token} = useSelector(state => state.users);
-  const {selectedHotel} = useSelector(state => state.hotels);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingUpdate, setLoadingUpdate] = useState(false);
@@ -70,24 +49,27 @@ const UserList = ({navigation}) => {
       setUsers([]);
       setCheck(false);
     };
-  }, [check,isFocused]);
+  }, [check, isFocused]);
   const updateRole = async () => {
     const formData = new FormData();
-    formData.append('user_role',   selectedPosition ? selectedPosition : user.user_role,);
-    setLoadingUpdate(true)
+    formData.append(
+      'user_role',
+      selectedPosition ? selectedPosition : user.user_role,
+    );
+    setLoadingUpdate(true);
     const res = await userApi.update(id, formData, token);
     if (res.data.data) {
       setFirstTime(false);
       setSelectedPosition();
       setVisibleRoleModal(false);
-      setLoadingUpdate(false)
+      setLoadingUpdate(false);
       setCheck(true);
       setUser();
     }
   };
   const [visible, setVisible] = useState(false);
   const [visibleRoleModal, setVisibleRoleModal] = useState(false);
-  
+
   return (
     <View style={styles.container}>
       {user && (
@@ -112,7 +94,6 @@ const UserList = ({navigation}) => {
                   : require('../src/images/staff.jpg')
               }
             />
-            {/* <Text style={{textAlign:'center'}}>role</Text> */}
           </View>
           <View style={{flex: 1, flexDirection: 'column', marginLeft: 5}}>
             <View style={styles.flex_row}>
@@ -185,7 +166,7 @@ const UserList = ({navigation}) => {
           return (
             <View style={{backgroundColor: '#ececec'}}>
               <UserItem
-              setCheck={setCheck}
+                setCheck={setCheck}
                 setRole={setRole}
                 setVisibleRoleModal={setVisibleRoleModal}
                 setVisible={setVisible}

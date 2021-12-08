@@ -14,12 +14,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {BLUE1, BLUE2, DARK_GRAY, MAP_MARKER, WHITE} from '../src/values/color';
-import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../src/values/size';
+import {
+  BLUE1,
+  BLUE2,
+  DARK_GRAY,
+  MAP_MARKER,
+  WHITE,
+} from '../../src/values/color';
+import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../../src/values/size';
 import {Button, Image} from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
-import {androidCameraPermission} from '../components/permission/permission';
-import roomApi from '../api/roomApi';
+import {androidCameraPermission} from '../permission/permission';
+import roomApi from '../../api/roomApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AddNewRoomScreen = function ({navigation, route}) {
@@ -37,8 +43,9 @@ const AddNewRoomScreen = function ({navigation, route}) {
   const [room_services, setServices] = useState();
   const [roomImgsUrl, setRoomImg] = useState([]);
   const [checkSelectImage, setCheckSelectImage] = useState(false);
-
+  const [isLoading, setisLoading] = useState(false);
   const handlePressAdd = async () => {
+    setisLoading(true);
     const token = await AsyncStorage.getItem('token');
     let formData = new FormData();
     try {
@@ -51,7 +58,7 @@ const AddNewRoomScreen = function ({navigation, route}) {
       formData.append('room_quantity', room_quantity && room_quantity);
       formData.append('room_num_people', room_num_people && room_num_people);
       formData.append('room_services', room_services && room_services);
-      formData.append('room_surcharge', room_surcharge && room_surcharge);
+      formData.append('room_surcharge', room_surcharge);
 
       if (roomImgsUrl.length > 0) {
         roomImgsUrl.forEach(element => {
@@ -60,8 +67,8 @@ const AddNewRoomScreen = function ({navigation, route}) {
       }
       const res = await roomApi.create(formData, token);
       if (res.data.data) {
+        setisLoading(false);
         ToastAndroid.show('Thêm phòng thành công', ToastAndroid.SHORT);
-        // dispatch(setServices(null));
         navigation.navigate('AllRooms');
       }
       console.log(
@@ -70,6 +77,7 @@ const AddNewRoomScreen = function ({navigation, route}) {
       );
     } catch (error) {
       console.log(error);
+      setisLoading(false);
     }
   };
   const handlePressCancel = () => {
@@ -331,12 +339,24 @@ const AddNewRoomScreen = function ({navigation, route}) {
             marginBottom: 10,
             marginHorizontal: 20,
           }}>
-          <TouchableOpacity style={styles.button} onPress={handlePressCancel}>
+          <Button
+            title={'CANCEL'}
+            buttonStyle={styles.buttonStyle}
+            onPress={handlePressCancel}
+          />
+          <Button
+            title={'ADD'}
+            buttonStyle={[styles.buttonStyle, styles.button]}
+            onPress={handlePressAdd}
+            loading={isLoading}
+          />
+
+          {/* <TouchableOpacity style={styles.button} onPress={handlePressCancel}>
             <Text style={styles.text_button}>Cancel</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={handlePressAdd}>
             <Text style={styles.text_button}>Add</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </ScrollView>
     </View>
@@ -347,6 +367,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
+  },
+  buttonStyle: {
+    backgroundColor: BLUE2,
+    borderRadius: 10,
+    marginTop: 20,
+    fontWeight: 'bold',
+    paddingHorizontal: 40,
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -374,13 +401,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   button: {
-    backgroundColor: BLUE2,
-    width: 150,
-    height: 40,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
+    paddingHorizontal: 52,
   },
   text_button: {
     color: WHITE,

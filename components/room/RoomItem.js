@@ -2,13 +2,6 @@ import React from 'react';
 import {Image, StyleSheet, Text} from 'react-native';
 import styled from 'styled-components';
 import {DARK_GRAY, GOLD_COLOR, WHITE} from '../../src/values/color';
-import {HOTEL_TEXT, VND} from '../../src/values/constants';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useDispatch} from 'react-redux';
-import {
-  removeSelectedHotel,
-  setSelectedHotel,
-} from '../../features/hotel/hotelSlice';
 import {formatCurrency} from '../../src/utilFunc';
 const RoomItem = ({item}) => {
   const images = item.room_imgs.split(',');
@@ -16,10 +9,7 @@ const RoomItem = ({item}) => {
     <>
       <ItemContainer
         activeOpacity={0.9}
-        onPress={() => {
-          dispatch(setSelectedHotel(item.hotel_id));
-          navigation.push('DashBoard');
-        }}>
+        onPress={()=>console.log("Pressed room")}>
         <ViewRow>
           <Image style={styles.hotelImage} source={{uri: images[0]}} />
           <ItemContent style={{flex: 1, marginRight: 7}}>
