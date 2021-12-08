@@ -7,7 +7,7 @@ import StaffList from '../../screens/StaffList';
 import AddNewStaff from '../../screens/AddNewStaff';
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
-import AddNewRoomScreen from '../../screens/AddNewRoomScreen';
+import AddNewRoomScreen from '../../components/room/AddNewRoomScreen';
 import ListRoomsTypeStatusAvailalbeScreen from '../../screens/ListRoomsTypeStatusAvailalbeScreen';
 import ListRoomsTypeStatusMaintainScreen from '../../screens/ListRoomsTypeStatusMaintainScreen';
 import ListRoomsTypeStatusOrderedScreen from '../../screens/ListRoomsTypeStatusOrderedScreen';
@@ -18,7 +18,7 @@ import AddHotel from '../hotel/AddHotel';
 import EditHotel from '../hotel/EditHotel';
 import UserList from '../../screens/UserList';
 import AddNewUser from '../../screens/AddNewUser';
-import EditRoom from '../../screens/EditRoom';
+import EditRoom from '../../components/room/EditRoom';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {

@@ -8,23 +8,15 @@ import {
   Image,
   ToastAndroid,
 } from 'react-native';
-import {WHITE, BLUE1, BLUE2} from '../src/values/color';
+import {WHITE, BLUE2} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
-import {useDispatch, useSelector} from 'react-redux';
-import {hotelSelectors} from '../features/hotel/hotelSlice';
-import {
-  createStaff,
-  staffSelectors,
-  updateStaffById,
-} from '../features/staff/staffSlice';
+import {useSelector} from 'react-redux';
 import {Formik} from 'formik';
 import {Button} from 'react-native-elements';
 import * as Yup from 'yup';
-import {EDIT_SUCCESSFULLY, ADD_SUCCESSFULLY} from '../src/values/constants';
-import Loading from '../components/Loading';
-import moment from 'moment';
+import {ADD_SUCCESSFULLY} from '../src/values/constants';
 import userApi from '../api/userApi';
 import staffApi from '../api/staffApi';
 
@@ -50,7 +42,7 @@ const AddNewUser = ({navigation, route}) => {
   const createStaff = async (name, email, phone, role, token) => {
     await staffApi.createStaff(name, email, phone, role, selectedHotel, token);
   };
-  const [selectedPosition, setSelectedPosition] = useState();
+  const [selectedPosition, setSelectedPosition] = useState(0);
   return (
     <>
       <Formik

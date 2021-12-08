@@ -1,27 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  Text,
-  TextInput,
-  Image,
-  StatusBar,
-  FlatList,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, StatusBar} from 'react-native';
 import styled from 'styled-components';
-import {BLUE1, DARK_GRAY, MAP_MARKER, WHITE, BLUE2} from '../src/values/color';
-import {SEARCH_ICON_SIZE, SEARCH_TEXT_SIZE} from '../src/values/size';
-import {Button} from 'react-native-elements';
+import {BLUE1, WHITE, BLUE2} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import RoomItem from '../components/room/RoomItem';
 import {useSelector} from 'react-redux';
 import hotelApi from '../api/hotelApi';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {Picker} from '@react-native-picker/picker';
 import {useIsFocused} from '@react-navigation/native';
 const ListRoomsScreen = function ({navigation}) {
   const isFocused = useIsFocused();
@@ -29,14 +15,13 @@ const ListRoomsScreen = function ({navigation}) {
   const {selectedHotel} = useSelector(state => state.hotels);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(isFocused,"FOCUS")
+  // console.log(isFocused, 'FOCUS');
   useEffect(() => {
     getRooms();
     return () => {
-      // setLoading(false);
       setRooms([]);
     };
-  }, [selectedHotel,isFocused]);
+  }, [selectedHotel, isFocused]);
   // MODIFY DATASOUCE HERE
   const getRooms = async () => {
     setLoading(true);
@@ -50,78 +35,62 @@ const ListRoomsScreen = function ({navigation}) {
   const handlePressAddNewRoom = () => {
     navigation.navigate('Add A new Room', {id: selectedHotel});
   };
-  const handlePressToAllRooms = () => {
-    navigation.navigate('AllRooms');
-  };
 
-  const [selectedValue, setSelectedValue] = useState(1);
   return (
-    <View>
-      <View style={ListRoomsStyle.filter}>
-        <Picker
-          selectedValue={selectedValue}
-          style={ListRoomsStyle.filterItems}
-          onValueChange={(itemValue, itemIndex) =>
-            itemValue == 2 && handlePressAddNewRoom()
-          }>
-          <Picker.Item label="All Type Rooms" value="1" />
-          <Picker.Item label="Add new Room" value="2" />
-        </Picker>
-      </View>
-
-      <SwipeListView
-        refreshing={loading}
-        onRefresh={getRooms}
-        style={{marginTop: 5}}
-        // disableLeftSwipe={true}
-        disableRightSwipe={true}
-        data={rooms}
-        onSwipeValueChange={({key, value}) => {
-          if (isFocused) {
-            value = 0;
-          }
-        }}
-        renderItem={(data, rowMap) => (
-          <>
-            <View style={{borderBottomWidth: 1, borderBottomColor: '#ccc'}}>
-              <View style={styles.rowFront}>
-                <RoomItem item={data.item}></RoomItem>
+    <>
+      <View>
+        <SwipeListView
+          refreshing={loading}
+          onRefresh={getRooms}
+          style={{marginTop: 5}}
+          disableRightSwipe={true}
+          data={rooms}
+          renderItem={(data, rowMap) => (
+            <>
+              <View style={{borderBottomWidth: 1, borderBottomColor: '#ccc'}}>
+                <View style={styles.rowFront}>
+                  <RoomItem item={data.item}></RoomItem>
+                </View>
               </View>
+            </>
+          )}
+          renderHiddenItem={(data, rowMap) => (
+            <View style={styles.rowBack}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('EditRoom', {id: data.item.room_id});
+                }}
+                style={{
+                  backgroundColor: 'green',
+                  width: 45,
+                  height: 90,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Icon name="edit" size={22} color={WHITE} />
+              </TouchableOpacity>
+              {/* <TouchableOpacity
+                onPress={() => console.log('swipe')}
+                style={{
+                  backgroundColor: 'red',
+                  width: 45,
+                  height: 90,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <AntDesign name="delete" size={22} color={WHITE} />
+              </TouchableOpacity> */}
             </View>
-          </>
-        )}
-        renderHiddenItem={(data, rowMap) => (
-          <View style={styles.rowBack}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('EditRoom', {id: data.item.room_id});
-              }}
-              style={{
-                backgroundColor: 'green',
-                width: 45,
-                height: 90,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Icon name="edit" size={22} color={WHITE} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => console.log('swipe')}
-              style={{
-                backgroundColor: 'red',
-                width: 45,
-                height: 90,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <AntDesign name="delete" size={22} color={WHITE} />
-            </TouchableOpacity>
-          </View>
-        )}
-        // leftOpenValue={1000}
-        rightOpenValue={-100}
-      />
-    </View>
+          )}
+          rightOpenValue={-50}
+        />
+      </View>
+      <TouchableOpacity
+        style={styles.plusButton}
+        onPress={handlePressAddNewRoom}>
+        <Icon name="plus" size={30} color={WHITE}></Icon>
+      </TouchableOpacity>
+    </>
   );
 };
 
@@ -129,6 +98,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
+  },
+  plusButton: {
+    backgroundColor: BLUE2,
+    width: 55,
+    height: 55,
+    position: 'absolute',
+    bottom: 10,
+    right: 5,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   item: {
     backgroundColor: '#f9c2ff',
