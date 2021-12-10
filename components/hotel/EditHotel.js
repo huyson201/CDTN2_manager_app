@@ -52,6 +52,7 @@ const EditHotel = ({navigation, route}) => {
   const serviceRedux = useSelector(state => state.hotels.services);
   const [checkFirst, setCheck] = useState([false, false, false]);
   const [address, setAddress] = useState([]);
+  const [firtTimeHotel, setCheckFirstTimeHotel] = useState(false);
 
   const hotel = useSelector(state => hotelSelectors.selectById(state, id));
   console.log(hotel, '===DATA HOTEL===');
@@ -236,6 +237,10 @@ const EditHotel = ({navigation, route}) => {
 
     getData();
     getServices();
+    return () => {
+      setProvinces([]);
+      setServiceList([]);
+    };
   }, []);
 
   useEffect(() => {
@@ -248,7 +253,18 @@ const EditHotel = ({navigation, route}) => {
       setHotelImgAvt(hotel.hotel_img);
       setHotelSlide(hotel.hotel_slide ? hotel.hotel_slide.split(',') : []);
       setHotelDesc(hotel.hotel_desc);
+      setCheckFirstTimeHotel(true);
     }
+    return () => {
+      setAddress([]);
+      setHotelName();
+      setHotelPhone();
+      setHotelStar();
+      setHotelImgAvt();
+      setHotelSlide([]);
+      setHotelDesc();
+      setCheckFirstTimeHotel(false);
+    };
   }, [hotel]);
 
   // load districts
@@ -267,6 +283,9 @@ const EditHotel = ({navigation, route}) => {
     if (+selectedProvince !== -1) {
       getData();
     }
+    return () => {
+      setDistricts([]);
+    };
   }, [selectedProvince]);
 
   // load communes
@@ -283,6 +302,9 @@ const EditHotel = ({navigation, route}) => {
     if (+selectedDistrict !== -1) {
       getData();
     }
+    return () => {
+      setCommunes([]);
+    };
   }, [selectedDistrict]);
 
   useEffect(() => {
@@ -297,6 +319,9 @@ const EditHotel = ({navigation, route}) => {
       setServiceAvailable([...result]);
     }
     getServicesByHotelId();
+    return () => {
+      setServiceAvailable([]);
+    };
   }, []);
 
   useEffect(() => {
@@ -376,7 +401,7 @@ const EditHotel = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
       )}
-
+ 
       <View style={{flexDirection: 'row'}}>
         <TouchableOpacity
           onPress={() => {
@@ -444,7 +469,7 @@ const EditHotel = ({navigation, route}) => {
             }}
           />
         </View>
-        {!hotel_name ? (
+        {!hotel_name && firtTimeHotel === true ? (
           <Text style={{color: 'red'}}>Vui lòng nhập tên khách sạn !</Text>
         ) : null}
 
@@ -463,7 +488,8 @@ const EditHotel = ({navigation, route}) => {
             }}
           />
         </View>
-        {!hotel_phone || hotel_phone.length < 10 || hotel_phone.length > 10 ? (
+        {(!hotel_phone || hotel_phone.length < 10 || hotel_phone.length > 10) &&
+        firtTimeHotel === true ? (
           <Text style={{color: 'red'}}>Vui lòng nhập hotline khách sạn !</Text>
         ) : null}
 
@@ -490,7 +516,7 @@ const EditHotel = ({navigation, route}) => {
             <Picker.Item label="5" value={5} style={{fontSize: 17}} />
           </Picker>
         </View>
-        {!hotel_star || hotel_star === -1 ? (
+        {(!hotel_star || hotel_star === -1) && firtTimeHotel === true ? (
           <Text style={{color: 'red'}}>Vui lòng chọn sao khách sạn !</Text>
         ) : null}
 
@@ -514,7 +540,7 @@ const EditHotel = ({navigation, route}) => {
             {provincesPickerItem}
           </Picker>
         </View>
-        {selectedProvince === -1 ? (
+        {selectedProvince === -1 && firtTimeHotel === true ? (
           <Text style={{color: 'red'}}>Vui lòng chọn địa chỉ!</Text>
         ) : null}
 
@@ -582,6 +608,11 @@ const EditHotel = ({navigation, route}) => {
             }}
           />
         </View>
+
+        {(serviceAvailable.length === 0 || serviceRedux.length === 0) &&
+        firtTimeHotel === true ? (
+          <Text style={{color: 'red'}}>Vui lòng chọn chọn dịch vụ !</Text>
+        ) : null}
         {/* Hotel desc */}
         <View style={{flexDirection: 'row', marginTop: 15}}>
           <Text style={{fontSize: 17, paddingTop: 10}}>Mô tả: </Text>
@@ -593,7 +624,9 @@ const EditHotel = ({navigation, route}) => {
             style={{textAlignVertical: 'top', flex: 1}}
           />
         </View>
-
+        {!hotel_desc && firtTimeHotel === true ? (
+          <Text style={{color: 'red'}}>Vui lòng chọn sao khách sạn !</Text>
+        ) : null}
         <View
           style={{
             flexDirection: 'row',
