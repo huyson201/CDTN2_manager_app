@@ -4,7 +4,6 @@ import Invoice from '../../screens/Invoice';
 import TabStatus from '../../screens/TabStatus';
 import DashBoardScreen from '../../screens/DashBoardScreen';
 import StaffList from '../../screens/StaffList';
-import AddNewStaff from '../../screens/AddNewStaff';
 import ListRoomsScreen from '../../screens/ListRoomsScreen';
 import ListRoomsByTypeScreen from '../../screens/ListRoomsByTypeScreen';
 import AddNewRoomScreen from '../../components/room/AddNewRoomScreen';
@@ -48,12 +47,6 @@ const TaskHome = () => {
         name="StaffList"
         component={StaffList}
         options={{headerShown: true,title:"Danh sách nhân viên"}}
-      />
-
-      <Stack.Screen
-        name="AddNewStaff"
-        component={AddNewStaff}
-        options={{headerShown: true, title: null}}
       />
 
       <Stack.Screen
