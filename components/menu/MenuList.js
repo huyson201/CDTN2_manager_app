@@ -17,8 +17,9 @@ import { LIGHT_GRAY } from "../../src/values/color";
 import invoiceApi from "../../api/invoiceApi";
 import { useDispatch, useSelector } from "react-redux";
 import { setCheck } from "../../features/invoice/invoiceSlice";
-
+import {useToast} from 'react-native-toast-notifications';
 const MenuList = (props) => {
+    const toast = useToast();
     const token = useSelector(state => state.users.token)
     const dispatch = useDispatch()
     const handleComfirm = async () => {
@@ -27,7 +28,13 @@ const MenuList = (props) => {
             console.log(status, "status");
             const res = await invoiceApi.update(props.id, status[0], props.room_quantity, token)
             if (res.data.data) {
-                console.log(res.data.data);
+                toast.show("Cập nhật thành công", {
+                    type: 'success',
+                    placement: 'top',
+                    duration: 3000,
+                    offset: 0,
+                    animationType: 'slide-in',
+                  });
                 dispatch(setCheck(true))
             }
         } catch (error) {

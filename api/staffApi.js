@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient';
 const staffApi = {
   getStaffByHotelId: (id, token) => {
-    const url = `/hotels/${id}/staffs`;
+    const url = `/hotels/${id}/staffs?sort=updatedAt:desc`;
     return axiosClient.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -11,7 +11,7 @@ import jwtDecode from 'jwt-decode';
 import {isJwtExpired} from 'jwt-check-expiration';
 import SplashScreen from './screens/SplashScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import "moment/locale/vi";
+import 'moment/locale/vi';
 import {
   getUserById,
   login,
@@ -22,13 +22,13 @@ import {
 } from './features/auth/userSlice';
 import userApi from './api/userApi';
 import {resetToken} from './src/utilFunc';
-
+import {ToastProvider} from 'react-native-toast-notifications';
 const Stack = createNativeStackNavigator();
 const App = () => {
   const dispatch = useDispatch();
   //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX3V1aWQiOiI4NDYxZTk1OS0yYTMzLTQyNGItYTQwYy0yOGU4YTFiYjU4MDMiLCJ1c2VyX3JvbGUiOjEsImlhdCI6MTYzNzQ4OTEwOCwiZXhwIjoxNjM3NDk2MzA4fQ.-aDZkI7Og4NHze23SC2XtY39gKK9LXqPD5RpEH08BGM
-  const {isRemembered, user,token} = useSelector(state => state.users);
-  console.log(token)
+  const {isRemembered, user, token} = useSelector(state => state.users);
+  console.log(token);
   const [firstLoading, setFirstLoading] = useState(true);
   const getUserInfo = async (user, token, refresh_token) => {
     try {
@@ -72,26 +72,26 @@ const App = () => {
     };
     getData();
   }, []);
-  console.log(isRemembered)
+  console.log(isRemembered);
   return (
     <View style={{flex: 1}}>
       <NavigationContainer>
         <MenuProvider>
-
-          {firstLoading ? (
-            <Stack.Navigator>
-              <Stack.Screen
-                name="SplashScreen"
-                component={SplashScreen}
-                options={{headerShown: false}}
-              />
-            </Stack.Navigator>
-          ) : isRemembered == true ? (
-            <TaskHome />
-          ) : (
-            <TaskLogin />
-          )}
-
+          <ToastProvider>
+            {firstLoading ? (
+              <Stack.Navigator>
+                <Stack.Screen
+                  name="SplashScreen"
+                  component={SplashScreen}
+                  options={{headerShown: false}}
+                />
+              </Stack.Navigator>
+            ) : isRemembered == true ? (
+              <TaskHome />
+            ) : (
+              <TaskLogin />
+            )}
+          </ToastProvider>
         </MenuProvider>
       </NavigationContainer>
     </View>

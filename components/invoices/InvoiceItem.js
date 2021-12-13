@@ -13,8 +13,10 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import Menu from '../menu/MenuList';
 import moment from 'moment';
 import {xoaDau} from '../../src/utilFunc';
+import { useSelector } from 'react-redux';
 
 const InvoiceItem = props => {
+  const {user} = useSelector(state => state.users);
   const rDate = props.data.r_date.split('T')[0].replace(/-/g, '/');
   const pDate = props.data.p_date.split('T')[0].replace(/-/g, '/');
   return (
@@ -38,7 +40,7 @@ const InvoiceItem = props => {
                 style={[styles.padding, styles.roomName]}>
                 {props.data.roomInfo.room_name}
               </Text>
-              {props.data.status != 4 && props.data.status != 5 && (
+              {props.data.status != 4 && props.data.status != 5 && user.user_role ===2 && (
                 <Menu
                   status={props.data.status}
                   id={props.data.invoice_id}

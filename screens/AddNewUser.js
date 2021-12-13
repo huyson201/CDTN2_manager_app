@@ -20,7 +20,7 @@ import * as Yup from 'yup';
 import {ADD_SUCCESSFULLY} from '../src/values/constants';
 import userApi from '../api/userApi';
 import staffApi from '../api/staffApi';
-
+import {useToast} from 'react-native-toast-notifications';
 const validationSchema = Yup.object({
   name: Yup.string()
     .trim()
@@ -33,6 +33,7 @@ const validationSchema = Yup.object({
   phone: Yup.string().min(10, 'Invalid phone!').required('phone is required!'),
 });
 const AddNewUser = ({navigation, route}) => {
+  const toast = useToast();
   const {selectedHotel} = useSelector(state => state.hotels);
   const {token} = useSelector(state => state.users);
   const [loading, setLoading] = useState(false);
@@ -68,10 +69,16 @@ const AddNewUser = ({navigation, route}) => {
               token,
             );
           }
-
+         
           setLoading(false);
           loading == false &&
-            ToastAndroid.show(ADD_SUCCESSFULLY, ToastAndroid.SHORT);
+          toast.show("Thêm thành công", {
+            type: 'success',
+            placement: 'top',
+            duration: 3000,
+            offset: 0,
+            animationType: 'slide-in',
+          });
           formikActions.resetForm();
         }}>
         {({
