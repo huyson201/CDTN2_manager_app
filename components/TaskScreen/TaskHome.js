@@ -18,6 +18,8 @@ import EditHotel from '../hotel/EditHotel';
 import UserList from '../../screens/UserList';
 import AddNewUser from '../../screens/AddNewUser';
 import EditRoom from '../../components/room/EditRoom';
+import ProfileScreen from '../../screens/ProfileScreen';
+import EditProfileScreen from '../../screens/EditProfileScreen';
 const Stack = createNativeStackNavigator();
 
 const TaskHome = () => {
@@ -32,10 +34,20 @@ const TaskHome = () => {
           title: selectedHotel ? 'Quản lý khách sạn' : 'Home',
         }}
       />
+       <Stack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{headerShown: true,title:"Thông tin cá nhân"}}
+      />
+        <Stack.Screen
+        name="EditProfileScreen"
+        component={EditProfileScreen}
+        options={{headerShown: true,title:"Chỉnh sửa thông tin"}}
+      />
       <Stack.Screen
         name="HotelList"
         component={HotelList}
-        options={{headerShown: true}}
+        options={{headerShown: true,title:"Danh sách khách sạn"}}
       />
       <Stack.Screen
         name="TabStatus"
@@ -68,12 +80,12 @@ const TaskHome = () => {
       <Stack.Screen
         name="AllRooms"
         component={ListRoomsScreen}
-        options={{headerShown: true}}
+        options={{headerShown: true,title: "Danh sách phòng" }}
       />
       <Stack.Screen
         name="EditRoom"
         component={EditRoom}
-        options={{headerShown: true}}
+        options={{headerShown: true,title: "Chỉnh sửa phòng" }}
       />
       <Stack.Screen
         name="Status Type Rooms"
@@ -100,7 +112,7 @@ const TaskHome = () => {
       <Stack.Screen
         name="Add A new Room"
         component={AddNewRoomScreen}
-        options={{headerShown: true}}
+        options={{headerShown: true,title: "Thêm mới" }}
       />
 
       <Stack.Screen

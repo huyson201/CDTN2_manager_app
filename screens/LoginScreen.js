@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
@@ -12,15 +12,17 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import { Button } from 'react-native-elements';
-import { BLUE1 } from '../src/values/color';
+import {Button} from 'react-native-elements';
+import {BLUE1} from '../src/values/color';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { DEVICE_WIDTH, DEVICE_HEIGHT } from '../src/values/size';
-import { LOGIN_SUCCESSFULLY } from '../src/values/constants';
+import {DEVICE_WIDTH, DEVICE_HEIGHT} from '../src/values/size';
+import {LOGIN_SUCCESSFULLY} from '../src/values/constants';
 import userApi from '../api/userApi';
-import { useDispatch } from 'react-redux';
-import { login } from '../features/auth/userSlice';
-const LoginScreen = ({ navigation }) => {
+import {useDispatch} from 'react-redux';
+import {login} from '../features/auth/userSlice';
+import {useToast} from 'react-native-toast-notifications';
+const LoginScreen = ({navigation}) => {
+  const toast = useToast();
   const dispatch = useDispatch();
   const emailInput = useRef();
   const passInput = useRef();
@@ -32,6 +34,7 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [isLoading, setisLoading] = useState(false);
   const _isMouted = useRef(true);
+  const [errors, setErrors] = useState({email: '', password: ''});
   const updateSecureTextEntry = () => {
     setData({
       ...data,
@@ -48,17 +51,42 @@ const LoginScreen = ({ navigation }) => {
     try {
       const res = await userApi.login(email, password);
       if (!res.data.msg && res.data.data.user.user_role != 3) {
-        ToastAndroid.show(LOGIN_SUCCESSFULLY, ToastAndroid.SHORT);
+        toast.show(LOGIN_SUCCESSFULLY, {
+          type: 'success',
+          placement: 'top',
+          duration: 3000,
+          offset: 0,
+          animationType: 'slide-in',
+        });
         dispatch(login(res.data.data));
+        setisLoading(false);
+        // ToastAndroid.show(LOGIN_SUCCESSFULLY, ToastAndroid.SHORT);
         await AsyncStorage.setItem('token', res.data.data.token);
         await AsyncStorage.setItem('refresh_token', res.data.data.refreshToken);
-        if (_isMouted.current) {
-          setisLoading(false);
-        }
-
       } else {
+        if (res.data.code === 0) {
+          setPassword('');
+          if (email === '') {
+            setErrors({
+              email: 'Vui lòng nhập email',
+              password: 'Vui lòng nhập password',
+            });
+          }
+          if (email !== '') {
+            setErrors({email: res.data.msg, password: ''});
+          }
+        } else {
+          if (password !== '' && email !== '') {
+            setErrors({email: '', password: res.data.msg});
+          } else {
+            setErrors({email: '', password: 'Vui lòng nhập password'});
+          }
+        }
         setisLoading(false);
       }
+      // if (_isMouted.current) {
+      //   setisLoading(false);
+      // }
     } catch (error) {
       console.log(error);
       setisLoading(false);
@@ -85,6 +113,9 @@ const LoginScreen = ({ navigation }) => {
                 backgroundColor="#05375a"
                 color="#05375a"></Icon>
               <TextInput
+                onFocus={() => {
+                  setErrors({...errors, email: ''});
+                }}
                 ref={emailInput}
                 placeholder="Your Email"
                 autoCapitalize="none"
@@ -99,6 +130,9 @@ const LoginScreen = ({ navigation }) => {
                 color="#05375a"></Icon>
             ) : null} */}
             </View>
+            {errors.email !== '' && (
+              <Text style={{color: 'red'}}>{errors.email}</Text>
+            )}
             <Text style={loginStyles.text_footer}>Password</Text>
             <View style={loginStyles.action}>
               <Icon
@@ -107,6 +141,9 @@ const LoginScreen = ({ navigation }) => {
                 size={18}
                 color="#05375a"></Icon>
               <TextInput
+                onFocus={() => {
+                  setErrors({...errors, password: ''});
+                }}
                 ref={passInput}
                 placeholder="Your Password"
                 secureTextEntry={data.secureTextEntry ? true : false}
@@ -130,6 +167,9 @@ const LoginScreen = ({ navigation }) => {
                 )}
               </TouchableOpacity>
             </View>
+            {errors.password !== '' && (
+              <Text style={{color: 'red'}}>{errors.password}</Text>
+            )}
             <Button
               title={'LOGIN'}
               buttonStyle={loginStyles.buttonStyle}

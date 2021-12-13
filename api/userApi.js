@@ -63,7 +63,7 @@ const userApi = {
       },
     );
   },
-  update: (id, formData,token) => {
+  update: (token, id, formData) => {
     const url = `/users/${id}`
     return axiosClient.patch(
       url,

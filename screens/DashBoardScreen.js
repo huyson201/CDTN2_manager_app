@@ -18,6 +18,7 @@ import {logout} from '../features/auth/userSlice';
 import {resetToken} from '../src/utilFunc';
 import staffApi from '../api/staffApi';
 import {setSelectedHotel} from '../features/hotel/hotelSlice';
+import {useToast} from 'react-native-toast-notifications';
 const data = [
   {
     key: 'Phòng',
@@ -85,9 +86,12 @@ const numColumns = 2;
 const DashboardItem = props => {
   const {key, image} = props.dashboardItem;
   const dispatch = useDispatch();
-
+  const toast = useToast();
   const handlePress = async () => {
     switch (key) {
+      case 'Tài khoản':
+        props.navigation.navigate('ProfileScreen');
+        break;
       case 'Nhân viên':
         props.navigation.navigate('StaffList');
         break;
@@ -100,8 +104,15 @@ const DashboardItem = props => {
           await userApi.logout(token);
           await AsyncStorage.removeItem('token');
           await AsyncStorage.removeItem('refresh_token');
+          toast.show(SIGNOUT_SUCCESSFULLY, {
+            type: 'success',
+            placement: 'top',
+            duration: 3000,
+            offset: 0,
+            animationType: 'slide-in',
+          });
           dispatch(logout());
-          ToastAndroid.show(SIGNOUT_SUCCESSFULLY, ToastAndroid.SHORT);
+          // ToastAndroid.show(SIGNOUT_SUCCESSFULLY, ToastAndroid.SHORT);
         } catch (e) {
           console.log(e);
           const refresh = await AsyncStorage.getItem('refresh_token');

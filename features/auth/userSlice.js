@@ -11,6 +11,8 @@ const userSlice = createSlice({
     isRemembered: false,
     firstLoading: true,
     isAdmin : false,
+    file: null,
+    checkPickerImage: false,
   },
   reducers: {
     login(state, action) {
@@ -42,6 +44,12 @@ const userSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
     },
+    setCheckPickerImage(state, action) {
+      state.checkPickerImage = action.payload
+    },
+    setFile(state, action) {
+      state.file = action.payload;
+    },
   },
   extraReducers: {
   
@@ -55,5 +63,7 @@ export const {
   setFirstLoading,
   setAllToken,
   setUserInfo,
+  setCheckPickerImage,
+  setFile
 } = userSlice.actions;
 export default userSlice.reducer;
