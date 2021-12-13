@@ -103,7 +103,6 @@ const InvoiceList = ({navigation, route}) => {
     };
   }, [isFocused, check]);
 
-  console.log(invoices, '33333333333333333333');
   return (
     <>
       {invoices && invoices !== [] ? (

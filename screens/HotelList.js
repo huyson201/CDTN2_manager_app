@@ -1,6 +1,7 @@
 import {useIsFocused} from '@react-navigation/core';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -31,10 +32,10 @@ const HotelList = ({navigation}) => {
   const hotels = useSelector(hotelSelectors.selectAll);
   const getHotels = () => {
     dispatch(getHotelsOfUser({id: user.user_uuid, userToken: token}));
-  }
-  
+  };
+
   useEffect(() => {
-    getHotels()
+    getHotels();
     return setCheck(false);
   }, [isFocused, check]);
   useEffect(() => {
@@ -45,7 +46,19 @@ const HotelList = ({navigation}) => {
   const handlePressAdd = () => {
     navigation.navigate('AddHotel');
   };
-  const deleteHotel = async ({id}) => {
+  const deleteHotel = ({id}) => {
+    Alert.alert('', 'Bạn có chắc chắn muốn xóa?', [
+      {text: 'Cancel', onPress: () => {}},
+      {
+        text: 'OK',
+        onPress: () => {
+          deleteHotelAfterConfirm(id);
+        },
+      },
+    ]);
+  };
+
+  const deleteHotelAfterConfirm = async id => {
     try {
       await hotelApi.delete(id, token);
       // dispatch(deleteHotelSlice({id: id, token: token}));
